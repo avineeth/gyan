@@ -144,5 +144,5 @@ public final class Contacts {
 
 The core collection interface:
 
-![Image](https://github.com/avineeth/hello-world/blob/master/collections.gif?raw=true)
+![Image](https://github.com/avineeth/gyan/blob/master/img/collections.gif?raw=true)
 
