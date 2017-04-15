@@ -60,8 +60,22 @@ Thread
 - If a thread requires a larger stack than allowed a StackOverflowError is thrown. One of the main reason for this error is incorrect  Recursion programs.
 
 
-## String Constant Pool
+## String Constant Pool/String Interning
 To make Java more memory efficient, the JVM sets aside a special area of memory called the "String constant pool." When the compiler encounters a String literal, it checks the pool to see if an identical String already exists. If a match is found, the reference to the new literal is directed to the existing String, and no new String literal object is created.
+
+### String intern()
+- A pool of strings, initially empty, is maintained privately by the class String.
+- When the intern method is invoked, if the pool already contains a string equal to this String object as determined by the equals(Object) method, then the string from the pool is returned.
+- Otherwise, this String object is added to the pool and a reference to this String object is returned.
+
+### What is the difference between? 
+
+`String s = "hello";`
+`String s = new String("hello");`
+
+- When you use a literal, say String str = "abc";, the object in the pool is used.
+- If you use String str = new String("abc");, a new object is created, but the existing string literal may be reused on either the JVM level or bytecode level (at compile time).
+
 
 # Java Basics
 
