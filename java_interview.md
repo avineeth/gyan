@@ -1,11 +1,9 @@
 # JVM Internals
-
 -	When you write and run a Java program, you are tapping the power of these four technologies.
   - You express the program in source files written in the Java programming language.
-  -	Compile the source to Java class files, and run the class files on a Java Virtual Machine. 
-  -	When you write your program, you access system resources (such as I/O, for example) by calling methods in the classes that implement the Java Application Programming Interface, or Java API. 
+  - Compile the source to Java class files, and run the class files on a Java Virtual Machine.
+  -	When you write your program, you access system resources (such as I/O, for example) by calling methods in the classes that implement the Java Application Programming Interface, or Java API.
   - As your program runs, it fulfills your program’s Java API calls by invoking methods in class files that implement the Java API. You can see the relationship between these four parts in below figure.
-
 ![Image](https://github.com/avineeth/gyan/blob/master/img/jvm-1_1.png?raw=true)
 
 ## JVM
@@ -28,6 +26,9 @@
   - interpreted
   - directly executed by a supported processor (bytecode is the native instruction set of some CPUs)
 
+## Just In Time (JIT) Compilation
+- Java byte code is interpreted however this is not as fast as directly executing native code on the JVM’s host CPU. To improve performance the Oracle Hotspot VM looks for “hot” areas of byte code that are executed regularly and compiles these to native code. The native code is then stored in the code cache in non-heap memory. In this way the Hotspot VM tries to choose the most appropriate way to trade-off the extra time it takes to compile code verses the extra time it take to execute interpreted code.
+
 ## Class Loader Architecture
 - There may be more than one class loader inside a Java Virtual Machine.
 - The primordial class loader (there is only one of them) is a part of the Java Virtual Machine implementation.
@@ -43,6 +44,21 @@
 - One example of dynamic extension is the web browser, which uses class loader objects to download the class files for an applet across a network. A web browser fires off a Java application that installs a class loader object--usually called an applet class loader--that knows how to request class files from an HTTP server. Applets are an example of dynamic extension, because the Java application doesn’t know when it starts which class files the browser will ask it to download across the network. The class files to download are determined at run-time, as the browser encounters pages that contain Java applets.
 - The Java application started by the web browser usually creates a different applet class loader object for each location on the network from which it retrieves class files. As a result, class files from different sources are loaded by different class loader objects. This places them into different name-spaces inside the host Java application. Because the class files for applets from different sources are placed in separate name-spaces, the code of a malicious applet is restricted from interfering directly with class files downloaded from any other source. This puts the class files from different sources into different name-spaces, which allows you to restrict or prevent access between code loaded from different sources.
 - HotSpot is an an implementation of the JVM concept, originally developed by Sun and now owned by Oracle. There are other implementations of the JVM specification, like JRockit, IBM J9, among many others.
+
+## Java Memory Model
+[Credits: http://blog.jamesdbloom.com/JVMInternals.html#threads ]
+
+Thread
+- A thread is a thread of execution in a program. 
+- The JVM allows an application to have multiple threads of execution running concurrently.
+- In the Hotspot JVM there is a direct mapping between a Java Thread and a native operating system Thread.
+- After preparing all of the state for a Java thread such as thread-local storage, allocation buffers, synchronization objects, stacks and the program counter, the native thread is created.
+- The native thread is reclaimed once the Java thread terminates.
+- The operating system is therefore responsible for scheduling all threads and dispatching them to any available CPU.
+- Once the native thread has initialized it invokes the run() method in the Java thread. When the run() method returns, uncaught exceptions are handled, then the native thread confirms if the JVM needs to be terminated as a result of the thread terminating (i.e. is it the last non-deamon thread).
+- When the thread terminates all resources for both the native and Java thread are released.
+- If a thread requires a larger stack than allowed a StackOverflowError is thrown. One of the main reason for this error is incorrect  Recursion programs.
+
 
 ## String Constant Pool
 To make Java more memory efficient, the JVM sets aside a special area of memory called the "String constant pool." When the compiler encounters a String literal, it checks the pool to see if an identical String already exists. If a match is found, the reference to the new literal is directed to the existing String, and no new String literal object is created.
