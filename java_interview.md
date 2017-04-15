@@ -70,8 +70,8 @@ To make Java more memory efficient, the JVM sets aside a special area of memory 
 
 ### What is the difference between? 
 
-`String s = "hello";`
-`String s = new String("hello");`
+    String s = "hello";
+    String s = new String("hello");
 
 - When you use a literal, say String str = "abc";, the object in the pool is used.
 - If you use String str = new String("abc");, a new object is created, but the existing string literal may be reused on either the JVM level or bytecode level (at compile time).
