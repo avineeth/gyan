@@ -1,9 +1,27 @@
 # JVM Internals
 
+-	When you write and run a Java program, you are tapping the power of these four technologies.
+  - You express the program in source files written in the Java programming language.
+  -	Compile the source to Java class files, and run the class files on a Java Virtual Machine. 
+  -	When you write your program, you access system resources (such as I/O, for example) by calling methods in the classes that implement the Java Application Programming Interface, or Java API. 
+  - As your program runs, it fulfills your program’s Java API calls by invoking methods in class files that implement the Java API. You can see the relationship between these four parts in below figure.
+
+![Image](https://github.com/avineeth/gyan/blob/master/img/jvm-1_1.png?raw=true)
+
+## JVM
+
+-	A Java Virtual Machine’s main job is to load class files and execute the bytecodes they contain.
+-	The bytecodes are executed in an execution engine, which is one part of the virtual machine that can vary in different implementations. 
+-	The simplest kind of execution engine just interprets the bytecodes one at a time.
+-	Another kind of execution engine, one that is faster but requires more memory, is a just-in-time compiler. In this scheme, the bytecodes of a method are compiled to native machine code the first time the method is invoked. The native machine code for the method is then cached, so it can be re-used the next time that same method is invoked.
+
+![Image](https://github.com/avineeth/gyan/blob/master/img/jvm-1_3.png?raw=true)
+
 ## Is java compiled or interpreted?
 - Java uses a two step compilation process. Java source code is compiled down to "bytecode" by the Java compiler. The bytecode is executed by Java Virtual Machine (JVM). 
 - The current version of Sun HotSpot JVM uses a technique called Just-in-time (JIT) compilation to compile the bytecode to the native instructions understood by the CPU on the fly at run time.
 - Some implementations of JVM might interpret the bytecode instead of JIT compiling it to machine code and running it directly. While this is still considered an "interpreter." It's significantly different from interpreters that read and execute the high level source code (i.e. in this case, Java source code is not interpreted directly, the bytecode, output of Java compiler, is.)
+- Sometimes the Java Virtual Machine is called the Java interpreter; however, given the various ways in which bytecodes can be executed, this term can be misleading. While "Java interpreter" is a reasonable name for a Java Virtual Machine that interprets bytecodes, virtual machines also use other techniques (such as just-in-time compiling) to execute bytecodes. Therefore, although all Java interpreters are Java Virtual Machines, not all Java Virtual Machines are Java interpreters.
 - To summarize, depending on the execution environment, bytecode can be:
   - compiled ahead of time and executed as native code (similar to C++)
   - compiled just-in-time and executed
@@ -140,9 +158,28 @@ public final class Contacts {
     }
 } 
 
-## Collections
+# Collections
 
 The core collection interface:
 
 ![Image](https://github.com/avineeth/gyan/blob/master/img/collections.gif?raw=true)
+
+
+## Traversing Collections
+There are three ways to traverse collections:
+- using aggregate operations ( TODO: JDK 1.8 lambda expressions)
+- with the for-each construct 
+`for(String t : names)
+ System.out.println("ForEach = [" + t + "]");`
+
+- by using Iterators. 
+   Note that Iterator. remove is the only safe way to modify a collection during iteration; the behavior is unspecified if the underlying collection is modified in any other way while the iteration is in progress.
+
+`Iterator<String> it = names.iterator();
+while(it.hasNext()) {
+   System.out.println("Iterator = [" + it.next() + "]");
+   it.remove();
+}
+System.out.println("has elements = [" + it.hasNext() + "]");
+`
 
