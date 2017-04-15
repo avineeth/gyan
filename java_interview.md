@@ -60,7 +60,10 @@ Thread
 - If a thread requires a larger stack than allowed a StackOverflowError is thrown. One of the main reason for this error is incorrect  Recursion programs.
 
 
-## String Constant Pool/String Interning
+# Java Basics
+
+## Strings
+### String Constant Pool/String Interning
 To make Java more memory efficient, the JVM sets aside a special area of memory called the "String constant pool." When the compiler encounters a String literal, it checks the pool to see if an identical String already exists. If a match is found, the reference to the new literal is directed to the existing String, and no new String literal object is created.
 
 ### String intern()
@@ -91,8 +94,17 @@ To make Java more memory efficient, the JVM sets aside a special area of memory 
 - When you use a literal, say String str = "abc";, the object in the pool is used.
 - If you use String str = new String("abc");, a new object is created, but the existing string literal may be reused on either the JVM level or bytecode level (at compile time).
 
+### String, StringBuffer, and StringBuilder
+- Mutability Difference: String is immutable, if you try to alter their values, another object gets created, whereas StringBuffer and StringBuilder are mutable so they can change their values.
+- Thread-Safety Difference: The difference between StringBuffer and StringBuilder is that StringBuffer is thread-safe. So when the application needs to be run only in a single thread then it is better to use StringBuilder. StringBuilder is more efficient than StringBuffer.
+- If your string is not going to change use a String class because a String object is immutable.
+- If your string can change (example: lots of logic and operations in the construction of the string) and will only be accessed from a single thread, using a StringBuilder is good enough.
+- If your string can change, and will be accessed from multiple threads, use a StringBuffer because StringBuffer is synchronous so you have thread-safety.
+- Also note that StringBuilder/Buffers aren't magic, they just use an Array as a backing object and that Array has to be re-allocated/re-sized when ever it gets full. 
+- All three classes are final. 
 
-# Java Basics
+### What is the main difference between Java strings and C, C++ strings?
+- In C and C++, strings are terminated with null character. But in java, strings are not terminated with null character. Strings are treated as objects in java.
 
 ## Can you mark a class as both abstract and final?
 - You can't mark a class as both abstract and final. They have nearly opposite meanings. An abstract class must be subclassed, whereas a final class must not be subclassed. 
