@@ -1,9 +1,9 @@
 # JVM Internals
 -	When you write and run a Java program, you are tapping the power of these four technologies.
-  * You express the program in source files written in the Java programming language.
-  * Compile the source to Java class files, and run the class files on a Java Virtual Machine.
-  *	When you write your program, you access system resources (such as I/O, for example) by calling methods in the classes that implement the Java Application Programming Interface, or Java API.
-  * As your program runs, it fulfills your program’s Java API calls by invoking methods in class files that implement the Java API. You can see the relationship between these four parts in below figure.
+    * You express the program in source files written in the Java programming language.
+    * Compile the source to Java class files, and run the class files on a Java Virtual Machine.
+    *	When you write your program, you access system resources (such as I/O, for example) by calling methods in the classes that implement the Java Application Programming Interface, or Java API.
+    * As your program runs, it fulfills your program’s Java API calls by invoking methods in class files that implement the Java API. You can see the relationship between these four parts in below figure.
 ![Image](https://github.com/avineeth/gyan/blob/master/img/jvm-1_1.png?raw=true)
 
 ## JVM
@@ -85,15 +85,15 @@
 
 ![Image](https://github.com/avineeth/gyan/blob/master/img/data-types.gif?raw=true)
 
-  * byte     8-bit signed two's complement integer (-27 to 27 - 1, inclusive)
-  * short    16-bit signed two's complement integer (-215 to 215 - 1, inclusive)
-  * int      32-bit signed two's complement integer (-231 to 231 - 1, inclusive)
-  * long     64-bit signed two's complement integer (-263 to 263 - 1, inclusive)
-  * char     16-bit unsigned Unicode character (0 to 216 - 1, inclusive)
-  * float    32-bit IEEE 754 single-precision float
-  * double   64-bit IEEE 754 double-precision float
-  * returnValue address of an opcode within the same method
-  * reference reference to an object on the heap, or null
+    * byte     8-bit signed two's complement integer (-27 to 27 - 1, inclusive)
+    * short    16-bit signed two's complement integer (-215 to 215 - 1, inclusive)
+    * int      32-bit signed two's complement integer (-231 to 231 - 1, inclusive)
+    * long     64-bit signed two's complement integer (-263 to 263 - 1, inclusive)
+    * char     16-bit unsigned Unicode character (0 to 216 - 1, inclusive)
+    * float    32-bit IEEE 754 single-precision float
+    * double   64-bit IEEE 754 double-precision float
+    * returnValue address of an opcode within the same method
+    * reference reference to an object on the heap, or null
 
 
 
