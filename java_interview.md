@@ -1,9 +1,9 @@
 # JVM Internals
 -	When you write and run a Java program, you are tapping the power of these four technologies.
-  - You express the program in source files written in the Java programming language.
-  - Compile the source to Java class files, and run the class files on a Java Virtual Machine.
-  -	When you write your program, you access system resources (such as I/O, for example) by calling methods in the classes that implement the Java Application Programming Interface, or Java API.
-  - As your program runs, it fulfills your program’s Java API calls by invoking methods in class files that implement the Java API. You can see the relationship between these four parts in below figure.
+  * You express the program in source files written in the Java programming language.
+  * Compile the source to Java class files, and run the class files on a Java Virtual Machine.
+  *	When you write your program, you access system resources (such as I/O, for example) by calling methods in the classes that implement the Java Application Programming Interface, or Java API.
+  * As your program runs, it fulfills your program’s Java API calls by invoking methods in class files that implement the Java API. You can see the relationship between these four parts in below figure.
 ![Image](https://github.com/avineeth/gyan/blob/master/img/jvm-1_1.png?raw=true)
 
 ## JVM
@@ -48,7 +48,56 @@
 ## Java Memory Model
 [Credits: http://blog.jamesdbloom.com/JVMInternals.html#threads ]
 
-Thread
+- Each Java Virtual Machine has a class loader subsystem: a mechanism for loading types (classes and interfaces) given fully qualified names.
+- Each Java Virtual Machine also has an execution engine: a mechanism responsible for executing the instructions contained in the methods of loaded classes.
+- When a Java Virtual Machine runs a program, it needs memory to store many things, including bytecodes and other information it extracts from loaded class files, objects the program instantiates, parameters to methods, return values, local variables, and intermediate results of computations. The Java Virtual Machine organizes the memory it needs to execute a program into several runtime data areas.
+![Image](https://github.com/avineeth/gyan/blob/master/img/jvm-internal-architechure.gif?raw=true)
+
+### Method Area and Heap
+- Each instance of the Java Virtual Machine has one method area and one heap.
+- These areas are shared by all threads running inside the virtual machine.
+- When the virtual machine loads a class file, it parses information about a type from the binary data contained in the class file. It places this type information into the method area.
+- As the program runs, the virtual machine places all objects the program instantiates onto the heap. 
+![Image](https://github.com/avineeth/gyan/blob/master/img/methodarea_heap.gif?raw=true)
+
+### Stack and Program Counter
+- As each new thread comes into existence, it gets its own pc register (program counter) and Java stack.
+- If the thread is executing a Java method (not a native method), the value of the pc register indicates the next instruction to execute.
+- A threadís Java stack stores the state of Java (not native) method invocations for the thread. The state of a Java method invocation includes its local variables, the parameters with which it was invoked, its return value (if any), and intermediate calculations. 
+- The Java stack is composed of stack frames (or frames). A stack frame contains the state of one Java method invocation. When a thread invokes a method, the Java Virtual Machine pushes a new frame onto that threadís Java stack. When the method completes, the virtual machine pops and discards the frame for that method.
+- If a thread requires a larger stack than allowed a StackOverflowError is thrown. One of the main reason for this error is incorrect  Recursion programs. If a thread requires a new frame and there isn’t enough memory to allocate it then an OutOfMemoryError is thrown.
+- Each frame contains:
+  - Local variable array
+  - Return value
+  - Operand stack
+  - Reference to runtime constant pool for class of the current method
+- Arrays and objects can never be stored on the stack because a frame is not designed to change in size after it has been created. The frame only stores references that point to objects or arrays on the heap.
+![Image](https://github.com/avineeth/gyan/blob/master/img/stack-area.gif?raw=true)
+
+### Data types
+
+- The data types can be divided into a set of primitive types and a reference type. 
+- Variables of the primitive types hold primitive values, and variables of the reference type hold reference values.
+- Reference values refer to objects, but are not objects themselves.
+- Primitive values, by contrast, do not refer to anything. They are the actual data themselves. 
+- All the primitive types of the Java programming language, **except boolean** , are primitive types of the Java Virtual Machine. When a compiler translates Java source code into bytecodes, it uses ints or bytes to represent booleans.
+- Values of type reference come in three flavors: the class type, the interface type, and the array type. 
+
+![Image](https://github.com/avineeth/gyan/blob/master/img/data-types.gif?raw=true)
+
+  * byte     8-bit signed two's complement integer (-27 to 27 - 1, inclusive)
+  * short    16-bit signed two's complement integer (-215 to 215 - 1, inclusive)
+  * int      32-bit signed two's complement integer (-231 to 231 - 1, inclusive)
+  * long     64-bit signed two's complement integer (-263 to 263 - 1, inclusive)
+  * char     16-bit unsigned Unicode character (0 to 216 - 1, inclusive)
+  * float    32-bit IEEE 754 single-precision float
+  * double   64-bit IEEE 754 double-precision float
+  * returnValue address of an opcode within the same method
+  * reference reference to an object on the heap, or null
+
+
+
+## Thread
 - A thread is a thread of execution in a program. 
 - The JVM allows an application to have multiple threads of execution running concurrently.
 - In the Hotspot JVM there is a direct mapping between a Java Thread and a native operating system Thread.
@@ -57,7 +106,10 @@ Thread
 - The operating system is therefore responsible for scheduling all threads and dispatching them to any available CPU.
 - Once the native thread has initialized it invokes the run() method in the Java thread. When the run() method returns, uncaught exceptions are handled, then the native thread confirms if the JVM needs to be terminated as a result of the thread terminating (i.e. is it the last non-deamon thread).
 - When the thread terminates all resources for both the native and Java thread are released.
-- If a thread requires a larger stack than allowed a StackOverflowError is thrown. One of the main reason for this error is incorrect  Recursion programs.
+- Inside the Java Virtual Machine, threads come in two flavors: daemon and non-daemon.
+- A daemon thread is ordinarily a thread used by the virtual machine itself, such as a thread that performs garbage collection.The application, however, can mark any threads it creates as daemon threads. The initial thread of an application--the one that begins at main()--is a non-daemon thread.
+- A Java application continues to execute (the virtual machine instance continues to live) as long as any non-daemon threads are still running. When all non-daemon threads of a Java application terminate, the virtual machine instance will exit. If permitted by the security manager, the application can also cause its own demise by invoking the exit() method of class Runtime or System.
+- You must in some implementation-dependent way give a Java Virtual Machine the name of the initial class that has the main() method that will start the entire application.
 
 
 # Java Basics
@@ -150,24 +202,27 @@ To make Java more memory efficient, the JVM sets aside a special area of memory 
 - finally is used in a try/catch statement to execute code "always"
 - Java 7 has a new try with resources statement that you can use to automatically close resources that explicitly or implicitly implement java.io.Closeable or java.lang.AutoCloseable
 
-`lock.lock();
+```
+lock.lock();
 try {
   //do stuff
 } catch (SomeException se) {
   //handle se
 } finally {
   lock.unlock(); //always executed, even if Exception or Error or se
-}`
+}
+```
 
 https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
 
 ## finalize
 - finalize is called when an object is garbage collected. You rarely need to override it. An example:
-`public void finalize() {
+```
+public void finalize() {
   //free resources (e.g. unallocate memory)
   super.finalize();
-}`
-
+}
+```
 
 ## What Is the Static Keyword in Java?
 
