@@ -67,7 +67,22 @@ To make Java more memory efficient, the JVM sets aside a special area of memory 
 - A pool of strings, initially empty, is maintained privately by the class String.
 - When the intern method is invoked, if the pool already contains a string equal to this String object as determined by the equals(Object) method, then the string from the pool is returned.
 - Otherwise, this String object is added to the pool and a reference to this String object is returned.
+```
+    String s1 = "hello";
+    String s2 = "hello";
+    String s3 = new String("hello");
+    String s4 = new String("hello").intern();
+    String s5 = "hello".intern();
 
+    if(s1 == s2) //true
+       System.out.println("s1 and s2 are same");
+    if(s1 == s3) //false
+       System.out.println("s1 and s3 are same");
+    if(s1 == s4) //true
+       System.out.println("s1 and s4 are same");
+    if(s1 == s5) //true
+       System.out.println("s1 and s5 are same");
+```
 ### What is the difference between? 
 
     String s = "hello";
