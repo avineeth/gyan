@@ -1,19 +1,162 @@
 # JVM Internals
+-	When you write and run a Java program, you are tapping the power of these four technologies.
+    * You express the program in source files written in the Java programming language.
+    * Compile the source to Java class files, and run the class files on a Java Virtual Machine.
+    *	When you write your program, you access system resources (such as I/O, for example) by calling methods in the classes that implement the Java Application Programming Interface, or Java API.
+    * As your program runs, it fulfills your program’s Java API calls by invoking methods in class files that implement the Java API. You can see the relationship between these four parts in below figure.
+![Image](https://github.com/avineeth/gyan/blob/master/img/jvm-1_1.png?raw=true)
+
+## JVM
+
+-	A Java Virtual Machine’s main job is to load class files and execute the bytecodes they contain.
+-	The bytecodes are executed in an execution engine, which is one part of the virtual machine that can vary in different implementations. 
+-	The simplest kind of execution engine just interprets the bytecodes one at a time.
+-	Another kind of execution engine, one that is faster but requires more memory, is a just-in-time compiler. In this scheme, the bytecodes of a method are compiled to native machine code the first time the method is invoked. The native machine code for the method is then cached, so it can be re-used the next time that same method is invoked.
+
+![Image](https://github.com/avineeth/gyan/blob/master/img/jvm-1_3.png?raw=true)
 
 ## Is java compiled or interpreted?
 - Java uses a two step compilation process. Java source code is compiled down to "bytecode" by the Java compiler. The bytecode is executed by Java Virtual Machine (JVM). 
 - The current version of Sun HotSpot JVM uses a technique called Just-in-time (JIT) compilation to compile the bytecode to the native instructions understood by the CPU on the fly at run time.
 - Some implementations of JVM might interpret the bytecode instead of JIT compiling it to machine code and running it directly. While this is still considered an "interpreter." It's significantly different from interpreters that read and execute the high level source code (i.e. in this case, Java source code is not interpreted directly, the bytecode, output of Java compiler, is.)
+- Sometimes the Java Virtual Machine is called the Java interpreter; however, given the various ways in which bytecodes can be executed, this term can be misleading. While "Java interpreter" is a reasonable name for a Java Virtual Machine that interprets bytecodes, virtual machines also use other techniques (such as just-in-time compiling) to execute bytecodes. Therefore, although all Java interpreters are Java Virtual Machines, not all Java Virtual Machines are Java interpreters.
 - To summarize, depending on the execution environment, bytecode can be:
   - compiled ahead of time and executed as native code (similar to C++)
   - compiled just-in-time and executed
   - interpreted
   - directly executed by a supported processor (bytecode is the native instruction set of some CPUs)
 
-## String Constant Pool
-To make Java more memory efficient, the JVM sets aside a special area of memory called the "String constant pool." When the compiler encounters a String literal, it checks the pool to see if an identical String already exists. If a match is found, the reference to the new literal is directed to the existing String, and no new String literal object is created.
+## Just In Time (JIT) Compilation
+- Java byte code is interpreted however this is not as fast as directly executing native code on the JVM’s host CPU. To improve performance the Oracle Hotspot VM looks for “hot” areas of byte code that are executed regularly and compiles these to native code. The native code is then stored in the code cache in non-heap memory. In this way the Hotspot VM tries to choose the most appropriate way to trade-off the extra time it takes to compile code verses the extra time it take to execute interpreted code.
+
+## Class Loader Architecture
+- There may be more than one class loader inside a Java Virtual Machine.
+- The primordial class loader (there is only one of them) is a part of the Java Virtual Machine implementation.
+- The Java Virtual Machine considers any class it loads through the primordial class loader to be trusted, regardless of whether or not the class is part of the Java API.
+- Classes it loads through class loader objects, however, it views with suspicion--by default, it considers them to be untrusted.
+
+![Image](https://github.com/avineeth/gyan/blob/master/img/class-loader.png?raw=true)
+
+- For each class it loads, the Java Virtual Machine keeps track of which class loader--whether primordial or object--loaded the class.
+- When a loaded class first refers to another class, the virtual machine requests the referenced class from the same class loader that originally loaded the referencing class.
+- For example, if the virtual machine loads class Volcano through a particular class loader, it will attempt to load any classes Volcano refers to through the same class loader. If Volcano refers to a class named Lava, perhaps by invoking a method in class Lava, the virtual machine will request Lava from the class loader object that loaded Volcano. The Lava class returned by the class loader is dynamically linked with class Volcano.
+- Because the Java Virtual Machine takes this approach to loading classes, classes can by default only see other classes that were loaded by the same class loader. This is how Java’s architecture enables you to create multiple name-spaces inside a single Java application. Each class loader in your running Java program maintains its own name-space, which is populated by the names of all the classes it has loaded.
+- One example of dynamic extension is the web browser, which uses class loader objects to download the class files for an applet across a network. A web browser fires off a Java application that installs a class loader object--usually called an applet class loader--that knows how to request class files from an HTTP server. Applets are an example of dynamic extension, because the Java application doesn’t know when it starts which class files the browser will ask it to download across the network. The class files to download are determined at run-time, as the browser encounters pages that contain Java applets.
+- The Java application started by the web browser usually creates a different applet class loader object for each location on the network from which it retrieves class files. As a result, class files from different sources are loaded by different class loader objects. This places them into different name-spaces inside the host Java application. Because the class files for applets from different sources are placed in separate name-spaces, the code of a malicious applet is restricted from interfering directly with class files downloaded from any other source. This puts the class files from different sources into different name-spaces, which allows you to restrict or prevent access between code loaded from different sources.
+- HotSpot is an an implementation of the JVM concept, originally developed by Sun and now owned by Oracle. There are other implementations of the JVM specification, like JRockit, IBM J9, among many others.
+
+## Java Memory Model
+[Credits: http://blog.jamesdbloom.com/JVMInternals.html#threads ]
+
+- Each Java Virtual Machine has a class loader subsystem: a mechanism for loading types (classes and interfaces) given fully qualified names.
+- Each Java Virtual Machine also has an execution engine: a mechanism responsible for executing the instructions contained in the methods of loaded classes.
+- When a Java Virtual Machine runs a program, it needs memory to store many things, including bytecodes and other information it extracts from loaded class files, objects the program instantiates, parameters to methods, return values, local variables, and intermediate results of computations. The Java Virtual Machine organizes the memory it needs to execute a program into several runtime data areas.
+![Image](https://github.com/avineeth/gyan/blob/master/img/jvm-internal-architechure.gif?raw=true)
+
+### Method Area and Heap
+- Each instance of the Java Virtual Machine has one method area and one heap.
+- These areas are shared by all threads running inside the virtual machine.
+- When the virtual machine loads a class file, it parses information about a type from the binary data contained in the class file. It places this type information into the method area.
+- As the program runs, the virtual machine places all objects the program instantiates onto the heap. 
+![Image](https://github.com/avineeth/gyan/blob/master/img/methodarea_heap.gif?raw=true)
+
+### Stack and Program Counter
+- As each new thread comes into existence, it gets its own pc register (program counter) and Java stack.
+- If the thread is executing a Java method (not a native method), the value of the pc register indicates the next instruction to execute.
+- A threadís Java stack stores the state of Java (not native) method invocations for the thread. The state of a Java method invocation includes its local variables, the parameters with which it was invoked, its return value (if any), and intermediate calculations. 
+- The Java stack is composed of stack frames (or frames). A stack frame contains the state of one Java method invocation. When a thread invokes a method, the Java Virtual Machine pushes a new frame onto that threadís Java stack. When the method completes, the virtual machine pops and discards the frame for that method.
+- If a thread requires a larger stack than allowed a StackOverflowError is thrown. One of the main reason for this error is incorrect  Recursion programs. If a thread requires a new frame and there isn’t enough memory to allocate it then an OutOfMemoryError is thrown.
+- Each frame contains:
+  - Local variable array
+  - Return value
+  - Operand stack
+  - Reference to runtime constant pool for class of the current method
+- Arrays and objects can never be stored on the stack because a frame is not designed to change in size after it has been created. The frame only stores references that point to objects or arrays on the heap.
+![Image](https://github.com/avineeth/gyan/blob/master/img/stack-area.gif?raw=true)
+
+### Data types
+
+- The data types can be divided into a set of primitive types and a reference type. 
+- Variables of the primitive types hold primitive values, and variables of the reference type hold reference values.
+- Reference values refer to objects, but are not objects themselves.
+- Primitive values, by contrast, do not refer to anything. They are the actual data themselves. 
+- All the primitive types of the Java programming language, **except boolean** , are primitive types of the Java Virtual Machine. When a compiler translates Java source code into bytecodes, it uses ints or bytes to represent booleans.
+- Values of type reference come in three flavors: the class type, the interface type, and the array type. 
+
+![Image](https://github.com/avineeth/gyan/blob/master/img/data-types.gif?raw=true)
+
+    * byte     8-bit signed two's complement integer (-27 to 27 - 1, inclusive)
+    * short    16-bit signed two's complement integer (-215 to 215 - 1, inclusive)
+    * int      32-bit signed two's complement integer (-231 to 231 - 1, inclusive)
+    * long     64-bit signed two's complement integer (-263 to 263 - 1, inclusive)
+    * char     16-bit unsigned Unicode character (0 to 216 - 1, inclusive)
+    * float    32-bit IEEE 754 single-precision float
+    * double   64-bit IEEE 754 double-precision float
+    * returnValue address of an opcode within the same method
+    * reference reference to an object on the heap, or null
+
+
+
+## Thread
+- A thread is a thread of execution in a program. 
+- The JVM allows an application to have multiple threads of execution running concurrently.
+- In the Hotspot JVM there is a direct mapping between a Java Thread and a native operating system Thread.
+- After preparing all of the state for a Java thread such as thread-local storage, allocation buffers, synchronization objects, stacks and the program counter, the native thread is created.
+- The native thread is reclaimed once the Java thread terminates.
+- The operating system is therefore responsible for scheduling all threads and dispatching them to any available CPU.
+- Once the native thread has initialized it invokes the run() method in the Java thread. When the run() method returns, uncaught exceptions are handled, then the native thread confirms if the JVM needs to be terminated as a result of the thread terminating (i.e. is it the last non-deamon thread).
+- When the thread terminates all resources for both the native and Java thread are released.
+- Inside the Java Virtual Machine, threads come in two flavors: daemon and non-daemon.
+- A daemon thread is ordinarily a thread used by the virtual machine itself, such as a thread that performs garbage collection.The application, however, can mark any threads it creates as daemon threads. The initial thread of an application--the one that begins at main()--is a non-daemon thread.
+- A Java application continues to execute (the virtual machine instance continues to live) as long as any non-daemon threads are still running. When all non-daemon threads of a Java application terminate, the virtual machine instance will exit. If permitted by the security manager, the application can also cause its own demise by invoking the exit() method of class Runtime or System.
+- You must in some implementation-dependent way give a Java Virtual Machine the name of the initial class that has the main() method that will start the entire application.
+
 
 # Java Basics
+
+## Strings
+### String Constant Pool/String Interning
+To make Java more memory efficient, the JVM sets aside a special area of memory called the "String constant pool." When the compiler encounters a String literal, it checks the pool to see if an identical String already exists. If a match is found, the reference to the new literal is directed to the existing String, and no new String literal object is created.
+
+### String intern()
+- A pool of strings, initially empty, is maintained privately by the class String.
+- When the intern method is invoked, if the pool already contains a string equal to this String object as determined by the equals(Object) method, then the string from the pool is returned.
+- Otherwise, this String object is added to the pool and a reference to this String object is returned.
+```
+    String s1 = "hello";
+    String s2 = "hello";
+    String s3 = new String("hello");
+    String s4 = new String("hello").intern();
+    String s5 = "hello".intern();
+
+    if(s1 == s2) //true
+       System.out.println("s1 and s2 are same");
+    if(s1 == s3) //false
+       System.out.println("s1 and s3 are same");
+    if(s1 == s4) //true
+       System.out.println("s1 and s4 are same");
+    if(s1 == s5) //true
+       System.out.println("s1 and s5 are same");
+```
+### What is the difference between? 
+
+    String s = "hello";
+    String s = new String("hello");
+
+- When you use a literal, say String str = "abc";, the object in the pool is used.
+- If you use String str = new String("abc");, a new object is created, but the existing string literal may be reused on either the JVM level or bytecode level (at compile time).
+
+### String, StringBuffer, and StringBuilder
+- Mutability Difference: String is immutable, if you try to alter their values, another object gets created, whereas StringBuffer and StringBuilder are mutable so they can change their values.
+- Thread-Safety Difference: The difference between StringBuffer and StringBuilder is that StringBuffer is thread-safe. So when the application needs to be run only in a single thread then it is better to use StringBuilder. StringBuilder is more efficient than StringBuffer.
+- If your string is not going to change use a String class because a String object is immutable.
+- If your string can change (example: lots of logic and operations in the construction of the string) and will only be accessed from a single thread, using a StringBuilder is good enough.
+- If your string can change, and will be accessed from multiple threads, use a StringBuffer because StringBuffer is synchronous so you have thread-safety.
+- Also note that StringBuilder/Buffers aren't magic, they just use an Array as a backing object and that Array has to be re-allocated/re-sized when ever it gets full. 
+- All three classes are final. 
+
+### What is the main difference between Java strings and C, C++ strings?
+- In C and C++, strings are terminated with null character. But in java, strings are not terminated with null character. Strings are treated as objects in java.
 
 ## Can you mark a class as both abstract and final?
 - You can't mark a class as both abstract and final. They have nearly opposite meanings. An abstract class must be subclassed, whereas a final class must not be subclassed. 
@@ -59,24 +202,27 @@ To make Java more memory efficient, the JVM sets aside a special area of memory 
 - finally is used in a try/catch statement to execute code "always"
 - Java 7 has a new try with resources statement that you can use to automatically close resources that explicitly or implicitly implement java.io.Closeable or java.lang.AutoCloseable
 
-`lock.lock();
+```
+lock.lock();
 try {
   //do stuff
 } catch (SomeException se) {
   //handle se
 } finally {
   lock.unlock(); //always executed, even if Exception or Error or se
-}`
+}
+```
 
 https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
 
 ## finalize
 - finalize is called when an object is garbage collected. You rarely need to override it. An example:
-`public void finalize() {
+```
+public void finalize() {
   //free resources (e.g. unallocate memory)
   super.finalize();
-}`
-
+}
+```
 
 ## What Is the Static Keyword in Java?
 
@@ -140,5 +286,28 @@ public final class Contacts {
     }
 } 
 
-![Image](https://github.com/avineeth/hello-world/blob/master/collections.gif?raw=true)
+# Collections
+
+The core collection interface:
+
+![Image](https://github.com/avineeth/gyan/blob/master/img/collections.gif?raw=true)
+
+
+## Traversing Collections
+There are three ways to traverse collections:
+- using aggregate operations ( TODO: JDK 1.8 lambda expressions)
+- with the for-each construct 
+`for(String t : names)
+ System.out.println("ForEach = [" + t + "]");`
+
+- by using Iterators. 
+   Note that Iterator. remove is the only safe way to modify a collection during iteration; the behavior is unspecified if the underlying collection is modified in any other way while the iteration is in progress.
+
+`Iterator<String> it = names.iterator();
+while(it.hasNext()) {
+   System.out.println("Iterator = [" + it.next() + "]");
+   it.remove();
+}
+System.out.println("has elements = [" + it.hasNext() + "]");
+`
 
