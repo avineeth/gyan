@@ -140,5 +140,9 @@ public final class Contacts {
     }
 } 
 
+## Collections
+
+The core collection interface:
+
 ![Image](https://github.com/avineeth/hello-world/blob/master/collections.gif?raw=true)
 
