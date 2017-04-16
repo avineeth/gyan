@@ -111,6 +111,61 @@
 - A Java application continues to execute (the virtual machine instance continues to live) as long as any non-daemon threads are still running. When all non-daemon threads of a Java application terminate, the virtual machine instance will exit. If permitted by the security manager, the application can also cause its own demise by invoking the exit() method of class Runtime or System.
 - You must in some implementation-dependent way give a Java Virtual Machine the name of the initial class that has the main() method that will start the entire application.
 
+### The Method Area
+- Inside a Java Virtual Machine instance, information about loaded types is stored in a logical area of memory called the method area.
+- When the Java Virtual Machine loads a type, it uses a class loader to locate the appropriate class file. 
+- The class loader reads in the class file--a linear stream of binary data--and passes it to the virtual machine.
+- The virtual machine extracts information about the type from the binary data and stores the information in the method area.
+- Memory for class (static) variables declared in the class is also taken from the method area. (Static variables are Methods are stored in Permanent Generation area).
+- All threads share the same method area, so access to the method area's data structures must be designed to be thread-safe. If two threads are attempting to find a class named Lava, for example, and Lava has not yet been loaded, only one thread should be allowed to load it while the other one waits.
+
+- The method area stores per-class information such as:
+  - Classloader Reference - The virtual machine uses this information during dynamic linking. When one type refers to another type, the virtual machine requests the referenced type from the same class loader that loaded the referencing type.
+  - Run Time Constant Pool
+  - Field data  - Field Name, Type, Modifiers, Attributes
+  - Method data - Method Name, return type, parameters, Modifiers, Attributes
+  - Method code
+
+### Constant Pool
+- Constants such as literal strings, final variable values
+- fully qualified names of classes and interfaces 
+- field names and descriptors 
+- method names and descriptors 
+
+### Dynamic Linking
+- The constant pool plays an important role in the dynamic linking of Java programs.
+- The constant pool's fully qualified names and method and field descriptors are used at run time to link code in this class or interface with code and data in other classes and interfaces.
+- The class file contains no information about the eventual memory layout of its components, so classes, fields, and methods cannot be referenced directly by the bytecodes in the class file.
+- The Java Virtual Machine resolves the actual address of any referenced item at run time given a symbolic reference from the constant pool.
+- For example, bytecode instructions that invoke a method give constant pool index of a symbolic reference to the method to invoke.
+- A symbolic reference is a logical reference not a reference that actually points to a physical memory location. The JVM implementation can choose when to resolve symbolic references, this can happen when the class file is verified, after being loaded, called eager or static resolution, instead this can happen when the symbolic reference is used for the first time called lazy or late resolution. 
+```
+class Lava {
+    private int speed = 5; // 5 kilometers per hour
+    void flow() {
+    }
+}
+
+class Volcano {
+    public static void main(String[] args) {
+        Lava lava = new Lava();
+        lava.flow();
+    }
+}
+```
+1. To run the Volcano application, you give the name "Volcano" to a Java Virtual Machine - "java Volcano"
+2. It extracts the definition of class Volcano from the binary data in the imported class file and places the information into the method area.
+3. The virtual machine then invokes the main() method, by interpreting the bytecodes stored in the method area. 
+4. As the virtual machine executes main(), it maintains a pointer to the constant pool (a data structure in the method area) for the current class (class Volcano).
+5. Note that this Java Virtual Machine has already begun to execute the bytecodes for main() in class Volcano even though it hasn't yet loaded class Lava. It loads classes only as it needs them.
+6. The virtual machine uses its pointer into Volcano's constant pool to look up entry one and finds a symbolic reference to class Lava. It checks the method area to see if Lava has already been loaded.
+7. When the virtual machine discovers that it hasnít yet loaded a class named "Lava," it proceeds to find and read in file Lava.class. It extracts the definition of class Lava from the imported binary data and places the information into the method area.
+8. The Java Virtual Machine then replaces the symbolic reference in Volcano's constant pool entry one, which is just the string "Lava", with a pointer to the class data for Lava. This process of replacing symbolic references with direct references (in this case, a native pointer) is called constant pool resolution. The symbolic reference is resolved into a direct reference by searching through the method area until the referenced entity is found, loading new classes if necessary.
+9. Finally, the virtual machine is ready to actually allocate memory for a new Lava object.
+10.  Initializes the instance variable speed.
+11. The first instruction of main() completes by pushing a reference to the new Lava object onto the stack. 
+12. A later instruction will use the reference to invoke Java code that initializes the speed variable to its proper initial value, five.
+13. Another instruction will use the reference to invoke the flow() method on the referenced Lava object.
 
 # Java Basics
 
