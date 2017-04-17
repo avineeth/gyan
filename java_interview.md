@@ -320,26 +320,46 @@ public void finalize() {
   - Don't provide "setter" methods — methods that modify fields or objects referred to by fields.
   - Make all fields final and private.
   - Don't allow subclasses to override methods. The simplest way to do this is to declare the class as final. A more sophisticated approach is to make the constructor private and construct instances in factory methods. (Builder Design Pattern).
-
-
+```
 public final class Contacts {
 
     private final String name;
     private final String mobile;
 
-    public Contacts(String name, String mobile) {
+   
+   public Contacts(String name, String mobile) {
         this.name = name;
         this.mobile = mobile;
     }
   
     public String getName(){
-        return name;
+            return name;
     }
-  
+
+
     public String getMobile(){
-        return mobile;
+-         return mobile;
     }
-} 
+   }
+   ```
+
+
+### What is Anonymous Inner Class?
+
+- Anonymous Inner Class is used often as single-use classes for convenience, that help make your code more concise. 
+- An anonymous inner class can come useful when making an instance of an object with certain "extras" such as overloading methods, without having to actually subclass a class.
+- Example attaching an event listener:
+```
+button.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // do something
+    }
+});
+```
+- Using this method makes coding a little bit quicker, as I don't need to make an extra class that implements ActionListener. I can just instantiate an anonymous inner class without actually making a separate class.
+- I only use this technique for "quick and dirty" tasks where making an entire class feels unnecessary. Having multiple anonymous inner classes that do exactly the same thing should be refactored to an actual class, be it an inner class or a separate class.
+
 
 # Collections
 
