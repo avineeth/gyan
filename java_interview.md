@@ -1,3 +1,10 @@
+TODO:
+Garbage Collection
+Thread Dumps
+GC Pauses
+
+http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
+
 # JVM Internals
 -	When you write and run a Java program, you are tapping the power of these four technologies.
     * You express the program in source files written in the Java programming language.
