@@ -1,4 +1,6 @@
-### Publishing an Object
+### Publishing an Object - Make defensive copies when needed
+
+http://www.informit.com/articles/article.aspx?p=31551&seqNum=2
 
 Returning a reference from a nonprivate method also publishes the returned object.
 The caller can modify its contents.
