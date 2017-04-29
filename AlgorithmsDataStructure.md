@@ -37,3 +37,15 @@ Since primitive types have no identity (there is no way to distinguish two ints 
   - Multiple comparisons. To provide several different ways to sort something. For example, you might want to sort a Person class by name, ID, age, height, ... You would define a Comparator for each of these to pass to the sort() method.
   - System class To provide comparison methods for classes that you have no control over. For example, you could define a Comparator for Strings that compared them by length.
   - Strategy pattern To implement a Strategy pattern, which is a situation where you want to represent an algorithm as an object that you can pass as a parameter, save in a data structure, etc.
+  
+  
+Binary tree: Tree where each node has up to two leaves
+
+  1
+ / \
+2   3
+Binary search tree: Used for searching. A binary tree where the left child contains only nodes with values less than the parent node, and where the right child only contains nodes with values greater than or equal to the parent.
+
+  2
+ / \
+1   3
