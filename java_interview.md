@@ -350,7 +350,51 @@ public final class Contacts {
    }
    ```
 
+### Floating Point Numbers
 
+The Java programming language provides two built-in classes for representing floating-point numbers: float, and double. The "float" class takes 4 bytes of storage, and have 23 binary digits of precision. The "double" class takes 8 bytes of storage, and have 52 binary digits of precision.
+
+3.0d is a double precision floating-point number constant. 3.0, or alternatively 3.0f is a single precision floating-point number constant.
+
+float f = 3.0f;
+double d = 3.0d;
+The Java core library also provides two wrapped classes java.lang.Float, and java.lang.Double. These two classes allow floating-point objects to be stored in Java collection objects, such as hash tables. These two classes also provides parsing, and conversion helper methods.
+
+Float ff = new Float(1.0f); // creates a Java "Float" object
+Double dd = new Double(2.0d); // creates a Java "Double" object
+
+#### Not A Number
+
+"NaN" stands for "not a number". "Nan" is produced if a floating point operation has some input parameters that cause the operation to produce some undefined result. For example, 0.0 divided by 0.0 is arithmetically undefined. Taking the square root of a negative number is also undefined.
+
+0.0 / 0.0   ->  NaN
+Math.sqrt(-2.0)  ->  NaN
+
+All boolean operations involving "NaN" results in a false value.
+
+Double.NaN > 1.0  ->  false
+Double.NaN < 1.0  ->  false
+
+A "NaN" value is not equal to itself. However, a "NaN" Java "Float" object is equal to itself. The semantic is defined this way, because otherwise "NaN" Java "Float" objects cannot be retrieved from a hash table.
+
+(new Float(0.0 / 0.0)).equals(new Float(0.0 / 0.0))  ->  true
+
+#### Infinity
+
+"Infinity" is produced if a floating point operation creates such a large floating-point number that it cannot be represented normally. "Infinity" is a special value that represent the concept of positive infinity.
+
+1.0 / 0.0  ->  Infinity
+
+"-Infinity" is a special value that represent the concept of negative infinity.
+
+-1.0 / 0.0  ->  -Infinity
+
+Negative Zero "-0.0" is numerically identical to "0.0". However, some operations involving "-0.0" are different than the same operation with "0.0".
+
+(-0.0) == 0.0  ->  true
+new Double(0.0).equals(new Double(-0.0)) -> false
+  
+  
 ### What is Anonymous Inner Class?
 
 - Anonymous Inner Class is used often as single-use classes for convenience, that help make your code more concise. 
