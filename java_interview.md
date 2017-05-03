@@ -174,6 +174,43 @@ class Volcano {
 12. A later instruction will use the reference to invoke Java code that initializes the speed variable to its proper initial value, five.
 13. Another instruction will use the reference to invoke the flow() method on the referenced Lava object.
 
+### Memory Leak
+
+- A memory leak in Java can occur if you forget to close a resource, or a reference to an object is not released. e.g.
+  - File/Text buffers not closed.
+  - Hash maps keeping references alive if equals() and hashcode() are not implemented, e.g.
+
+- Of course, there are a number of ways to create memory leaks in Java. For simplicity we will define a class to be a key in a HashMap, but we will not define the equals() and hashcode() methods.
+- A HashMap is a hash table implementation for the Map interface, and as such it defines the basic concepts of key and value: each value is related to a unique key, so if the key for a given key-value pair is already present in the HashMap, its current value is replaced.
+- It’s mandatory that our key class provides a correct implementation of the equals() and hashcode() methods. Without them, there is no guarantee that a good key will be generated.
+- By not defining the equals() and hashcode() methods, we add the same key to the HashMap over and over and, instead of replacing the key as it should, the HashMap grows continuously, failing to identify these identical keys and throwing an OutOfMemoryError.
+
+```
+package com.post.memory.leak;
+import java.util.Map;
+
+public class MemLeak {
+    public final String key;
+    
+    public MemLeak(String key) {
+        this.key =key;
+    }
+    
+    public static void main(String args[]) {
+        try {
+            Map map = System.getProperties();
+            
+            for(;;) {
+                map.put(new MemLeak("key"), "value");
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+- Note: the memory leak is not due to the infinite loop on line 14: the infinite loop can lead to a resource exhaustion, but not a memory leak. If we had properly implemented equals() and hashcode() methods, the code would run fine even with the infinite loop as we would only have one element inside the HashMap.
+
 # Java Basics
 
 ## Strings
