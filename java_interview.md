@@ -1,3 +1,10 @@
+TODO:
+Garbage Collection
+Thread Dumps
+GC Pauses
+
+http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
+
 # JVM Internals
 -	When you write and run a Java program, you are tapping the power of these four technologies.
     * You express the program in source files written in the Java programming language.
@@ -167,6 +174,43 @@ class Volcano {
 12. A later instruction will use the reference to invoke Java code that initializes the speed variable to its proper initial value, five.
 13. Another instruction will use the reference to invoke the flow() method on the referenced Lava object.
 
+### Memory Leak
+
+- A memory leak in Java can occur if you forget to close a resource, or a reference to an object is not released. e.g.
+  - File/Text buffers not closed.
+  - Hash maps keeping references alive if equals() and hashcode() are not implemented, e.g.
+
+- Of course, there are a number of ways to create memory leaks in Java. For simplicity we will define a class to be a key in a HashMap, but we will not define the equals() and hashcode() methods.
+- A HashMap is a hash table implementation for the Map interface, and as such it defines the basic concepts of key and value: each value is related to a unique key, so if the key for a given key-value pair is already present in the HashMap, its current value is replaced.
+- It’s mandatory that our key class provides a correct implementation of the equals() and hashcode() methods. Without them, there is no guarantee that a good key will be generated.
+- By not defining the equals() and hashcode() methods, we add the same key to the HashMap over and over and, instead of replacing the key as it should, the HashMap grows continuously, failing to identify these identical keys and throwing an OutOfMemoryError.
+
+```
+package com.post.memory.leak;
+import java.util.Map;
+
+public class MemLeak {
+    public final String key;
+    
+    public MemLeak(String key) {
+        this.key =key;
+    }
+    
+    public static void main(String args[]) {
+        try {
+            Map map = System.getProperties();
+            
+            for(;;) {
+                map.put(new MemLeak("key"), "value");
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+- Note: the memory leak is not due to the infinite loop on line 14: the infinite loop can lead to a resource exhaustion, but not a memory leak. If we had properly implemented equals() and hashcode() methods, the code would run fine even with the infinite loop as we would only have one element inside the HashMap.
+
 # Java Basics
 
 ## Strings
@@ -320,26 +364,90 @@ public void finalize() {
   - Don't provide "setter" methods — methods that modify fields or objects referred to by fields.
   - Make all fields final and private.
   - Don't allow subclasses to override methods. The simplest way to do this is to declare the class as final. A more sophisticated approach is to make the constructor private and construct instances in factory methods. (Builder Design Pattern).
-
-
+```
 public final class Contacts {
 
     private final String name;
     private final String mobile;
 
-    public Contacts(String name, String mobile) {
+   
+   public Contacts(String name, String mobile) {
         this.name = name;
         this.mobile = mobile;
     }
   
     public String getName(){
-        return name;
+            return name;
     }
-  
+
+
     public String getMobile(){
-        return mobile;
+-         return mobile;
     }
-} 
+   }
+   ```
+
+### Floating Point Numbers
+
+The Java programming language provides two built-in classes for representing floating-point numbers: float, and double. The "float" class takes 4 bytes of storage, and have 23 binary digits of precision. The "double" class takes 8 bytes of storage, and have 52 binary digits of precision.
+
+3.0d is a double precision floating-point number constant. 3.0, or alternatively 3.0f is a single precision floating-point number constant.
+
+float f = 3.0f;
+double d = 3.0d;
+The Java core library also provides two wrapped classes java.lang.Float, and java.lang.Double. These two classes allow floating-point objects to be stored in Java collection objects, such as hash tables. These two classes also provides parsing, and conversion helper methods.
+
+Float ff = new Float(1.0f); // creates a Java "Float" object
+Double dd = new Double(2.0d); // creates a Java "Double" object
+
+#### Not A Number
+
+"NaN" stands for "not a number". "Nan" is produced if a floating point operation has some input parameters that cause the operation to produce some undefined result. For example, 0.0 divided by 0.0 is arithmetically undefined. Taking the square root of a negative number is also undefined.
+
+0.0 / 0.0   ->  NaN
+Math.sqrt(-2.0)  ->  NaN
+
+All boolean operations involving "NaN" results in a false value.
+
+Double.NaN > 1.0  ->  false
+Double.NaN < 1.0  ->  false
+
+A "NaN" value is not equal to itself. However, a "NaN" Java "Float" object is equal to itself. The semantic is defined this way, because otherwise "NaN" Java "Float" objects cannot be retrieved from a hash table.
+
+(new Float(0.0 / 0.0)).equals(new Float(0.0 / 0.0))  ->  true
+
+#### Infinity
+
+"Infinity" is produced if a floating point operation creates such a large floating-point number that it cannot be represented normally. "Infinity" is a special value that represent the concept of positive infinity.
+
+1.0 / 0.0  ->  Infinity
+
+"-Infinity" is a special value that represent the concept of negative infinity.
+
+-1.0 / 0.0  ->  -Infinity
+
+Negative Zero "-0.0" is numerically identical to "0.0". However, some operations involving "-0.0" are different than the same operation with "0.0".
+
+(-0.0) == 0.0  ->  true
+new Double(0.0).equals(new Double(-0.0)) -> false
+  
+  
+### What is Anonymous Inner Class?
+
+- Anonymous Inner Class is used often as single-use classes for convenience, that help make your code more concise. 
+- An anonymous inner class can come useful when making an instance of an object with certain "extras" such as overloading methods, without having to actually subclass a class.
+- Example attaching an event listener:
+```
+button.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // do something
+    }
+});
+```
+- Using this method makes coding a little bit quicker, as I don't need to make an extra class that implements ActionListener. I can just instantiate an anonymous inner class without actually making a separate class.
+- I only use this technique for "quick and dirty" tasks where making an entire class feels unnecessary. Having multiple anonymous inner classes that do exactly the same thing should be refactored to an actual class, be it an inner class or a separate class.
+
 
 # Collections
 
