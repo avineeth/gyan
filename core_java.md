@@ -44,6 +44,30 @@ To make Java more memory efficient, the JVM sets aside a special area of memory 
 ### What is the main difference between Java strings and C, C++ strings?
 - In C and C++, strings are terminated with null character. But in java, strings are not terminated with null character. Strings are treated as objects in java.
 
+### Hascode fuction for String class. - hashCode()
+- Returns a hash code for this string. The hash code for a String object is computed as
+  `s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]`
+ 
+ -using int arithmetic, where s[i] is the ith character of the string, n is the length of the string, and ^ indicates exponentiation. (The hash value of the empty string is zero.)
+
+- The value 31 was chosen because it is an odd prime. If it were even and the multiplication overflowed, information would be lost, as multiplication by 2 is equivalent to shifting. The advantage of using a prime is less clear, but it is traditional. A nice property of 31 is that the multiplication can be replaced by a shift and a subtraction for better performance: 31 * i == (i << 5) - i. Modern VMs do this sort of optimization automatically.
+
+Code from String class is different from the logic mentioned above.
+```
+ public int hashCode() {
+        int h = hash;
+        if (h == 0 && value.length > 0) {
+            char val[] = value;
+
+            for (int i = 0; i < value.length; i++) {
+                h = 31 * h + val[i];
+            }
+            hash = h;
+        }
+        return h;
+    }
+```
+
 ## Can you mark a class as both abstract and final?
 - You can't mark a class as both abstract and final. They have nearly opposite meanings. An abstract class must be subclassed, whereas a final class must not be subclassed. 
 - If you see this combination of abstract and final modifiers, used for a class or method declaration, the code will not compile.
