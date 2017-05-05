@@ -44,6 +44,40 @@ To make Java more memory efficient, the JVM sets aside a special area of memory 
 ### What is the main difference between Java strings and C, C++ strings?
 - In C and C++, strings are terminated with null character. But in java, strings are not terminated with null character. Strings are treated as objects in java.
 
+
+## Object’s equal() method and when do you override it?
+- If you don't override a class's equals() method, you won't be able to use those objects as a key in a hashtable and you probably won't get accurate Sets, such that there are no conceptual duplicates.
+- boolean equals (Object obj) Decides whether two objects are meaningfully equivalent.
+- int hashCode() Returns a hashcode int value for an object, so that the object can be used in Collection classes that use hashing, including Hashtable,HashMap, and HashSet.
+
+- This is what the JDK 1.4 API documentation says about the equals method of Object class-
+
+- Indicates whether some other object is "equal to" this one.
+
+- The equals method implements an equivalence relation:
+  - It is reflexive: for any reference value x, x.equals(x) should return true.
+  - It is symmetric: for any reference values x and y, x.equals(y) should return true if and only if y.equals(x) returns true.
+  - It is transitive: for any reference values x, y, and z, if x.equals(y) returns true and y.equals(z) returns true, then x.equals(z) should return true.
+  - It is consistent: for any reference values x and y, multiple invocations of x.equals(y) consistently return true or consistently return false, provided no information used in equals comparisons on the object is modified.
+  - For any non-null reference value x, x.equals(null) should return false.
+  - The equals method for class Object implements the most discriminating possible equivalence relation on objects; that is, for any reference values x and y, this method returns true if and only if x and y refer to the same object (x==y has the value true).
+
+Note that it is generally necessary to override the hashCode method whenever this method is overridden, so as to maintain the general contract for the hashCode method, which states that equal objects must have equal hash codes.
+
+```
+     public boolean equals(Object obj)
+		{
+			if(this == obj)
+				return true;
+			if((obj == null) || (obj.getClass() != this.getClass()))
+				return false;
+			// object must be Test at this point
+			Test test = (Test)obj;
+			return num == test.num &&
+			(data == test.data || (data != null && data.equals(test.data)));
+		}
+```
+
 ### Hascode fuction for String class. - hashCode()
 - Returns a hash code for this string. The hash code for a String object is computed as
   `s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]`
@@ -86,12 +120,6 @@ Code from String class is different from the logic mentioned above.
 - An interface cannot implement another interface or class.
 - An interface must be declared with the keyword interface.
 - Interface types can be used polymorphically
-
-
-## Object’s equal() method and when do you override it?
-- If you don't override a class's equals() method, you won't be able to use those objects as a key in a hashtable and you probably won't get accurate Sets, such that there are no conceptual duplicates.
-- boolean equals (Object obj) Decides whether two objects are meaningfully equivalent.
-- int hashCode() Returns a hashcode int value for an object, so that the object can be used in Collection classes that use hashing, including Hashtable,HashMap, and HashSet.
 
 ## final
 - final can be used to mark a variable "unchangeable"
