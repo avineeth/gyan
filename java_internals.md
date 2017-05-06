@@ -7,18 +7,31 @@ TODO:
 
 ### JVM Generations
 
-Emperical analysis of objects have shown that objects are short lived.
-Therefore the heap is divided into smaller parts or generations.
+- Emperical analysis of objects have shown that objects are short lived.
+- Therefore the heap is divided into smaller parts or generations.
   - Young Generation
   - Old or Tenured Generation
   - Permanent Generation (before Java 8) / Metaspace (Java 8 onwards)
 ![Image](https://github.com/avineeth/gyan/blob/master/img/jvm_metapsace.png?raw=true)
 
 #### Stop the world
+- The term is "stop-the-world." Stop-the-world will occur no matter which GC algorithm you choose. Stop-the-world means that the JVM is stopping the application from running to execute a GC. When stop-the-world occurs, every thread except for the threads needed for the GC will stop their tasks. The interrupted tasks will resume only after the GC task has completed. GC tuning often means reducing this stop-the-world time.
 
-The term is "stop-the-world." Stop-the-world will occur no matter which GC algorithm you choose. Stop-the-world means that the JVM is stopping the application from running to execute a GC. When stop-the-world occurs, every thread except for the threads needed for the GC will stop their tasks. The interrupted tasks will resume only after the GC task has completed. GC tuning often means reducing this stop-the-world time.
+- Young generation: Most of the newly created objects are located here. Since most objects soon become unreachable, many objects are created in the young generation, then disappear. When objects disappear from this area, we say a "minor GC" has occurred. Minor garbage collections are always stop the world events.
 
+- Old generation: The objects that did not become unreachable and survived from the young generation are copied here. It is generally larger than the young generation. As it is bigger in size, the GC occurs less frequently than in the young generation. When objects disappear from the old generation, we say a "major GC" (or a "full GC") has occurred. Major garbage collection are also Stop the World events, often a major gc is much slower because it involves all live objects, so major gc should be minimized.
 
+- The permanent generation is also called the "method area," and it stores classes or interned character strings. So, this area is definitely not for objects that survived from the old generation to stay permanently. A GC may occur in this area. The GC that took place here is still counted as a major GC. 
+
+#### Where are Static methods and Variables stored?
+- Static methods (in fact all methods) as well as static variables are stored in the PermGen section of the heap, since they are part of the reflection data (class related data, not instance related).
+- Note that only the variables and their technical values (primitives or references) are stored in PermGen space. If your static variable is a reference to an object that object itself is stored in the normal sections of the heap (young/old generation or survivor space). Those objects (unless they are interal objects like classes etc.) are not stored in PermGen space.
+
+- Example:
+```
+static int i = 1; //the value 1 is stored in the permgen section
+static Object o = new SomeObject(); //the reference(pointer/memory address) is stored in the permgen section, the object itself is not.
+```
 
 http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
 
