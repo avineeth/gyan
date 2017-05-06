@@ -90,6 +90,11 @@ http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
 - As the program runs, the virtual machine places all objects the program instantiates onto the heap. 
 ![Image](https://github.com/avineeth/gyan/blob/master/img/methodarea_heap.gif?raw=true)
 
+### Run-Time Constant Pool
+- A run-time constant pool is a per-class or per-interface run-time representation of the constant_pool table in a class file (§4.4).
+- It contains several kinds of constants, ranging from numeric literals known at compile-time to method and field references that must be resolved at run-time.
+- The run-time constant pool serves a function similar to that of a symbol table for a conventional programming language, although it contains a wider range of data than a typical symbol table.
+
 ### Stack and Program Counter
 - As each new thread comes into existence, it gets its own pc register (program counter) and Java stack.
 - If the thread is executing a Java method (not a native method), the value of the pc register indicates the next instruction to execute.
