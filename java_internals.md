@@ -1,7 +1,24 @@
 TODO:
-- Garbage Collection
+
 - Thread Dumps
 - GC Pauses
+
+# Garbage Collection
+
+### JVM Generations
+
+Emperical analysis of objects have shown that objects are short lived.
+Therefore the heap is divided into smaller parts or generations.
+  - Young Generation
+  - Old or Tenured Generation
+  - Permanent Generation (before Java 8) / Metaspace (Java 8 onwards)
+![Image](https://github.com/avineeth/gyan/blob/master/img/jvm_metapsace.png?raw=true)
+
+#### Stop the world
+
+The term is "stop-the-world." Stop-the-world will occur no matter which GC algorithm you choose. Stop-the-world means that the JVM is stopping the application from running to execute a GC. When stop-the-world occurs, every thread except for the threads needed for the GC will stop their tasks. The interrupted tasks will resume only after the GC task has completed. GC tuning often means reducing this stop-the-world time.
+
+
 
 http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
 
@@ -35,6 +52,12 @@ http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
 
 ## Just In Time (JIT) Compilation
 - Java byte code is interpreted however this is not as fast as directly executing native code on the JVM’s host CPU. To improve performance the Oracle Hotspot VM looks for “hot” areas of byte code that are executed regularly and compiles these to native code. The native code is then stored in the code cache in non-heap memory. In this way the Hotspot VM tries to choose the most appropriate way to trade-off the extra time it takes to compile code verses the extra time it take to execute interpreted code.
+
+### Difference between 32 bit and 64 bit
+- 32 bit/64 bit is the size of the CPU register.
+- with 32 bit registers CPU can hold only 2^32 address locations -max 4 GB RAM
+- with 64 bit registers CPU can hold 2^64 address locations - 17.2 billion GB RAM
+- additionally with 32 bit CPU must process 64 bit numbers are 2 stepp process, where as  64 bit processors are able to perform 64-bit number operations as a single step.
 
 ## Class Loader Architecture
 - There may be more than one class loader inside a Java Virtual Machine.
