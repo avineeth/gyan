@@ -1,10 +1,11 @@
 # Java Basics
 
 ## Strings
-### String Constant Pool/String Interning
+
+#### String Constant Pool/String Interning
 To make Java more memory efficient, the JVM sets aside a special area of memory called the "String constant pool." When the compiler encounters a String literal, it checks the pool to see if an identical String already exists. If a match is found, the reference to the new literal is directed to the existing String, and no new String literal object is created.
 
-### String intern()
+#### String intern()
 - A pool of strings, initially empty, is maintained privately by the class String.
 - When the intern method is invoked, if the pool already contains a string equal to this String object as determined by the equals(Object) method, then the string from the pool is returned.
 - Otherwise, this String object is added to the pool and a reference to this String object is returned.
@@ -24,13 +25,33 @@ To make Java more memory efficient, the JVM sets aside a special area of memory 
     if(s1 == s5) //true
        System.out.println("s1 and s5 are same");
 ```
-### What is the difference between? 
+#### What is the difference between? 
 
     String s = "hello";
     String s = new String("hello");
 
 - When you use a literal, say String str = "abc";, the object in the pool is used.
 - If you use String str = new String("abc");, a new object is created, but the existing string literal may be reused on either the JVM level or bytecode level (at compile time).
+
+#### String pooling
+
+- String pooling (sometimes also called as string canonicalisation) is a process of replacing several String objects with equal value but different identity with a single shared String object. You can achieve this goal by keeping your own Map (with possibly soft or weak references depending on your requirements) and using map values as canonicalised values. Or you can use String.intern() method which is provided to you by JDK.
+
+- At times of Java 6 using String.intern() was forbidden by many standards due to a high possibility to get an OutOfMemoryException if pooling went out of control. Oracle Java 7 implementation of string pooling was changed considerably. You can look for details in http://bugs.sun.com/view_bug.do?bug_id=6962931 and http://bugs.sun.com/view_bug.do?bug_id=6962930.
+
+#### String.intern() in Java 6
+
+- In those good old days all interned strings were stored in the PermGen – the fixed size part of heap mainly used for storing loaded classes and string pool. Besides explicitly interned strings, PermGen string pool also contained all literal strings earlier used in your program (the important word here is used – if a class or method was never loaded/called, any constants defined in it will not be loaded).
+- The biggest issue with such string pool in Java 6 was its location – the PermGen. PermGen has a fixed size and can not be expanded at runtime. You can set it using -XX:MaxPermSize=96m option. As far as I know, the default PermGen size varies between 32M and 96M depending on the platform. You can increase its size, but its size will still be fixed. Such limitation required very careful usage of String.intern – you’d better not intern any uncontrolled user input using this method. That’s why string pooling at times of Java 6 was mostly implemented in the manually managed maps.
+
+#### String.intern() in Java 7
+- Oracle engineers made an extremely important change to the string pooling logic in Java 7 – the string pool was relocated to the heap. It means that you are no longer limited by a separate fixed size memory area. 
+- All strings are now located in the heap, as most of other ordinary objects, which allows you to manage only the heap size while tuning your application. Technically, this alone could be a sufficient reason to reconsider using String.intern() in your Java 7 programs. But there are other reasons.
+
+#### String pool values are garbage collected
+- Yes, all strings in the JVM string pool are eligible for garbage collection if there are no references to them from your program roots.
+- It applies to all discussed versions of Java. It means that if your interned string went out of scope and there are no other references to it – it will be garbage collected from the JVM string pool.
+- Being eligible for garbage collection and residing in the heap, a JVM string pool seems to be a right place for all your strings, isn’t it? In theory it is true – non-used strings will be garbage collected from the pool, used strings will allow you to save memory in case then you get an equal string from the input. Seems to be a perfect memory saving strategy? Nearly so. You must know how the string pool is implemented before making any decisions.
 
 ### String, StringBuffer, and StringBuilder
 - Mutability Difference: String is immutable, if you try to alter their values, another object gets created, whereas StringBuffer and StringBuilder are mutable so they can change their values.
