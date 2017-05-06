@@ -36,6 +36,12 @@ http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
 ## Just In Time (JIT) Compilation
 - Java byte code is interpreted however this is not as fast as directly executing native code on the JVM’s host CPU. To improve performance the Oracle Hotspot VM looks for “hot” areas of byte code that are executed regularly and compiles these to native code. The native code is then stored in the code cache in non-heap memory. In this way the Hotspot VM tries to choose the most appropriate way to trade-off the extra time it takes to compile code verses the extra time it take to execute interpreted code.
 
+### Difference between 32 bit and 64 bit
+- 32 bit/64 bit is the size of the CPU register.
+- with 32 bit registers CPU can hold only 2^32 address locations -max 4 GB RAM
+- with 64 bit registers CPU can hold 2^64 address locations - 17.2 billion GB RAM
+- additionally with 32 bit CPU must process 64 bit numbers are 2 stepp process, where as  64 bit processors are able to perform 64-bit number operations as a single step.
+
 ## Class Loader Architecture
 - There may be more than one class loader inside a Java Virtual Machine.
 - The primordial class loader (there is only one of them) is a part of the Java Virtual Machine implementation.
