@@ -77,3 +77,15 @@ Binary search tree: Used for searching. A binary tree where the left child conta
   2
  / \
 1   3
+
+### Symbol Tables
+- Key-value pair abstraction.
+  - Insert a value with specified key.
+  - Given a key, search for the corresponding value.
+- Ex. DNS lookup.
+  - Insert domain name with specified IP address.
+  - Given domain name, find corresponding IP address.
+* key domain name          IP address
+* www.cs.princeton.edu     128.112.136.11
+* www.princeton.edu        128.112.128.15
+* www.yale.edu             130.132.143.21
