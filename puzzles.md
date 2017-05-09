@@ -62,6 +62,7 @@ Given an array of integers, find two numbers such that they add up to a specific
 		}
 	```
   
+[TwoSum.java](../../../algos/blob/master/TwoSum.java)
 
 ## 3-Sum Problem
 
@@ -84,4 +85,5 @@ Given an array of integers, find two numbers such that they add up to a specific
 
 - Solution
   -  create a hash table with (nC2) key-value pairs.
+  
   [FourSum.java](../../../algos/blob/master/FourSum.java)
