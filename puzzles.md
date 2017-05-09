@@ -13,6 +13,9 @@ Returns a string representation of the contents of the specified array.
 int[] arr= {12, 3, 4, 1, 6, 9};
 int[] arr2 = Arrays.copyOf(arr, arr.length);
 ```
+#### Integer to int
+Integer.intValue()
+
 
 ## Nuts and bolts.
 A disorganized carpenter has a mixed pile of n nuts and n bolts. The goal is to find the corresponding pairs of nuts and bolts. Each nut fits exactly one bolt and each bolt fits exactly one nut. By fitting a nut and a bolt together, the carpenter can see which one is bigger (but the carpenter cannot compare two nuts or two bolts directly). Design an algorithm for the problem that uses nlogn compares (probabilistically).
@@ -59,3 +62,26 @@ Given an array of integers, find two numbers such that they add up to a specific
 		}
 	```
   
+
+## 3-Sum Problem
+
+- Find a triplet that sum to a given value.
+- Given an array and a value, find if there is a triplet in array whose sum is equal to the given value. If there is such a triplet present in array, then print the triplet and return true. Else return false. For example, if the given array is {12, 3, 4, 1, 6, 9} and given sum is 24, then there is a triplet (12, 3 and 9) present in array whose sum is 24.
+
+- Solution 1 
+  - Brute force nested loop. Complexity O(N^3)
+- Solution 2
+  - Sort the elements 
+  - make one element the anchor
+  - Make two pointers i, j pointing at the head and tail elements of the rest sorted array
+  - move the pointers according to if the value is less or more than the total.
+  
+  [ThreeSum.java](../../../algos/blob/master/ThreeSum.java)
+  
+ ## 4-Sum Problem
+ 
+-  4-SUM. Given an array a[] of n integers, the 4-SUM problem is to determine if there exist distinct indices i, j, k, and l such that a[i]+a[j]=a[k]+a[l]. Design an algorithm for the 4-SUM problem that takes time proportional to n2 (under suitable technical assumptions).
+
+- Solution
+  -  create a hash table with (nC2) key-value pairs.
+  [FourSum.java](../../../algos/blob/master/FourSum.java)
