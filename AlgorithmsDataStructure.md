@@ -110,6 +110,72 @@ Binary search tree: Used for searching. A binary tree where the left child conta
 * www.yale.edu             130.132.143.21
 
 
+### Graph Theory
+
+- A graph   G is an ordered pair 
+  - of a set V of vertices and
+  - a set E of edges
+  - represented as **G= (V,E)**
+
+- Different Types of Graphs
+1. Directed Graph - Digraph - Connection is One-Way - eg - Webcrawling
+2. Undirected Graph - Connection is both ways. - eg Facebook friends
+3. Weighted - weight or cost associated with the edges - eg - Road Network
+
+- |V| -> number of vertices
+- |E| -> number of edges
+
+- Number of elements in a graph
+  - if |V| = n
+  1. then 0<= |E| <= n(n-1) , in a directed graph
+  2. then 0<= |E| <= n(n-1)/2 , in an un-directed graph
+
+- Dense Graph-> too many edges - Adjacency matrix to represent the graph
+- Sparse Graph -> too few edges  - Adjacency List to represnt the graph
+
+- Path in a graph
+  - Walk - a sequence of vertices where each adjacent pair is connected by an edge.
+  - (Simple) Path - a walk in which no vertices (and thus no edges) are repeated.
+  - Trail - a walk in which vertices (and not edges) can be repeated.
+  - Closed Walk - starts and ends at the same vertex.
+  - Cycle - starts and ends at the same vertex but no repetitiin other than start/end vertex.
+  - Acyclic graph - a graph with no cycle - A tree is an example of directed acyclic graph.
+  - Directed Acyclic graph (DAG)
+  - Strongly Connected/Connection Graph - if there is a path from any vertex to any other vertex.
+
+- How is graph represented in memory
+
+1. Edge List and Vertex List
+- this can be implemented using arraylists
+- Vertex can be just the name of the Vertex.
+- Edge can be an object which has Start Vertex and End Vertex.
+- Space Complexity = O(|V| + |E|)
+- Time Complexity 
+  - for finding adjacent vertices for a vertex. 
+    - All elements in Edge List has to be scanned to find all the adjacent vertices. Complexity - O(|E|)
+  - to find if 2 nodes are connected.
+    - has to traverse the edge list - O(|E|)
+- Space Complexity     
+    - O(|E|) ~= O(|V| * |V|) -> quadratic -> not efficient
+![Image](https://github.com/avineeth/gyan/blob/master/img/Graph-representation-EdgeList.PNG?raw=true)
+
+2. Adjacency Matrix
+- Vertex list same as before
+- Edge list represented by a VxV matrix called A
+- A(i,j) =1 if there is an edge between two vertices Vi and Vj
+- A(i,j) =0 if there is no edge
+- Time complexity
+  - for finding adjacent vertices for a vertex. 
+    - if vertex index is provided then its constant time. else time to scan the vertex list.
+  - to find if 2 nodes are connected.
+    - if vertex index is provided then its constant time. else time to scan the vertex list.	  
+- Space Complexity  - O(|V| * |V|)
+  - this is inefficient for large graphs like facebook. In which each Vertex may not be connected to all other vertices.
+  - Good for dense graphs.
+![Image](https://github.com/avineeth/gyan/blob/master/img/Graph-representation-AdjacencyMatrix.PNG?raw=true)
+
+3. Adjacency List
+
 
 ### Divide and Conquer
 - Like Greedy and Dynamic Programming, Divide and Conquer is an algorithmic paradigm. A typical Divide and Conquer algorithm solves a problem using following three steps.
