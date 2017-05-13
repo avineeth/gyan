@@ -185,6 +185,30 @@ Given an array of integers, find two numbers such that they add up to a specific
   
 [TwoSum.java](../../../algos/blob/master/TwoSum.java)
 
+## Binary Search
+- Easiest way to find a key in a Array.
+- Pre-condition - Array has to be sorted.
+- Complexity - logN
+- Compare key against middle entry.
+  - Too small, go left.
+  - Too big, go right.
+  - Equal, found.
+  
+```
+public static int binarySearch(int[] a, int key)
+ {
+ int lo = 0, hi = a.length-1;
+ while (lo <= hi)
+ {
+ int mid = lo + (hi - lo) / 2;
+ if (key < a[mid]) hi = mid - 1;
+ else if (key > a[mid]) lo = mid + 1;
+ else return mid;
+ }
+ return -1;
+ }
+```
+
 ## 3-Sum Problem
 
 - Find a triplet that sum to a given value.
@@ -208,3 +232,11 @@ Given an array of integers, find two numbers such that they add up to a specific
   -  create a hash table with (nC2) key-value pairs.
   
   [FourSum.java](../../../algos/blob/master/FourSum.java)
+  
+  
+  ## Social network connectivity. TODO
+- Given a social network containing n members and a log file containing m timestamps at which times pairs of members formed friendships, design an algorithm to determine the earliest time at which all members are connected (i.e., every member is a friend of a friend of a friend ... of a friend). Assume that the log file is sorted by timestamp and that friendship is an equivalence relation. The running time of your algorithm should be mlogn or better and use extra space proportional to n.
+
+Union-find
+
+・Kruskal's minimum spanning tree algorithm.
