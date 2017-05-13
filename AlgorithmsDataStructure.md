@@ -145,7 +145,7 @@ Binary search tree: Used for searching. A binary tree where the left child conta
 
 - How is graph represented in memory
 
--  ** Edge List and Vertex List **
+##### Edge List and Vertex List 
 - this can be implemented using arraylists
 - Vertex can be just the name of the Vertex.
 - Edge can be an object which has Start Vertex and End Vertex.
@@ -159,7 +159,7 @@ Binary search tree: Used for searching. A binary tree where the left child conta
     - O(|E|) ~= O(|V| * |V|) -> quadratic -> not efficient
 ![Image](https://github.com/avineeth/gyan/blob/master/img/Graph-representation-EdgeList.PNG?raw=true)
 
--  ** Adjacency Matrix **
+##### Adjacency Matrix
 - Vertex list same as before
 - Edge list represented by a VxV matrix called A
 - A(i,j) =1 if there is an edge between two vertices Vi and Vj
@@ -174,7 +174,7 @@ Binary search tree: Used for searching. A binary tree where the left child conta
   - Good for dense graphs.
 ![Image](https://github.com/avineeth/gyan/blob/master/img/Graph-representation-AdjacencyMatrix.PNG?raw=true)
 
-- ** Adjacency List **
+##### Adjacency List
 - An array of linked lists is used.
 - Size of the array is equal to number of vertices.
 - Let the array be array[]. An entry array[i] represents the linked list of vertices adjacent to the ith vertex. 
