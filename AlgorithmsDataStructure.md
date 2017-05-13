@@ -118,17 +118,17 @@ Binary search tree: Used for searching. A binary tree where the left child conta
   - represented as **G= (V,E)**
 
 - Different Types of Graphs
-1. Directed Graph - Digraph - Connection is One-Way - eg - Webcrawling
-2. Undirected Graph - Connection is both ways. - eg Facebook friends
-3. Weighted - weight or cost associated with the edges - eg - Road Network
+  1. Directed Graph - Digraph - Connection is One-Way - eg - Webcrawling
+  2. Undirected Graph - Connection is both ways. - eg Facebook friends
+  3. Weighted - weight or cost associated with the edges - eg - Road Network
 
-- |V| -> number of vertices
-- |E| -> number of edges
 
 - Number of elements in a graph
-  - if |V| = n
-  1. then 0<= |E| <= n(n-1) , in a directed graph
-  2. then 0<= |E| <= n(n-1)/2 , in an un-directed graph
+  - |V| -> number of vertices
+  - |E| -> number of edges
+  - if |V| = n, maximum possible edges in a graph
+    1. 0<= |E| <= n(n-1) , in a directed graph
+    2. 0<= |E| <= n(n-1)/2 , in an un-directed graph
 
 - Dense Graph-> too many edges - Adjacency matrix to represent the graph
 - Sparse Graph -> too few edges  - Adjacency List to represnt the graph
@@ -145,7 +145,7 @@ Binary search tree: Used for searching. A binary tree where the left child conta
 
 - How is graph represented in memory
 
-1. Edge List and Vertex List
+1. ** Edge List and Vertex List **
 - this can be implemented using arraylists
 - Vertex can be just the name of the Vertex.
 - Edge can be an object which has Start Vertex and End Vertex.
@@ -159,7 +159,7 @@ Binary search tree: Used for searching. A binary tree where the left child conta
     - O(|E|) ~= O(|V| * |V|) -> quadratic -> not efficient
 ![Image](https://github.com/avineeth/gyan/blob/master/img/Graph-representation-EdgeList.PNG?raw=true)
 
-2. Adjacency Matrix
+2. ** Adjacency Matrix **
 - Vertex list same as before
 - Edge list represented by a VxV matrix called A
 - A(i,j) =1 if there is an edge between two vertices Vi and Vj
@@ -174,8 +174,11 @@ Binary search tree: Used for searching. A binary tree where the left child conta
   - Good for dense graphs.
 ![Image](https://github.com/avineeth/gyan/blob/master/img/Graph-representation-AdjacencyMatrix.PNG?raw=true)
 
-3. Adjacency List
-
+3. ** Adjacency List **
+- An array of linked lists is used.
+- Size of the array is equal to number of vertices.
+- Let the array be array[]. An entry array[i] represents the linked list of vertices adjacent to the ith vertex. 
+![Image](https://github.com/avineeth/gyan/blob/master/img/Adjacency List Representation of Graph.JPG?raw=true)
 
 ### Divide and Conquer
 - Like Greedy and Dynamic Programming, Divide and Conquer is an algorithmic paradigm. A typical Divide and Conquer algorithm solves a problem using following three steps.
