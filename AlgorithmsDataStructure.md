@@ -201,9 +201,9 @@ Binary search tree: Used for searching. A binary tree where the left child conta
 1. Put an arbitrary node s in queue 
 2. Mark the node s as visited
 3. Repeat while queue is not empty:
-   4. curV = remove the first node from queue Q
-   5. Print and Put all of curV's unvisited neighbor nodes in a queue Q
-   6. Mark all inserted nodes as visited
+   - curV = remove the first node from queue Q
+   - Print and Put all of curV's unvisited neighbor nodes in a queue Q
+   - Mark all inserted nodes as visited
 
 ```
 public void bfsSearch(int s) {
