@@ -120,6 +120,117 @@ Binary search tree: Used for searching. A binary tree where the left child conta
 * www.princeton.edu        128.112.128.15
 * www.yale.edu             130.132.143.21
 
+### Priority Queues
+- Remove the largest or smallest queue by the natural order.
+- Requirement - Generic Items that are Comparable
+- Example Client- Find the largest transaction in a huge set (million/billions) of transactions which cannot be stored in memory. Keep track of top 5 transactions using Priority Queues.
+
+```
+MinPQ<Transaction> pq = new MinPQ<Transaction>();
+while (StdIn.hasNextLine())
+{
+ String line = StdIn.readLine();
+ Transaction item = new Transaction(line);
+ pq.insert(item);
+ if (pq.size() > M)
+	pq.delMin(); // Important here.
+}
+```
+Priority queue Implementation
+
+1. Maitain an Un-ordered array as queue (unsorted).
+   - Insert to the end. When removing max, parse the array to get the maximum and remove.
+   - Complexity Insert - 1 Max - N, Del Max - N
+2. Maitain an Ordered array as queue (sorted).
+   - When inserting, insert it at right postition. When removing max, remove from end.
+   - Complexity Insert - N, Max -1, Del Max - 1
+3. Binary Heap
+
+#### Binary Heap
+- based on Complete Binary Tree
+- Complexity Insert - logN, Max -1, Del Max - logN
+
+![Image](https://github.com/avineeth/gyan/blob/master/img/heap-representations.png?raw=true)
+
+##### Heap order Binary tree
+- key in nodes
+- In Array Representation start from index 1
+- Largest Key is a[1]
+- Parents key no smaller than childrens keys.
+- Parent of node k is at k/2
+- Children of node k is at 2k at 2k+1
+- In computer science, a heap is a specialized tree-based data structure that satisfies the heap property: If A is a parent node of B, then the key (the value) of node A is ordered with respect to the key of node B with the same ordering applying across the heap.
+- The Java platform (since version 1.5) provides a binary heap implementation with class java.util.PriorityQueue in the Java Collections Framework. This class implements by default a min-heap; to implement a max-heap, programmer should write a custom comparator.
+  - eg: PriorityQueue<Integer> queue = new PriorityQueue<>(10, Collections.reverseOrder());
+  - add(E e)- Inserts the specified element into this priority queue.
+  - peek() - Retrieves, but does not remove, the head of this queue, or returns null if this queue is empty.
+  - poll() - Retrieves and removes the head of this queue, or returns null if this queue is empty.
+
+- A heap can be classified further as either a "max heap" or a "min heap". 
+- In a max heap, the keys of parent nodes are always greater than or equal to those of the children and the highest key is in the root node.
+- In a min heap, the keys of parent nodes are less than or equal to those of the children and the lowest key is in the root node.
+
+##### Swim operation
+- When child's key becomes larger than its parents key
+  - Exchange Child Key with Parents key.
+  - Repeat until the heap order is restored.
+  - analogy - an better employee is promoted above his manager.
+```
+private void swim(int k) {
+  while (k > 1 && less(k/2, k))  {
+    exch(k, k/2);
+    k = k/2;
+  }
+ }
+```
+##### Insertion in a heap
+- Insert. Add node at end, then swim it up.
+- Cost. At most 1 + lg N compares.
+```
+public void insert(Key x)
+{
+ pq[++N] = x;
+ swim(N);
+}
+```
+##### Sink Operation
+- Parent's key becomes smaller than one (or both) of its children's.
+- Exchange key in parent with key in larger child.
+- Repeat until heap order restored.
+```
+private void sink(int k)
+{
+ while (2*k <= N)
+ {
+ int j = 2*k;
+ if (j < N && less(j, j+1)) j++;
+ if (!less(k, j)) break;
+ exch(k, j);
+ k = j;
+ }
+}
+```
+##### Heap Sort
+- start with a arbitary array
+- heap construction - Build max heap using bottom-up method
+```
+for (int k = N/2; k >= 1; k--)
+ sink(a, k, N);
+```
+ - Second pass.
+   - Remove the maximum, one at a time.
+   - Leave in array, instead of nulling out.
+ ```  
+while (N > 1)
+{
+ exch(a, 1, N--);
+ sink(a, 1, N);
+}
+```
+- Complexity
+  - Heap construction uses ≤ 2 N compares and exchanges.
+  - Heapsort uses ≤ 2 N lg N compares and exchanges.
+
 
 ### Graph Theory
 
