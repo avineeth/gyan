@@ -23,6 +23,17 @@ int[] arr2 = Arrays.copyOf(arr, arr.length);
 #### Integer to int
 Integer.intValue()
 
+#### Queue 
+- Queue is an interface cannot instantiate
+- Implement as a **Priority Queue** or as a **LinkedList**
+- The elements of the **Priority Queue** are ordered according to their natural ordering, or by a Comparator provided at queue construction time, depending on which constructor is used.
+- Operations on queue
+  - **add()** -Adds an element at the tail of queue. More specifically, at the last of linkedlist if it is used, or according to the priority in case of priority queue implementation.
+  - **peek()** -To view the head of queue without removing it. Returns null if queue is empty.
+  - **remove()** -Removes and returns the head of the queue. Throws NoSuchElementException when queue is impty.
+  - **poll()** -Removes and returns the head of the queue. Returns null if queue is empty.
+  - Since it is a subtype of Collections class, it inherits all the methods of it namely size(), **isEmpty()**, contains() etc.
+
 
 
 ## Traversing Collections
@@ -180,6 +191,76 @@ Binary search tree: Used for searching. A binary tree where the left child conta
 - Let the array be array[]. An entry array[i] represents the linked list of vertices adjacent to the ith vertex. 
 
 ![Image](https://github.com/avineeth/gyan/blob/master/img/Graph-representation-AdjacencyList.JPG?raw=true)
+
+#### Graph traversal algorithms
+
+##### Breadth-first Search 
+- Uses Queues
+- Time Complexity - O(|V| + |E|) and Space Complexity O(|V|)
+- Nodes will be visit in the order imposed by the FIFO queue
+1. Put an arbitrary node s in queue 
+2. Mark the node s as visited
+3. Repeat while queue is not empty:
+   4. curV = remove the first node from queue Q
+   5. Print and Put all of curV's unvisited neighbor nodes in a queue Q
+   6. Mark all inserted nodes as visited
+
+```
+public void bfsSearch(int s) {
+	int[] visited = new int[V.length];
+	Queue<Integer> queue = new LinkedList<Integer>();	
+	queue.add(s);
+	visited[s] =1;
+		
+	while(!queue.isEmpty()){
+		Integer curV = queue.remove();
+		for(Integer e: EdgeList[curV]) {
+			if(visited[e] !=1) {
+				System.out.println(e);					
+				queue.add(e);
+				visited[e] =1;
+			}
+		}
+	}
+}
+```
+##### Depth-first search. 
+- One starts at some arbitrary node as the root and explores as far as possible along each branch before backtracking.
+- Uses Stacks
+- Time Complexity - O(|V| + |E|) and Space Complexity O(|V|)
+- Differs from BFS 
+  - it uses a stack instead of a queue, and
+  - it delays checking whether a vertex has been discovered until the vertex is popped from the stack rather than making this check before pushing the vertex.
+```
+public void dfsSearch(int s) {
+	int[] visited = new int[V.length];
+	Stack<Integer> stack = new Stack<Integer>();
+	visited[s] =1;
+	stack.push(new Integer(s));
+	
+	while(!stack.empty()) {
+		Integer curV = stack.pop();
+		if(visited[curV] !=1) {
+			visited[curV] =1; //mark as visited
+			System.out.println(curV);
+		}
+		for(Integer e: EdgeList[curV])
+			stack.push(e); //push it into stack;
+		}			
+	}
+```
+- recursive algorithm
+```
+public void dfsRecursion(int s, int[] visited) {
+        visited[s] = 1;
+		System.out.println(s);
+        for(Integer e: EdgeList[s]) {
+            if (visited[e] != 1) {
+                dfsRecursion(e, visited);
+            }
+        }
+    }
+```    
 
 ### Divide and Conquer
 - Like Greedy and Dynamic Programming, Divide and Conquer is an algorithmic paradigm. A typical Divide and Conquer algorithm solves a problem using following three steps.
