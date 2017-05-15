@@ -21,7 +21,23 @@ TODO:
 
 - Old generation: The objects that did not become unreachable and survived from the young generation are copied here. It is generally larger than the young generation. As it is bigger in size, the GC occurs less frequently than in the young generation. When objects disappear from the old generation, we say a "major GC" (or a "full GC") has occurred. Major garbage collection are also Stop the World events, often a major gc is much slower because it involves all live objects, so major gc should be minimized.
 
-- The permanent generation is also called the "method area," and it stores classes or interned character strings. So, this area is definitely not for objects that survived from the old generation to stay permanently. A GC may occur in this area. The GC that took place here is still counted as a major GC. 
+- The permanent generation is also called the "method area," and it stores classes or interned character strings (until java 7). So, this area is definitely not for objects that survived from the old generation to stay permanently. A GC may occur in this area. The GC that took place here is still counted as a major GC. 
+
+### Garbage collection process
+refer the link below:
+http://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/index.html
+
+
+#### What if an object in the old generation need to reference an object in the young generation?
+
+- To handle these cases, there is something called the a "card table" in the old generation, which is a 512 byte chunk.
+- Whenever an object in the old generation references an object in the young generation, it is recorded in this table.
+- When a GC is executed for the young generation, only this card table is searched to determine whether or not it is subject for GC, instead of checking the reference of all the objects in the old generation.
+- This card table is managed with write barrier. This write barrier is a device that allows a faster performance for minor GC. Though a bit of overhead occurs because of this, the overall GC time is reduced. 
+- Write barrier - a piece of code executed whenever a member variable (of a reference type) is assigned/written to. If the new reference points to a young object and it's stored in an old object, the write barrier records that fact for the garbage collect.
+
+![Image](https://github.com/avineeth/gyan/blob/master/img/card-table-structure.png?raw=true)
+
 
 #### Where are Static methods and Variables stored?
 - Static methods (in fact all methods) as well as static variables are stored in the PermGen section of the heap, since they are part of the reflection data (class related data, not instance related).
