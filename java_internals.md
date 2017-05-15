@@ -22,6 +22,7 @@ TODO:
 - Old generation: The objects that did not become unreachable and survived from the young generation are copied here. It is generally larger than the young generation. As it is bigger in size, the GC occurs less frequently than in the young generation. When objects disappear from the old generation, we say a "major GC" (or a "full GC") has occurred. Major garbage collection are also Stop the World events, often a major gc is much slower because it involves all live objects, so major gc should be minimized.
 
 - The permanent generation is also called the "method area," and it stores classes or interned character strings (until java 7). So, this area is definitely not for objects that survived from the old generation to stay permanently. A GC may occur in this area. The GC that took place here is still counted as a major GC. 
+![Image](https://github.com/avineeth/gyan/blob/master/img/JavaGarbageCollectionheap.png?raw=true)
 
 ### Garbage collection process
 refer the link below:
