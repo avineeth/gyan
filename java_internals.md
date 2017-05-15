@@ -49,6 +49,21 @@ static int i = 1; //the value 1 is stored in the permgen section
 static Object o = new SomeObject(); //the reference(pointer/memory address) is stored in the permgen section, the object itself is not.
 ```
 
+#### Tenuring Threshold
+
+- Each object in Java heap has a header which is used by Garbage Collection (GC) algorithm. 
+- The young space collector (which is responsible for object promotion) uses a few bit(s) from this header to track the number of collections object that have survived (32-bit JVM use 4 bits for this, 64-bit probably some more).
+- During young space collection, every single object is copied. The Object may be copied to one of survival spaces (one which is empty before young GC) or to the old space.
+- For each object being copied, GC algorithm increases it's age (number of collection survived) and if the age is above the current tenuring threshold it would be copied (promoted) to old space. 
+- The Object could also be copied to the old space directly if the survival space gets full (overflow).
+- The journey of Object has the following pattern:
+  - allocated in eden
+  - copied from eden to survival space due to young GC
+  - copied from survival to (other) survival space due to young GC (this could happen few times)
+  - promoted from survival (or possible eden) to old space due to young GC (or full GC)
+  - the actual tenuring threshold is dynamically adjusted by JVM, but MaxTenuringThreshold sets an upper limit on it.
+- If you set MaxTenuringThreshold=0, all objects will be promoted immediately.
+
 http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
 
 # JVM Internals
