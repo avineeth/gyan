@@ -417,11 +417,16 @@ private void visit(Graph g, int v) {
 ```
 
 #### Djikstra's Algorithm - shortest path
+- Consider Vertices in the increasing order of distance from Source S.
+
+
 - algorithm similar to Prim's Minimum spanning tree algoritm
 - Both compute a spanning tree
 - Main difference is to choose the vertex of the tree
   - Prim's chooses the vertex closest to the tree. (via undirected edge).
-  - Djiksta's chooses closest to the Source. (via a directed path).
+  - Djikstra's chooses closest to the Source. (via a directed path).
+- Djikstra's algorithm is for directed graph
+- Prim's algorithm is for undirected graph
 
 ### Divide and Conquer
 - Like Greedy and Dynamic Programming, Divide and Conquer is an algorithmic paradigm. A typical Divide and Conquer algorithm solves a problem using following three steps.
