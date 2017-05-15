@@ -67,6 +67,42 @@ static Object o = new SomeObject(); //the reference(pointer/memory address) is s
 
 http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
 
+- According to JDK 7, there are 5 GC types for the Old Generation. 
+1. Serial GC
+2. Parallel GC
+3. Parallel Old GC (Parallel Compacting GC)
+4. Concurrent Mark & Sweep GC  (or "CMS")
+5. Garbage First (G1) GC
+
+
+#### Serial GC (-XX:+UseSerialGC)
+
+- The GC in the young generation uses the type we explained in the previous paragraph. The GC in the old generation uses an algorithm called ** "mark-sweep-compact." **
+- The first step of this algorithm is to mark the surviving objects in the old generation.
+- Then, it checks the heap from the front and leaves only the surviving ones behind (sweep).
+- In the last step, it fills up the heap from the front with the objects so that the objects are piled up consecutively, and divides the heap into two parts: one with objects and one without objects (compact).
+- The serial GC is suitable for a small memory and a small number of CPU cores.
+
+#### Parallel GC (-XX:+UseParallelGC)
+- While the serial GC uses only one thread to process a GC, the parallel GC uses several threads to process a GC, and therefore, faster. - This GC is useful when there is enough memory and a large number of cores. It is also called the "throughput GC."
+
+#### CMS GC (-XX:+UseConcMarkSweepGC)
+
+![Image](https://github.com/avineeth/gyan/blob/master/img/serial-gc-and-cms-gc.png?raw=true)
+
+- As you can see from the picture, the Concurrent Mark-Sweep GC is much more complicated than any other GC types that I have explained so far. 
+- The early **initial mark** step is simple. The surviving objects among the objects the closest to the classloader are searched. So, the pausing time is very short.
+- In the **concurrent mark** step, the objects referenced by the surviving objects that have just been confirmed are tracked and checked. The difference of this step is that it proceeds while other threads are processed at the same time.
+- In the **remark step**, the objects that were newly added or stopped being referenced in the concurrent mark step are checked.
+- Lastly, in the **concurrent sweep step**, the garbage collection procedure takes place. The garbage collection is carried out while other threads are still being processed. 
+- Since this GC type is performed in this manner, the pausing time for GC is very short. The CMS GC is also called the low latency GC, and is used when the response time from all applications is crucial. 
+- While this GC type has the advantage of short stop-the-world time, it also has the following disadvantages.
+  - It uses more memory and CPU than other GC types.
+  - The compaction step is not provided by default.
+- You need to carefully review before using this type. Also, if the compaction task needs to be carried out because of the many memory fragments, the stop-the-world time can be longer than any other GC types. You need to check how often and how long the compaction task is carried out.
+
+
+
 # JVM Internals
 -	When you write and run a Java program, you are tapping the power of these four technologies.
     * You express the program in source files written in the Java programming language.
