@@ -104,7 +104,9 @@ http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
 #### G1 - Garbage First
 
 -The G1 has a more flexible approach. The heap structured by the G1 looks more like this:
+
 ![Image](https://github.com/avineeth/gyan/blob/master/img/GC_Heap_G1.jpg?raw=true)
+
 - As you see, the G1 partitions the heap into smaller, equal sized blocks and assigns them to a generation, instead of reserving one big space for the entire generation. The size of these blocks can be configured and varies between 1 and 32 MB.
 - Now, if the Garbage Collector performs its global marking phase (which is of course concurrent), it is able to sort the blocks by the amount of garbage they contain.
 - In the next step, the collector selects a number of blocks based on the pause-time-goal specified by the user. These blocks are of course the ones, that contain the most garbage. Because of this behavior, the G1 got its name “Garbage First”.
