@@ -62,7 +62,7 @@ static Object o = new SomeObject(); //the reference(pointer/memory address) is s
   - copied from survival to (other) survival space due to young GC (this could happen few times)
   - promoted from survival (or possible eden) to old space due to young GC (or full GC)
   - the actual tenuring threshold is dynamically adjusted by JVM, but MaxTenuringThreshold sets an upper limit on it.
-- If you set MaxTenuringThreshold=0, all objects will be promoted immediately.
+- If you set MaxTenuringThreshold=0, all objects will be promoted immediately. Default value is 15 in Garbage First (G1) Garbage Collector
 
 http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
 
