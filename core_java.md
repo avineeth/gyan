@@ -123,6 +123,18 @@ Code from String class is different from the logic mentioned above.
     }
 ```
 
+#### User defined hashcode implementation
+```
+public int hashCode()
+ {
+ int hash = 17;
+ hash = 31*hash + who.hashCode();
+ hash = 31*hash + when.hashCode();
+ hash = 31*hash + ((Double) amount).hashCode();
+ return hash;
+ }
+ ```
+ 
 #### Hashing with wrong hashCode() or equals(). Suppose that you implement a data type OlympicAthlete for use in a java.util.HashMap.
 
 - What happens if you override hashCode() but not equals().
