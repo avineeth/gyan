@@ -373,6 +373,48 @@ public void dfsRecursion(int s, int[] visited) {
     }
 ```    
 
+##### Prims Minimum Spanning Tree
+
+- An edge-weighted graph is a graph where we associate weights or costs with each edge.
+- A minimum spanning tree (MST) of an edge-weighted graph is a spanning tree whose weight (the sum of the weights of its edges) is no larger than the weight of any other spanning tree.
+
+![Image](https://github.com/avineeth/gyan/blob/master/img/edge-weighted-graph-representation.png?raw=true)
+![Image](https://github.com/avineeth/gyan/blob/master/img/mst.png?raw=true)
+
+- You need Three Data structures
+   - Queue<Edge> mst - to return MST tree to client
+   - PriorityQueue<Edge> pq - to hold the edges and find one of minimal weight.
+  - marked[] - to keep track of visited node
+  
+```
+public void computeMST() {
+	mst = new LinkedList<Edge>();
+	pq = new PriorityQueue<Edge>();
+	marked = new boolean[G.getV()];
+		
+	visit(G,0);
+	while(!pq.isEmpty()) {
+		Edge e = pq.poll();
+		int start = e.getStart();
+		int end = e.getEnd();
+		if(marked[start] && marked[end]) continue; //ignore if both endpoint in T
+		mst.add(e);
+		if(!marked[start]) visit(G, start);
+		if(!marked[end]) visit(G, end);
+	}
+		
+}
+	
+private void visit(Graph g, int v) {
+	marked[v] = true;
+	for(Edge e: g.getEdgeList(v)) {
+		if(!marked[e.other(v)]) {
+			pq.add(e);
+		}
+	}
+}
+
+```
 ### Divide and Conquer
 - Like Greedy and Dynamic Programming, Divide and Conquer is an algorithmic paradigm. A typical Divide and Conquer algorithm solves a problem using following three steps.
 
