@@ -240,6 +240,13 @@ http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
 - A Java application continues to execute (the virtual machine instance continues to live) as long as any non-daemon threads are still running. When all non-daemon threads of a Java application terminate, the virtual machine instance will exit. If permitted by the security manager, the application can also cause its own demise by invoking the exit() method of class Runtime or System.
 - You must in some implementation-dependent way give a Java Virtual Machine the name of the initial class that has the main() method that will start the entire application.
 
+- Different types of threads in HotSpot JVM:
+  - VM thread : This thread waits for operations to appear that require the JVM to reach a safe-point. The reason these operations have to happen on a separate thread is because they all require the JVM to be at a safe point where modifications to the heap can not occur. The type of operations performed by this thread are "stop-the-world" garbage collections, thread stack dumps, thread suspension and biased locking revocation.
+  - Periodic task thread: This thread is responsible for timer events (i.e. interrupts) that are used to schedule execution of periodic operations
+  - GC threads: These threads support the different types of garbage collection activities that occur in the JVM
+  - Compiler threads: These threads compile byte code to native code at runtime
+  - Signal dispatcher thread: This thread receives signals sent to the JVM process and handle them inside the JVM by calling the appropriate JVM methods.
+
 ### The Method Area
 - Inside a Java Virtual Machine instance, information about loaded types is stored in a logical area of memory called the method area.
 - When the Java Virtual Machine loads a type, it uses a class loader to locate the appropriate class file. 
