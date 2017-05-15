@@ -170,6 +170,8 @@ http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
 ## Java Memory Model
 [Credits: http://blog.jamesdbloom.com/JVMInternals.html#threads ]
 
+![Image](https://github.com/avineeth/gyan/blob/master/img/JVM_Internal_Architecture.png?raw=true)
+
 - Each Java Virtual Machine has a class loader subsystem: a mechanism for loading types (classes and interfaces) given fully qualified names.
 - Each Java Virtual Machine also has an execution engine: a mechanism responsible for executing the instructions contained in the methods of loaded classes.
 - When a Java Virtual Machine runs a program, it needs memory to store many things, including bytecodes and other information it extracts from loaded class files, objects the program instantiates, parameters to methods, return values, local variables, and intermediate results of computations. The Java Virtual Machine organizes the memory it needs to execute a program into several runtime data areas.
