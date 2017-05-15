@@ -101,6 +101,15 @@ http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
   - The compaction step is not provided by default.
 - You need to carefully review before using this type. Also, if the compaction task needs to be carried out because of the many memory fragments, the stop-the-world time can be longer than any other GC types. You need to check how often and how long the compaction task is carried out.
 
+#### G1 - Garbage First
+
+-The G1 has a more flexible approach. The heap structured by the G1 looks more like this:
+![Image](https://github.com/avineeth/gyan/blob/master/img/GC_Heap_G1.jpg?raw=true)
+- As you see, the G1 partitions the heap into smaller, equal sized blocks and assigns them to a generation, instead of reserving one big space for the entire generation. The size of these blocks can be configured and varies between 1 and 32 MB.
+- Now, if the Garbage Collector performs its global marking phase (which is of course concurrent), it is able to sort the blocks by the amount of garbage they contain.
+- In the next step, the collector selects a number of blocks based on the pause-time-goal specified by the user. These blocks are of course the ones, that contain the most garbage. Because of this behavior, the G1 got its name “Garbage First”.
+- In the final step, the collector collects the selected blocks by evacuating their regions. That means, it copies the objects that are still alive from the different blocks together into a new region and removes the old regions entirely. This results in the heap being compacted on the go and avoiding compaction pauses.
+
 
 
 # JVM Internals
