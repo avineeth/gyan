@@ -557,3 +557,5 @@ public static int binarySearch(int[] a, int key)
 Union-find
 
 ・Kruskal's minimum spanning tree algorithm.
+- Reverse a linked List 
+  - Time Complexity O(N) and space complexity O(1)
