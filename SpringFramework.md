@@ -33,10 +33,22 @@ Within the <beans> you can place all of your Spring configuration, including <be
 
 - Spring comes with several XML namespaces through which you can configure the Spring container
 
-  - aop  -  Provides elements for declaring aspects and for automatically proxying @AspectJannotated classes as Spring aspects.
-  - beans The core primitive Spring namespace, enabling declaration of beans and how they should be wired.
-  - context - Comes with elements for configuring the Spring application context, including the ability to autodetect and autowire beans and injection of objects not directly managed by Spring.
-  - jee  - Offers integration with Java EE APIs such as JNDI and EJB.
-  - jms - Provides configuration elements for declaring message-driven POJOs.
-  - lang - Enables declaration of beans that are implemented as Groovy, JRuby, or BeanShell scripts.
-  - mvc - Enables Spring MVC capabilities such as annotation-oriented controllers, view control-lers, and interceptors.
+  - **aop**  -  Provides elements for declaring aspects and for automatically proxying @AspectJannotated classes as Spring aspects.
+  - **beans** The core primitive Spring namespace, enabling declaration of beans and how they should be wired.
+  - **context** - Comes with elements for configuring the Spring application context, including the ability to autodetect and autowire beans and injection of objects not directly managed by Spring.
+  - **jee**  - Offers integration with Java EE APIs such as JNDI and EJB.
+  - **jms** - Provides configuration elements for declaring message-driven POJOs.
+  - **lang** - Enables declaration of beans that are implemented as Groovy, JRuby, or BeanShell scripts.
+  - **mvc** - Enables Spring MVC capabilities such as annotation-oriented controllers, view control-lers, and interceptors.
+
+
+#### Bean Scope 
+
+Spring’s bean scopes let you declare the scope under which beans are created without hard-
+coding the scoping rules in the bean class itself.
+
+  - **singleton** - Scopes the bean definition to a single instance per Spring container (default).
+  - **prototype** - Allows a bean to be instantiated any number of times (once per use).
+  - **request** - Scopes a bean definition to an HTTP request. Only valid when used with a web-capable Spring context (such as with Spring MVC).
+  - **session** - Scopes a bean definition to an HTTP session. Only valid when used with a web-capable Spring context (such as with Spring MVC).
+  - **global-session** - Scopes a bean definition to a global HTTP session. Only valid when used in a portlet context.
