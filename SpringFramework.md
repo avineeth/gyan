@@ -58,9 +58,12 @@ coding the scoping rules in the bean class itself.
 - Autowiring helps reduce or even eliminate the need for <property> and <constructor-arg> elements by letting Spring automatically figure out how to wire bean dependencies.
 
 - The four kinds of autowiring
-  - byName — Attempts to match all properties of the autowired bean with beans that have the same name (or ID) as the properties. Properties for which there’s no matching bean will remain unwired.
-  ```
-// Before
+  - byName — Attempts to match all properties of the autowired bean with beans that have the same name (or ID) as the properties. Properties for which there’s no matching bean will remain unwired. 
+  - byType — Attempts to match all properties of the autowired bean with beans whose types are assignable to the properties. Properties for which there’s no matching bean will remain unwired.  	
+  - constructor — Tries to match up a constructor of the autowired bean with beans whose types are assignable to the constructor arguments. 
+  - autodetect — Attempts to apply constructor autowiring first. If that fails, byType will be tried.
+ 
+Before
   <bean id="kenny" class ="com.springaction.springidol.Instrumentalist" autowire="byName" >
         <property name="song" value="hey there" />
 	<property name="instrument" ref="piano" />
@@ -68,7 +71,7 @@ coding the scoping rules in the bean class itself.
  
   <bean id="instrument" class="com.springaction.springidol.Violin" />
 
-// After
+After
      <bean id="kenny" class ="com.springaction.springidol.Instrumentalist" autowire="byName" >
         <property name="song" value="hey there" />
     </bean>
@@ -76,8 +79,4 @@ coding the scoping rules in the bean class itself.
     <bean id="instrument" class="com.springaction.springidol.Violin" />
 
 
-  ```
-  - byType — Attempts to match all properties of the autowired bean with beans whose types are assignable to the properties. Properties for which there’s no matching bean will remain unwired.
-  	
-  - constructor — Tries to match up a constructor of the autowired bean with beans whose types are assignable to the constructor arguments. 
-  - autodetect — Attempts to apply constructor autowiring first. If that fails, byType will be tried.
+  
