@@ -64,19 +64,20 @@ coding the scoping rules in the bean class itself.
   - autodetect — Attempts to apply constructor autowiring first. If that fails, byType will be tried.
  
 Before
+```
   <bean id="kenny" class ="com.springaction.springidol.Instrumentalist" autowire="byName" >
         <property name="song" value="hey there" />
 	<property name="instrument" ref="piano" />
   </bean>
  
   <bean id="instrument" class="com.springaction.springidol.Violin" />
-
+```
 After
+```
      <bean id="kenny" class ="com.springaction.springidol.Instrumentalist" autowire="byName" >
         <property name="song" value="hey there" />
     </bean>
     
     <bean id="instrument" class="com.springaction.springidol.Violin" />
-
-
+``` 
   
