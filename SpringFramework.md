@@ -29,7 +29,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.sprin
 </beans>
 ```
 
-Within the <beans> you can place all of your Spring configuration, including <bean> declarations.
+- Within the <beans> you can place all of your Spring configuration, including <bean> declarations.
 
 - Spring comes with several XML namespaces through which you can configure the Spring container
 
@@ -44,7 +44,7 @@ Within the <beans> you can place all of your Spring configuration, including <be
 
 #### Bean Scope 
 
-Spring’s bean scopes let you declare the scope under which beans are created without hard-
+- Spring’s bean scopes let you declare the scope under which beans are created without hard-
 coding the scoping rules in the bean class itself.
 
   - **singleton** - Scopes the bean definition to a single instance per Spring container (default).
@@ -52,3 +52,32 @@ coding the scoping rules in the bean class itself.
   - **request** - Scopes a bean definition to an HTTP request. Only valid when used with a web-capable Spring context (such as with Spring MVC).
   - **session** - Scopes a bean definition to an HTTP session. Only valid when used with a web-capable Spring context (such as with Spring MVC).
   - **global-session** - Scopes a bean definition to a global HTTP session. Only valid when used in a portlet context.
+
+#### Minimalizing XML Configuration
+
+- Autowiring helps reduce or even eliminate the need for <property> and <constructor-arg> elements by letting Spring automatically figure out how to wire bean dependencies.
+
+- The four kinds of autowiring
+  - byName — Attempts to match all properties of the autowired bean with beans that have the same name (or ID) as the properties. Properties for which there’s no matching bean will remain unwired.
+  ```
+// Before
+  <bean id="kenny" class ="com.springaction.springidol.Instrumentalist" autowire="byName" >
+        <property name="song" value="hey there" />
+	<property name="instrument" ref="piano" />
+  </bean>
+ 
+  <bean id="instrument" class="com.springaction.springidol.Violin" />
+
+// After
+     <bean id="kenny" class ="com.springaction.springidol.Instrumentalist" autowire="byName" >
+        <property name="song" value="hey there" />
+    </bean>
+    
+    <bean id="instrument" class="com.springaction.springidol.Violin" />
+
+
+  ```
+  - byType — Attempts to match all properties of the autowired bean with beans whose types are assignable to the properties. Properties for which there’s no matching bean will remain unwired.
+  	
+  - constructor — Tries to match up a constructor of the autowired bean with beans whose types are assignable to the constructor arguments. 
+  - autodetect — Attempts to apply constructor autowiring first. If that fails, byType will be tried.
