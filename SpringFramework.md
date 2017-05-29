@@ -65,7 +65,7 @@ coding the scoping rules in the bean class itself.
  
 Before
 ```
-  <bean id="kenny" class ="com.springaction.springidol.Instrumentalist" autowire="byName" >
+  <bean id="kenny" class ="com.springaction.springidol.Instrumentalist" >
         <property name="song" value="hey there" />
 	<property name="instrument" ref="piano" />
   </bean>
