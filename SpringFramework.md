@@ -53,6 +53,20 @@ coding the scoping rules in the bean class itself.
   - **session** - Scopes a bean definition to an HTTP session. Only valid when used with a web-capable Spring context (such as with Spring MVC).
   - **global-session** - Scopes a bean definition to a global HTTP session. Only valid when used in a portlet context.
 
+#### Spring Bean vs Java Bean vs POJOs
+
+- Java Beans: At a basic level, JavaBeans are simply Java classes which adhere to certain coding conventions. For example, classes that
+  - Have a public default (no argument) constructor
+  - allows access to properties using accessor (getter and setter) methods
+  - Implement java.io.Serializable
+
+- Spring Beans:
+  - A Spring bean is basically an object managed by Spring. 
+  - More specifically, it is an object that is instantiated, configured and otherwise "managed by a Spring Framework container".
+  - Spring beans are defined in a Spring configuration file (or, more recently, by using annotations), instantiated by the Spring container, and then injected into your application.
+
+- Note that Spring Beans need not to be Java Beans always. Spring Beans may not implement java.io.Serializable Interface, can have arguments in constructor etc.
+
 #### Minimalizing XML Configuration
 
 - Autowiring helps reduce or even eliminate the need for <property> and <constructor-arg> elements by letting Spring automatically figure out how to wire bean dependencies.
@@ -81,3 +95,21 @@ After
     <bean id="instrument" class="com.springaction.springidol.Violin" />
 ``` 
   
+#### Wiring with Annotation
+
+- Annotation wiring isn’t turned on in the Spring container by default.
+- The simplest way to do that is with the ``` <context:annotation-config> ``` element from Spring’s context configuration namespace.
+
+```
+<?xml version="1.0"encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+<context:annotation-config/>
+<!-- beandeclarationsgohere-->
+</beans>
+```
