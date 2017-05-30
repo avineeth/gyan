@@ -52,3 +52,64 @@ public class UnsafeStates {
     }
 }
 ```
+### ThreadLocal in Java
+
+- ThreadLocal in Java is a different way to achieve thread-safety
+- It doesn't address synchronization requirement, instead it eliminates sharing by providing explicitly copy of Object to each thread. 
+- Since Object is no more shared there is no requirement of Synchronization which can improve performance.
+- ThreadLocal are fantastic to implement Per Thread Singleton classes or per thread context information like **transaction id**.
+- You can wrap any non Thread Safe object in ThreadLocal and suddenly its uses becomes Thread-safe, as its only being used by Thread Safe. One of the classic example of ThreadLocal is sharing SimpleDateForamt. Since SimpleDateFormat is not thread safe, having a global formatter may not work but having per Thread formatter will certainly work.
+- Real Life example of ThreadLocal are in J2EE application servers which uses java ThreadLocal variable to keep track of transaction and security Context.
+- It makes lot of sense to share heavy object like Database Connection as ThreadLocal in order to avoid excessive creation and cost of locking in case of sharing global instance.
+- Each thread holds an exclusive copy of ThreadLocal variable which becomes eligible to Garbage collection after thread finished or died, normally or due to any Exception, Given those ThreadLocal variable doesn't have any other live references.
+- ThreadLocal variables in Java are generally private static fields in Classes and maintain its state inside Thread.
+- Using ThreadLocal inside web application is very dangerous as it can cause memory leak if you failed to remove ThreadLocal variable when web application stopped. so just beware of that. ThreadLocal's remove() method can be used to remove variable.
+
+Since values set on a ThreadLocal object only are visible to the thread who set the value, no thread can set an initial value on a ThreadLocal using set() which is visible to all threads.
+
+```
+private ThreadLocal myThreadLocal = new ThreadLocal<String>() {
+    @Override protected String initialValue() {
+        return "This is the initial value";
+    }
+}; 
+```
+
+Example
+
+```
+public class ThreadLocalExample {
+
+    public static class MyRunnable implements Runnable {
+        private ThreadLocal<Integer> threadlocal = new ThreadLocal<Integer>();
+        private Integer nonthreadlocal = new Integer((int)(Math.random() *100D));
+
+        public void run(){
+            threadlocal.set((int) (Math.random() *100D));
+
+            try{
+              Thread.sleep(2000);
+            }catch(InterruptedException e) {
+              e.printStackTrace();
+            }
+
+            System.out.println("ThreadLocal:" + threadlocal.get());
+            System.out.println("Non-ThreadLocal:" + nonthreadlocal);
+        }
+    }
+
+    public static void main(String[] args) throws Exception{
+
+      MyRunnable sharedRunnable = new MyRunnable();
+      Thread t1 = new Thread(sharedRunnable);
+      Thread t2 = new Thread(sharedRunnable);
+
+      t1.start();
+      t2.start();
+
+      t1.join();
+      t2.join();
+    }
+}
+
+```
