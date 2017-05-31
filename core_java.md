@@ -238,6 +238,64 @@ public void finalize() {
   - Caching: Really just an application of the above, but sometimes an object takes 10 minutes to build, but would only take 10 seconds to de-serialize. So, rather than hold onto the giant object in memory, just cache it out to a file via serialization, and read it in later when it's needed.
   - Cross JVM Synchronization: Serialization works across different JVMs that may be running on different architectures.
 
+- Notice that for a class to be serialized successfully, two conditions must be met -
+  - The class must implement the java.io.Serializable interface.
+  - All of the fields in the class must be serializable. If a field is not serializable, it must be marked transient.
+
+
+```
+import java.io.Serializable;
+
+public class Employee implements Serializable{
+	private String name;
+	private int age;
+	
+	public void setName(String var) {
+		name = var;
+	}
+	public void setAge(int i) {
+		age = i;
+	}
+	public void printName(){
+		System.out.println("The Name is:" + name);
+	}
+}
+
+```
+```
+import java.io.*;
+
+public class SerializableExample {
+
+	public static void main(String[] args){
+	
+		Employee e = new Employee();
+		e.setName("vineeth");
+		e.setAge(34);
+		
+		try {
+			FileOutputStream fs = new FileOutputStream("tem.ser");
+			ObjectOutputStream out = new ObjectOutputStream(fs);
+			out.writeObject(e);
+			out.close();
+			fs.close();
+			System.out.println("Serialization done");
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		try{
+			FileInputStream is = new FileInputStream("tem.ser");
+			ObjectInputStream in = new ObjectInputStream(is);
+			Employee e1= (Employee)in.readObject();
+			e1.printName();
+		}catch(Exception ex2){
+			ex2.printStackTrace();
+		}
+		
+	}
+}
+```
 ## Immutability
 
 - Immutable classes are those class, whose object can not be modified once created, it means any modification on immutable object will result in another immutable object. 
