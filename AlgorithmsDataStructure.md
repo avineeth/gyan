@@ -8,6 +8,14 @@ The core collection interface:
 
 # CODING CHECKLIST
 
+#### String to char array
+```
+	char[] val = "Hello World".toCharArray();
+	for(char c : val) {
+		System.out.println(c);
+	}
+```
+
 #### To print an array
 ```
 import java.util.Arrays;
