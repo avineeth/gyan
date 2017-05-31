@@ -26,6 +26,57 @@ public class StatelessFactorizer implements Servlet {
 
 ```
 
+Defining and Starting a Thread
+Two ways to Define a thread.
+Provide a Runnable object.
+The Runnable interface defines a single method, run, meant to contain the code executed in the thread. The Runnable object is passed to the Thread constructor, as in the HelloRunnable example:
+
+public class HelloRunnable implements Runnable {
+
+    public void run() {
+        System.out.println("Hello from a thread!");
+    }
+
+    public static void main(String args[]) {
+        (new Thread(new HelloRunnable())).start();
+    }
+
+}
+Subclass Thread. 
+The Thread class itself implements Runnable, though its run method does nothing. An application can subclass Thread, providing its own implementation of run, as in the HelloThread example:
+
+public class HelloThread extends Thread {
+
+    public void run() {
+        System.out.println("Hello from a thread!");
+    }
+
+    public static void main(String args[]) {
+        (new HelloThread()).start();
+    }
+
+}
+Notice that both examples invoke **Thread.start()** in order to start the new thread.
+
+Thread.sleep causes the current thread to suspend execution for a specified period. 
+This method throws an InterruptedException, an exception that sleep throws when another thread interrupts the current thread while sleep is active.
+
+three different synchronized Map implementations in the Java API:
+
+Hashtable
+Collections.synchronizedMap(Map)
+ConcurrentHashMap
+
+
+Difference between HashMap and ConcurrentHashMap
+
+To better visualize the ConcurrentHashMap, let it consider as a group of HashMaps. To get and put key-value pairs from hashmap, you have to calculate the hashcode and look for correct bucket location in array of Collection.Entry. Rest you have read on previous related article on how hashmap works.
+
+In concurrentHashMap, the difference lies in internal structure to store these key-value pairs. ConcurrentHashMap has an addition concept of segments. It will be easier to understand it you think of one segment equal to one HashMap [conceptually]. A concurrentHashMap is divided into number of segments [default 16] on initialization. ConcurrentHashMap allows similar number (16) of threads to access these segments concurrently so that each thread work on a specific segment during high concurrency.
+
+This way, if when your key-value pair is stored in segment 10; code does not need to block other 15 segments additionally. This structure provides a very high level of concurrency.
+
+
 
 ### Publishing an Object - Make defensive copies when needed
 
