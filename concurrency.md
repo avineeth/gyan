@@ -26,11 +26,12 @@ public class StatelessFactorizer implements Servlet {
 
 ```
 
-Defining and Starting a Thread
-Two ways to Define a thread.
-Provide a Runnable object.
-The Runnable interface defines a single method, run, meant to contain the code executed in the thread. The Runnable object is passed to the Thread constructor, as in the HelloRunnable example:
+#### Defining and Starting a Thread
+- Two ways to Define a thread.
+1. Provide a Runnable object.
+    - The Runnable interface defines a single method, run, meant to contain the code executed in the thread. The Runnable object is passed to the Thread constructor, as in the HelloRunnable example:
 
+```
 public class HelloRunnable implements Runnable {
 
     public void run() {
@@ -42,9 +43,12 @@ public class HelloRunnable implements Runnable {
     }
 
 }
-Subclass Thread. 
-The Thread class itself implements Runnable, though its run method does nothing. An application can subclass Thread, providing its own implementation of run, as in the HelloThread example:
+```
 
+2. Subclass Thread. 
+   - The Thread class itself implements Runnable, though its run method does nothing. An application can subclass Thread, providing its own implementation of run, as in the HelloThread example:
+
+```
 public class HelloThread extends Thread {
 
     public void run() {
@@ -56,10 +60,66 @@ public class HelloThread extends Thread {
     }
 
 }
+```
+
 Notice that both examples invoke **Thread.start()** in order to start the new thread.
 
-Thread.sleep causes the current thread to suspend execution for a specified period. 
-This method throws an InterruptedException, an exception that sleep throws when another thread interrupts the current thread while sleep is active.
+- Thread.sleep causes the current thread to suspend execution for a specified period. 
+- This method throws an InterruptedException, an exception that sleep throws when another thread interrupts the current thread while sleep is active.
+
+##### How To Stop A Thread In Java?
+
+- There was a stop() method in Thread class but its deprecated * because of deadlock and other issues.
+- There are two ways to stop a thread.
+
+1. By using a boolean volatile variable. 
+			- In order to stop the thread, you need to set the value of this boolean variable to true when you want to stop a running thread.
+			- Since you are setting this variable from a different thread e.g. main thread, it's important to mark this variable **volatile** to make it thread safe or by using getter and setter methods which are synchronised.
+
+```
+public class StoptheThreadExample {
+	public static class LongRunningStuff implements Runnable{
+		
+		private volatile boolean flag = false;
+		
+		public void run() {
+			try {
+				for(int i=0; i<1000; i++) {
+					if(!flag) {
+						System.out.println("Helloo.." +i);
+						Thread.sleep(2000);
+					}
+				}
+				System.out.println("Im Dead - Using Volatile");
+			}catch(InterruptedException e) {
+				System.out.println("Im Dead -Interrupted");
+				
+			}
+		}
+		
+		public void terminate() {
+			flag =true;
+		}
+	
+	}
+	
+	public static void main(String[] args) throws InterruptedException{
+		LongRunningStuff longrunning = new LongRunningStuff();
+		Thread t1 = new Thread(longrunning);
+		t1.start();
+		Thread.sleep(6000);
+		longrunning.terminate();
+		t1.join();
+	}
+}
+```
+
+2. Using interrupt() Method
+
+
+//TODO add Simple Thread example here..
+
+
 
 three different synchronized Map implementations in the Java API:
 
