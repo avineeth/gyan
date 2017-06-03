@@ -152,7 +152,7 @@ public class StoptheThreadExample {
 
 ![Image](https://github.com/avineeth/gyan/blob/master/img/monitor.gif?raw=true)  
 
-##### Object Locking
+#### Object Locking
 
 - Because the heap and method area are shared by all threads, Java programs need to coordinate multi-threaded access to two kinds of data: 
   - instance variables, which are stored on the heap 
@@ -180,6 +180,43 @@ public class StoptheThreadExample {
   - An unlocked object has a count of zero. When a thread acquires the lock for the first time, the count is again incremented to one. Each time the thread acquires a lock on the same object, the count is again incremented. 
   - (Only the thread that already owns an object's lock is allowed to lock it again. As mentioned previously, no other thread can lock the object until the owning thread releases the lock.) 
   - Each time the thread releases the lock, the count is decremented. When the count reaches zero, the lock is released and made available to other threads.
+
+
+#### Synchronization Support in the Instruction Set
+
+- As mentioned earlier, the language provides two built-in ways to identify monitor regions in your programs: synchronized statements and synchronized methods. These two mechanisms, which implement the mutual exclusion aspect of synchronization, are supported by the Java virtual machine's instruction set.
+
+- Synchronized Statements
+
+- To create a synchronized statement, you use the synchronized keyword with an expression that evaluates to an object reference, as in the reverseOrder() method below:
+- the statements contained within the synchronized block will not be executed until a lock is acquired on the current object (this). If instead of a this reference, the expression yielded a reference to another object, the lock associated with that object would be acquired before the thread continued. If the expression yields a reference to an instance of class Class, the lock associated with the class is acquired.
+
+- monitorenter and monitorexit: Two opcodes, monitorenter and monitorexit, are used for synchronization blocks within methods. These opcodes are shown in the Table 20-1. Table 20-1. Monitors
+- When monitorenter is encountered by the Java virtual machine, it acquires the lock for the object referred to by objectref on the stack. If the thread already owns the lock for that object, the count that is associated with the lock is incremented. Each time monitorexit is executed for the thread on the object, the count is decremented. When the count reaches zero, the monitor is released.
+
+- Class Object declares five methods that enable programmers to access the Java virtual machine's support for the coordination aspect of synchronization. 
+
+1. void wait();	 - Enter a monitor's wait set until notified by another thread
+2. void wait(long timeout);  - Enter a monitor's wait set until notified by another thread or timeout milliseconds elapses
+3. void wait(long timeout, int nanos);	-Enter a monitor's wait set until notified by another thread or timeout milliseconds plus nanos nanoseconds elapses
+4. void notify(); - Wake up one thread waiting in the monitor's wait set. (If no threads are waiting, do nothing.)
+5. void notifyAll(); - Wake up all threads waiting in the monitor's wait set. (If no threads are waiting, do nothing.)
+
+####  Thread States
+- NEW : Thread state for a thread which has not yet started.
+- RUNNABLE : Thread state for a runnable thread. A thread in the runnable state is executing in the Java virtual machine but it may be waiting for other resources from the operating system such as processor.
+- BLOCKED : Thread state for a thread blocked waiting for a monitor lock. A thread in the blocked state is waiting for a monitor lock to enter a synchronized block/method or reenter a synchronized block/method after calling Object.wait.
+- WAITING: Thread state for a waiting thread. A thread is in the waiting state due to calling one of the following methods:
+   - Object.wait with no timeout
+   - Thread.join with no timeout
+   - LockSupport.park A thread in the waiting state is waiting for another thread to perform a particular action. For example, a thread that has called Object.wait() on an object is waiting for another thread to call Object.notify() or Object.notifyAll() on that object. A thread that has called Thread.join() is waiting for a specified thread to terminate.
+- TIMED_WAITING : Thread state for a waiting thread with a specified waiting time. A thread is in the timed waiting state due to calling one of the following methods with a specified positive waiting time:
+  - Thread.sleep
+  - Object.wait with timeout
+  - Thread.join with timeout
+  - LockSupport.parkNanos
+  - LockSupport.parkUntil
+- TERMINATED : Thread state for a terminated thread. The thread has completed execution.
 
 
 
