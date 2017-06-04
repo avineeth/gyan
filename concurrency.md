@@ -186,9 +186,7 @@ public class StoptheThreadExample {
 
 - As mentioned earlier, the language provides two built-in ways to identify monitor regions in your programs: synchronized statements and synchronized methods. These two mechanisms, which implement the mutual exclusion aspect of synchronization, are supported by the Java virtual machine's instruction set.
 
-- Synchronized Statements
-
-- To create a synchronized statement, you use the synchronized keyword with an expression that evaluates to an object reference, as in the reverseOrder() method below:
+- Synchronized Statements To create a synchronized statement, you use the synchronized keyword with an expression that evaluates to an object reference, as in the reverseOrder() method below:
 - the statements contained within the synchronized block will not be executed until a lock is acquired on the current object (this). If instead of a this reference, the expression yielded a reference to another object, the lock associated with that object would be acquired before the thread continued. If the expression yields a reference to an instance of class Class, the lock associated with the class is acquired.
 
 - monitorenter and monitorexit: Two opcodes, monitorenter and monitorexit, are used for synchronization blocks within methods. These opcodes are shown in the Table 20-1. Table 20-1. Monitors
@@ -218,7 +216,7 @@ public class StoptheThreadExample {
   - LockSupport.parkUntil
 - TERMINATED : Thread state for a terminated thread. The thread has completed execution.
 
-
+![Image](https://github.com/avineeth/gyan/blob/master/img/thread_states.png?raw=true)  
 
 three different synchronized Map implementations in the Java API:
 
