@@ -243,26 +243,139 @@ synchronized(m) {
 - The iterators returned by the synchronized collections are not designed to deal with concurrent modification, and they are **fail-fast**—meaning that if they detect that the collection has changed since iteration began, they throw the unchecked ConcurrentModificationException.
 - These fail-fast iterators are not designed to be foolproof—they are designedto catch concurrency errors on a “good-faith-effort” basis and thus act only as early-warning indicators for concurrency problems. 
 - They are implemented by associating a modification count with the collection: if the modification count changes during iteration, hasNext or next throws ConcurrentModificationException.
+- HashMap contains a variable to count the number of modifications and iterator use it when you call its next() function to get the next entry.
+```
+HashMap.java
 
+/**
+     * The number of times this HashMap has been structurally modified
+     * Structural modifications are those that change the number of mappings in
+     * the HashMap or otherwise modify its internal structure (e.g.,
+     * rehash).  This field is used to make iterators on Collection-views of
+     * the HashMap fail-fast.  (See ConcurrentModificationException).
+     */
+    transient volatile int modCount;
+ ```
+ 
 //TODO add EmployeeDB.java
 
+### Concurrent Collections
+- **ConcurrentHashMap** - a replacement for synchronized hash-based Map implementations
+- **CopyOnWriteArrayList** - a replacement for synchronized List implementations for cases where traversal is the dominant operation. 
+- **BlockingQueue** - extends Queue to add blocking insertion and retrieval operations. If the queue is empty, a retrieval blocks until an element is available, and if the queue is full (for bounded queues) an insertion blocks until there is space available. Blocking queues are extremely useful in producer-consumer designs.
 
-three different synchronized Map implementations in the Java API:
+#### Concurrent HashMap
 
-Hashtable
-Collections.synchronizedMap(Map)
-ConcurrentHashMap
+http://www.docjar.com/html/api/java/util/concurrent/ConcurrentHashMap.java.html
 
+##### How ConcurrentHashMap Works Internally
 
-Difference between HashMap and ConcurrentHashMap
+ - In concurrentHashMap, the difference lies in internal structure to store these key-value pairs. To better visualize the ConcurrentHashMap, let it consider as a group of HashMaps. To get and put key-value pairs from hashmap, you have to calculate the hashcode and look for correct bucket location in array of Collection.Entry.
+- ConcurrentHashMap has an addition concept of segments. It will be easier to understand it you think of one segment equal to one HashMap [conceptually].
+- Number of segments is called Concurrency-Level which determines number of thread that can write simultaneous. 
+- A concurrentHashMap is divided into number of segments [default 16] on initialization.
+- This way, if when your key-value pair is stored in segment 10; code does not need to block other 15 segments additionally. This structure provides a very high level of concurrency.
+- Reads are completely lock free i.e No need to acquire lock for reading.
+- ConcurrentHashMap, along with the other concurrent collections, further improve on the synchronized collection classes by providing iterators that do not throw **ConcurrentModificationException**, thus eliminating the need to lock the collection during iteration.
+- The iterators returned by ConcurrentHashMap are **weakly consistent** instead of **fail-fast**. A weakly consistent iterator can tolerate concurrent modification, traverses elements as they existed when the iterator was constructed, and may (but is not guaranteed to) reflect modifications to the collection after the construction of the iterator.
+- As with all improvements, there are still a few tradeoffs. The semantics of methods that operate on the entire Map, such as size and isEmpty, have been slightly weakened to reflect the concurrent nature of the collection. Since the result of size could be out of date by the time it is computed, it is really only an estimate, so size is allowed to return an approximation instead of an exact count. -- -- While at first this may seem disturbing, in reality methods like size and isEmpty are far less useful in concurrent environments because these quantities are moving targets. So the requirements for these operations were weakened to enable performance optimizations for the most important operations, primarily get, put, containsKey, and remove.
 
-To better visualize the ConcurrentHashMap, let it consider as a group of HashMaps. To get and put key-value pairs from hashmap, you have to calculate the hashcode and look for correct bucket location in array of Collection.Entry. Rest you have read on previous related article on how hashmap works.
+##### Initialization
 
-In concurrentHashMap, the difference lies in internal structure to store these key-value pairs. ConcurrentHashMap has an addition concept of segments. It will be easier to understand it you think of one segment equal to one HashMap [conceptually]. A concurrentHashMap is divided into number of segments [default 16] on initialization. ConcurrentHashMap allows similar number (16) of threads to access these segments concurrently so that each thread work on a specific segment during high concurrency.
+- First when you create a ConcurrentHashMap you can provide concurrency level. This determines size of Segment array. Size of segment array will always be equal or more than the concurrency level. If this is not provided default is used - 
 
-This way, if when your key-value pair is stored in segment 10; code does not need to block other 15 segments additionally. This structure provides a very high level of concurrency.
+```
+public ConcurrentHashMap(int initialCapacity,
+                 float loadFactor,
+                 int concurrencyLevel)
+Creates a new, empty map with the specified initial capacity, load factor and concurrency level.
+Parameters:
+initialCapacity - the initial capacity. The implementation performs internal sizing to accommodate this many elements.
+loadFactor - the load factor threshold, used to control resizing. Resizing may be performed when the average number of elements per bin exceeds this threshold.
+concurrencyLevel - the estimated number of concurrently updating threads. The implementation performs internal sizing to try to accommodate this many threads.
 
+```
+- Note that the size of segment table will always be power of 2. So if you give  concurrency level as 10 then next best power of 2 match will be picked up i.e 16 and Segment array of size 16 will be created which implies 16 threads can simultaneously operate on the map.
 
+##### Putting element in ConcurrentHashMap 
+
+- For putting element in Map we first need to determine which segment the element should be processed for. For this we first get hascode of the key. Next we do a **rehash** of the existing hash.
+-  Once hash is calculated you can get the segment which it belongs to and delegate put method to segments put method as follows.
+
+```
+ public V put(K key, V value) {
+        if (value == null)
+            throw new NullPointerException();
+        int hash = hash(key.hashCode());
+        return segmentFor(hash).put(key, hash, value, false);
+    }
+```    
+- Once put is delegated to segment , segment will add it to the appropriate bucket in the segment.
+```
+ 	V put(K key, int hash, V value, boolean onlyIfAbsent) {
+            lock();
+            try {
+                int c = count;
+                if (c++ > threshold) // ensure capacity
+                    rehash();
+                HashEntry<K,V>[] tab = table;
+                int index = hash & (tab.length - 1);
+                HashEntry<K,V> first = tab[index];
+                HashEntry<K,V> e = first;
+                while (e != null && (e.hash != hash || !key.equals(e.key)))
+                    e = e.next;
+ 
+                V oldValue;
+                if (e != null) {
+                    oldValue = e.value;
+                    if (!onlyIfAbsent)
+                        e.value = value;
+                }
+                else {
+                    oldValue = null;
+                    ++modCount;
+                    tab[index] = new HashEntry<K,V>(key, hash, first, value);
+                    count = c; // write-volatile
+                }
+                return oldValue;
+            } finally {
+                unlock();
+            }
+        }
+```	
+- First call is to lock(). Since it is a write/update operation on a bucket of same segment we need a lock. If you recollect Segment class it extends ReentrantLock so each segment is a lock. So you can call lock() and unlock() directly in Segment class.
+- Next it's like a normal HashMap. You find the index of the Entry table where your elements hash falls and add it there as linked list.
+- You can see similar code has HashMap that updates value if key is same, inserts in array if there is no element in the table and adds it in the linked list of the table if element already exists.
+- Finally once operation is complete it calls unlock() so that other threads can continue update.
+- Note the lock is a blocking call. 
+- You can also see call for rehash if threshold is reached. Like Entry array Segment also has a threshold and when it is reached Segment array is resized for performance. That's what rehash. 
+
+##### Getting element from  ConcurrentHashMap : 
+
+- Get on ConcurrentHashMap is very simple no locks involved. You simply read the data and return -
+```
+        public V get(Object key) {
+                int hash = hash(key.hashCode());
+                return segmentFor(hash).get(key, hash);
+        }
+ 
+        V get(Object key, int hash) {
+            if (count != 0) { // read-volatile
+                HashEntry<K,V> e = getFirst(hash);
+                while (e != null) {
+                    if (e.hash == hash && key.equals(e.key)) {
+                        V v = e.value;
+                        if (v != null)
+                            return v;
+                        return readValueUnderLock(e); // recheck
+                    }
+                    e = e.next;
+                }
+            }
+            return null;
+        }
+```
+![Image](https://github.com/avineeth/gyan/blob/master/img/concurrenthaspmap.png?raw=true)  
 
 ### Publishing an Object - Make defensive copies when needed
 
