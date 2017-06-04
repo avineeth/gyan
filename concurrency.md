@@ -218,6 +218,35 @@ public class StoptheThreadExample {
 
 ![Image](https://github.com/avineeth/gyan/blob/master/img/thread_states.png?raw=true)  
 
+
+### Synchronized Collections
+- Legacy Classes like Vector and Hastable are synchronized collection classes.
+- also Synchronized collection wrappers like Collections.synchronizedXxx exist.
+- These achieve thread safety by encapsulating their state and synchronzing every public method so that only one thread can access the collection state.
+- though synchronized collections are thread-safe, there would be need to add additional client-side locking to guard compound actions.
+- If an explicit iterator is used, the iterator method must be called from within the synchronized block. Failure to follow this advice may result in nondeterministic behavior
+
+```
+Map<KeyType, ValType> m = Collections.synchronizedMap(new HashMap<KeyType, ValType>());
+    ...
+Set<KeyType> s = m.keySet();
+    ...
+// Synchronizing on m, not s!
+synchronized(m) {
+    while (KeyType k : s)
+        foo(k);
+}
+```
+
+### ConcurrentModificationException
+
+- The iterators returned by the synchronized collections are not designed to deal with concurrent modification, and they are **fail-fast**—meaning that if they detect that the collection has changed since iteration began, they throw the unchecked ConcurrentModificationException.
+- These fail-fast iterators are not designed to be foolproof—they are designedto catch concurrency errors on a “good-faith-effort” basis and thus act only as early-warning indicators for concurrency problems. 
+- They are implemented by associating a modification count with the collection: if the modification count changes during iteration, hasNext or next throws ConcurrentModificationException.
+
+//TODO add EmployeeDB.java
+
+
 three different synchronized Map implementations in the Java API:
 
 Hashtable
