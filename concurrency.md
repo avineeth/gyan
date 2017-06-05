@@ -70,6 +70,71 @@ Notice that both examples invoke **Thread.start()** in order to start the new th
 #### join()
 The current thread calls join(), via another thread's thread object reference when it wants to wait for that other thread to terminate. 
 
+#### Interrupts
+
+- An interrupt is an indication to a thread that it should stop what it is doing and do something else. It's up to the programmer to decide exactly how a thread responds to an interrupt, but it is very common for the thread to terminate.
+- If the thread is frequently invoking methods that throw InterruptedException, it simply returns from the run method after it catches that exception. 
+  - Many methods that throw InterruptedException, such as sleep, are designed to cancel their current operation and return immediately when an interrupt is received.
+ ```
+ for (int i = 0; i < importantInfo.length; i++) {
+    // Pause for 4 seconds
+    try {
+        Thread.sleep(4000);
+    } catch (InterruptedException e) {
+        // We've been interrupted: no more messages.
+        return;
+    }
+    // Print a message
+    System.out.println(importantInfo[i]);
+ }
+```
+- What if a thread goes a long time without invoking a method that throws InterruptedException? 
+  - Then it must periodically invoke Thread.interrupted, which returns true if an interrupt has been received. For example:
+```
+for (int i = 0; i < inputs.length; i++) {
+    heavyCrunch(inputs[i]);
+    if (Thread.interrupted()) {
+        // We've been interrupted: no more crunching.
+        return;
+    }
+}
+```
+- The interrupt mechanism is implemented using an internal flag known as the interrupt status. Invoking Thread.interrupt sets this flag.
+
+### Blocking and interruptible methods
+- Threads may block, or pause, for several reasons: waiting for I/O completion,waiting to acquire a lock, waiting to wake up from Thread.sleep, or waiting for the result of a computation in another thread. 
+- When a thread blocks, it is usually suspended and placed in one of the blocked thread states (BLOCKED, WAITING, or TIMED_WAITING).
+- The distinction between a blocking operation and an ordinary operation that merely takes a long time to finish is that a blocked thread must wait for an event that is beyond its control before it can proceed—the I/O completes, the lock becomes available, or the external computation finishes.
+- When that external event occurs, the thread is placed back in the RUNNABLE state and becomes eligible again for scheduling.
+- The put and take methods of BlockingQueue throw the checked InterruptedException, as do a number of other library methods such as Thread.sleep.
+- When a method can throw InterruptedException, it is telling you that it is a blocking method, and further that if it is interrupted, it will make an effort to stop blocking early.
+- Thread provides the interrupt method for interrupting a thread and for querying whether a thread has been interrupted. Each thread has a boolean property that represents its interrupted status; interrupting a thread sets this status.
+- Interruption is a cooperative mechanism. One thread cannot force another to stop what it is doing and do something else; when thread A interrupts thread B, A is merely requesting that B stop what it is doing when it gets to a convenient stopping point—if it feels like it. 
+- While there is nothing in the API or language specification that demands any specific application-level semantics for interruption,the most sensible use for interruption is to cancel an activity. 
+- Blocking methods that are responsive to interruption make it easier to cancel long-running activities on a timely basis.
+
+- When your code calls a method that throws InterruptedException, then your method is a blocking method too, and must have a plan for responding to interruption.
+- For library code, there are basically two choices:
+1. **Propagate the InterruptedException.** This is often the most sensible policy if you can get away with it—just propagate the InterruptedException to your caller. This could involve not catching InterruptedException, or catching it and throwing it again after performing some brief activity-specific cleanup.
+2. **Restore the interrupt.** Sometimes you cannot throw InterruptedException, for instance when your code is part of a Runnable. In these situations, you must catch InterruptedException and restore the interrupted status by calling interrupt on the current thread, so that code higher up the call stack can
+
+- **But there is one thing you should not do with InterruptedException—catch it and do nothing in response.** This deprives code higher up on the call stack of the opportunity to act on the interruption, because the evidence that the thread was interrupted is lost.
+
+```
+	public class TaskRunnable implements Runnable {
+		BlockingQueue<Task> queue;
+		...
+		public void run() {
+			try {
+				processTask(queue.take());
+			} catch (InterruptedException e) {
+				// restore interrupted status
+				Thread.currentThread().interrupt();
+			}
+		}
+	}
+```
+
 ##### How To Stop A Thread In Java?
 
 - There was a stop() method in Thread class but its deprecated * because of deadlock and other issues.
@@ -377,6 +442,102 @@ concurrencyLevel - the estimated number of concurrently updating threads. The im
 ```
 ![Image](https://github.com/avineeth/gyan/blob/master/img/concurrenthaspmap.png?raw=true)  
 
+//TODO Blocking Queues
+
+### Synchronizers
+
+- A synchronizer is any object that coordinates the control flow of threads based on its state.
+- Main Synchronizers after Java 1.5
+  - CountDownLatches
+  - Semaphores
+  - Barriers
+  - Blocking queues
+- All synchronizers share certain structural properties: they encapsulate state that determines whether threads arriving at the synchronizer should be allowed to pass or forced to wait, provide methods to manipulate that state, and provide methods to wait efficiently for the synchronizer to enter the desired state.
+
+
+#### Latches
+- A latch is a synchronizer that can delay the progress of threads until it reaches its terminal state.
+- A latch acts as a gate: until the latch reaches the terminal state the gate is closed and no thread can pass, and in the terminal state the gate opens, allowing all threads to pass.
+- Once the latch reaches the terminal state, it cannot change state again, so it remains open forever.
+- CountDownLatch is a flexible latch implementation that can be used in any of these situations; it allows one or more threads to wait for a set of events to occur.
+- The latch state consists of a counter initialized to a positive number, representing the number of events to wait for. 
+- The countDown method decrements the counter,indicating that an event has occurred, 
+- the await methods wait for the counter to reach zero, which happens when all the events have occurred.
+- If the counter is nonzero on entry, await blocks until the counter reaches zero, the waiting thread is interrupted, or the wait times out.
+
+Example
+
+```
+import java.util.concurrent.CountDownLatch;
+public class Waiter implements Runnable {
+
+  private CountDownLatch latch;
+
+  public Waiter(CountDownLatch latch) {
+    this.latch = latch;
+  }
+
+  public void run() {
+    try {
+        latch.await();
+        System.out.println("Waiter Has Started");
+    }catch(InterruptedException e) {
+      Thread.currentThread().interrupt();
+    }
+  }
+}
+
+```
+```
+import java.util.concurrent.CountDownLatch;
+
+public class Decrementer implements Runnable {
+
+  private CountDownLatch latch;
+
+  public Decrementer(CountDownLatch latch) {
+    this.latch = latch;
+  }
+
+  public void run() {
+    try{
+      latch.countDown();
+      System.out.println("Decrementer Counting Down: 1");
+      Thread.sleep(2000);
+      latch.countDown();
+      System.out.println("Decrementer Counting Down: 2");
+      Thread.sleep(2000);
+      latch.countDown();
+      System.out.println("Decrementer Counting Down: 3");
+      Thread.sleep(2000);
+
+    }catch(InterruptedException e) {
+      Thread.currentThread().interrupt();
+    }
+  }
+}
+```
+
+```
+import java.util.concurrent.CountDownLatch;
+
+public class CountDownLatchExample {
+
+  public static void main(String[] args) {
+    CountDownLatch latch = new CountDownLatch(3);
+
+    Waiter waiter = new Waiter(latch);
+    Decrementer decrementer = new Decrementer(latch);
+
+    Thread t1 = new Thread(waiter);
+    Thread t2 = new Thread(decrementer);
+
+    t1.start();
+    t2.start();
+  }
+
+}
+```
 ### Publishing an Object - Make defensive copies when needed
 
 http://www.informit.com/articles/article.aspx?p=31551&seqNum=2
