@@ -324,6 +324,9 @@ HashMap.java
  
 //TODO add EmployeeDB.java
 
+#### What is fail-fast in java?
+- A fail-fast system is nothing but immediately report any failure that is likely to lead to failure. When a problem occurs, a fail-fast systemfails immediately. In Java, we can find this behavior with iterators. Incase, you have called iterator on a collection object, and another thread tries to modify the collection object, then concurrent modification exception will be thrown. This is called fail-fast.
+
 ### Concurrent Collections
 - **ConcurrentHashMap** - a replacement for synchronized hash-based Map implementations
 - **CopyOnWriteArrayList** - a replacement for synchronized List implementations for cases where traversal is the dominant operation. 
