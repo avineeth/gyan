@@ -31,6 +31,9 @@ int[] arr2 = Arrays.copyOf(arr, arr.length);
 #### Integer to int
 Integer.intValue()
 
+#### Middle of an array
+    int mid = lo + (hi - lo) / 2;
+	    
 #### Queue 
 - Queue is an interface cannot instantiate
 - Implement as a **Priority Queue** or as a **LinkedList**
