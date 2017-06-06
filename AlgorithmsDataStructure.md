@@ -133,7 +133,35 @@ public class InsertionSort {
 
 [MergeSort.java](../../../algos/blob/master/MergeSort.java)
 
+### Quick Sort
 
+```
+  //1. shuffle
+  //2. partition
+  //3. sort
+  public static int partition(Comparable[] a, int lo, int hi) {
+        int i= lo;
+        int j=hi+1;
+        while(true) {
+            while(less(a[++i],a[lo]))
+                if(i==hi) break;
+			while(less(a[lo],a[--j])) 
+				if(j==lo) break;
+            if(i>=j) break;
+            exch(a, i, j);
+        }
+        exch(a,lo,j);
+		return j;
+    }
+ 
+ public static void sort(Comparable[] a, int lo, int hi) {		
+		if(lo >= hi) return;
+		int part = partition(a, lo, hi);
+		sort(a,lo,part-1);
+		sort(a, part+1, hi);
+	}
+```	
+	
 #### Java's Arrays.sort method uses Quicksort for arrays of primitives and merge sort for arrays of objects. 
 The most likely reason: quicksort is not stable, i.e. equal entries can change their relative position during the sort; among other things, this means that if you sort an already sorted array, it may not stay unchanged.
 Since primitive types have no identity (there is no way to distinguish two ints with the same value), this does not matter for them. But for reference types, it could cause problems for some applications. Therefore, a stable merge sort is used for those.
