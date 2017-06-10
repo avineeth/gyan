@@ -115,4 +115,107 @@ public class Something {
 
 - While the implementation is an efficient thread-safe "singleton" cache without synchronization overhead, and better performing than uncontended synchronization,[4] the idiom can only be used when the construction of Something can be guaranteed to not fail. In most JVM implementations, if construction of Something fails, subsequent attempts to initialize it from the same class-loader will result in a NoClassDefFoundError failure.
 
+## Proxy Design Pattern
+
+- Proxy design pattern intent according to GoF is: **Provide a surrogate or placeholder for another object to control access to it. **
+- proxy design pattern is used when we want to provide controlled access of a functionality.
+- Let’s say we have a class that can run some command on the system. Now if we are using it, its fine but if we want to give this program to a client application, it can have severe issues because client program can issue command to delete some system files or change some settings that you don’t want.
+- Proxy design pattern common uses are to control access or to provide a wrapper implementation for better performance.
+- Java RMI package uses proxy pattern. 
+- The following Java example illustrates the "virtual proxy" pattern. The ProxyImage class is used to access a remote method.
+- The example creates first an interface against which the pattern creates the classes. This interface contains only one method to display the image, called displayImage(), that has to be coded by all classes implementing it.
+- The proxy class ProxyImage is running on another system than the real image class itself and can represent the real image RealImage over there. The image information is accessed from the disk. Using the proxy pattern, the code of the ProxyImage avoids multiple loading of the image, accessing it from the other system in a memory-saving manner. It should be noted, however, that the lazy loading demonstrated in this example is not part of the proxy pattern, but is merely an advantage made possible by the use of the proxy.
+```
+interface Image {
+    public void displayImage();
+}
+
+```
+
+```
+// On System A
+class RealImage implements Image {
+
+    private String filename = null;
+    /**
+     * Constructor
+     * @param filename
+     */
+    public RealImage(final String filename) {
+        this.filename = filename;
+        loadImageFromDisk();
+    }
+
+    /**
+     * Loads the image from the disk
+     */
+    private void loadImageFromDisk() {
+        System.out.println("Loading   " + filename);
+    }
+
+    /**
+     * Displays the image
+     */
+    public void displayImage() {
+        System.out.println("Displaying " + filename);
+    }
+
+}
+```
+```
+// On System B
+class ProxyImage implements Image {
+
+    private RealImage image = null;
+    private String filename = null;
+    /**
+     * Constructor
+     * @param filename
+     */
+    public ProxyImage(final String filename) {
+        this.filename = filename;
+    }
+
+    /**
+     * Displays the image
+     */
+    public void displayImage() {
+        if (image == null) {
+           image = new RealImage(filename);
+        }
+        image.displayImage();
+    }
+
+}
+```
+```
+class ProxyExample {
+
+   /**
+    * Test method
+    */
+   public static void main(final String[] arguments) {
+        final Image image1 = new ProxyImage("HiRes_10MB_Photo1");
+        final Image image2 = new ProxyImage("HiRes_10MB_Photo2");
+
+        image1.displayImage(); // loading necessary
+        image1.displayImage(); // loading unnecessary
+        image2.displayImage(); // loading necessary
+        image2.displayImage(); // loading unnecessary
+        image1.displayImage(); // loading unnecessary
+    }
+}
+```
+The program's output is:
+
+Loading   HiRes_10MB_Photo1
+Displaying HiRes_10MB_Photo1
+Displaying HiRes_10MB_Photo1
+Loading   HiRes_10MB_Photo2
+Displaying HiRes_10MB_Photo2
+Displaying HiRes_10MB_Photo2
+Displaying HiRes_10MB_Photo1
+
+
+
 
