@@ -117,7 +117,8 @@ public class Something {
 
 ## Proxy Design Pattern
 
-- Proxy design pattern intent according to GoF is: **Provide a surrogate or placeholder for another object to control access to it. **
+- Proxy design pattern intent according to GoF is: 
+**Provide a surrogate or placeholder for another object to control access to it. **
 - proxy design pattern is used when we want to provide controlled access of a functionality.
 - Let’s say we have a class that can run some command on the system. Now if we are using it, its fine but if we want to give this program to a client application, it can have severe issues because client program can issue command to delete some system files or change some settings that you don’t want.
 - Proxy design pattern common uses are to control access or to provide a wrapper implementation for better performance.
@@ -125,6 +126,10 @@ public class Something {
 - The following Java example illustrates the "virtual proxy" pattern. The ProxyImage class is used to access a remote method.
 - The example creates first an interface against which the pattern creates the classes. This interface contains only one method to display the image, called displayImage(), that has to be coded by all classes implementing it.
 - The proxy class ProxyImage is running on another system than the real image class itself and can represent the real image RealImage over there. The image information is accessed from the disk. Using the proxy pattern, the code of the ProxyImage avoids multiple loading of the image, accessing it from the other system in a memory-saving manner. It should be noted, however, that the lazy loading demonstrated in this example is not part of the proxy pattern, but is merely an advantage made possible by the use of the proxy.
+
+![Image](https://github.com/avineeth/gyan/blob/master/img/400px-Proxy_pattern_diagram.svg.png?raw=true)
+![Image](https://github.com/avineeth/gyan/blob/master/img/proxydesignpattern.PNG?raw=true)
+
 ```
 interface Image {
     public void displayImage();
