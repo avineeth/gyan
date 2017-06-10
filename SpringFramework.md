@@ -33,7 +33,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.sprin
 </beans>
 ```
 
-- Within the <beans> you can place all of your Spring configuration, including <bean> declarations.
+- Within the `<beans>` you can place all of your Spring configuration, including `<bean>` declarations.
 
 - Spring comes with several XML namespaces through which you can configure the Spring container
 
@@ -73,7 +73,7 @@ coding the scoping rules in the bean class itself.
 
 #### Minimalizing XML Configuration
 
-- Autowiring helps reduce or even eliminate the need for <property> and <constructor-arg> elements by letting Spring automatically figure out how to wire bean dependencies.
+- Autowiring helps reduce or even eliminate the need for `<property> and <constructor-arg> ` elements by letting Spring automatically figure out how to wire bean dependencies.
 
 - The four kinds of autowiring
   - byName — Attempts to match all properties of the autowired bean with beans that have the same name (or ID) as the properties. Properties for which there’s no matching bean will remain unwired. 
@@ -117,6 +117,111 @@ After
 <!-- beandeclarationsgohere-->
 </beans>
 ```
+
+## Spring AOP
+- In software development, functions that span multiple points of an application are called cross-cutting concerns.
+- Separating these cross-cutting concerns from the business logic is where aspect-oriented programming (AOP) goes to work.
+- AOP helps you decouple cross-cutting concerns from the objects that they affect.
+- Practical applications of aspects, includes ** logging, declarative transactions, security, and caching.**
+
+- Cross-cutting concerns can now be modularized into special classes called aspects. 
+- This has two benefits. First, the logic for each concern is now in one place, as opposed to being scattered all over the code base.
+- Second, our service modules are now cleaner since they only contain code for their primary concern (or core functionality) and second-ary concerns have been moved to aspects.
+
+### AOP Concepts
+
+#### Advice
+- Advice defines both the what and the when of an aspect. In addition to describing the job that an aspect will perform, advice addresses the question of when to perform the job.
+- Spring aspects can work with five kinds of advice: before, after, after-returning, after-throwing, around.
+ 
+#### Join Points
+- A join point is a point in the execution of the application where an aspect can be plugged in. This point is always a method being called in Spring
+
+#### Pointcuts
+- Pointcuts help narrow down the join points advised by an aspect.
+- If advice defines the what and when of aspects, then pointcuts define the where. 
+- A pointcut definition matches one or more join points at which advice should be woven.
+- Often you specify these pointcuts using explicit class and method names or through regular expressions that define matching class and method name patterns.
+
+### Aspects
+- An aspect is the merger of advice and pointcuts. 
+- Taken together, advice and pointcuts define everything there is to know about an aspect—what it does and where and when it does it.
+
+### SPRING ADVISES OBJECTS AT RUNTIME
+- In Spring, aspects are woven into Spring-managed beans at runtime by wrapping them with a proxy class. As illustrated in figure 4.3, the proxy class poses as the target bean, intercepting advised method calls and forwarding those calls to the target bean.
+- Between the time when the proxy intercepts the method call and the time when it invokes the target bean’s method, the proxy performs the aspect logic.
+- Spring doesn’t create a proxied object until that proxied bean is needed by the application. If you’re using an ApplicationContext, the proxied objects will be created when it loads all of the beans from the BeanFactory. Because Spring creates proxies at runtime, you don’t need a special compiler to weave aspects in Spring’s AOP.
+
+### SPRING ONLY SUPPORTS METHOD JOIN POINTS
+- As mentioned earlier, multiple join point models are available through various AOP implementations. Because it’s based on dynamic proxies, **Spring only supports method join points.**
+- This is in contrast to some other AOP frameworks, such as AspectJ and JBoss, which provide field and constructor join points in addition to method pointcuts.
+- Spring’s lack of field pointcuts prevents you from creating very fine-grained advice, such as intercepting updates to an object’s field. And without constructor pointcuts, there’s no way to apply advice when a bean is instantiated.
+
+![Image](https://github.com/avineeth/gyan/blob/master/img/spring_aop.png?raw=true)
+
+#### Wiring Pointcuts
+
+![Image](https://github.com/avineeth/gyan/blob/master/img/pointcut.PNG?raw=true)
+
+
+#### AOP Configuration
+
+
+ AOP Config | Purpose
+ ---------- | ------------------------------------------------------------
+ `<aop:config>` | The top-level AOP element. all AOP elements must be contained within this element.
+`<aop:aspect>` | Defines an aspect.
+`<aop:pointcut>` | Defines a pointcut.
+ `<aop:before>` | The advice functionality takes place before the advised method is invoked.
+ `<aop:after>` | The advice functionality takes place after the advised method completes,regardless of the outcome.
+ `<aop:after-returning>` |The advice functionality takes place after the advised method successfully completes.
+ `<aop:after-throwing>` | The advice functionality takes place after the advised method throws an exception.
+ `<aop:around>` |The advice wraps the advised method, providing some functionality before and after the advised method is invoked.
+ 
+#### Example
+
+**Aspect Class**
+```
+package com.citibank.cfx.trial;
+public class Audience {
+
+	public void takeSeats() {
+		System.out.println("Take Seats...");
+	}
+	
+	public void clap() {
+		System.out.println("Clap...Clap..Clap");
+	}
+	
+}
+```
+**Spring Config**
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation= "http://www.springframework.org/schema/beans
+ 		http://www.springframework.org/schema/beans/spring-beans.xsd
+ 		http://www.springframework.org/schema/aop
+ 		http://www.springframework.org/schema/aop/spring-aop.xsd" >
+ 
+	<bean id="piano" class="com.citibank.cfx.trial.Piano" />
+	
+	<bean id="audience" class="com.citibank.cfx.trial.Audience" />
+	
+	 <aop:config>
+	 	<aop:aspect ref="audience">
+	 		<aop:pointcut id="performance" expression="execution(* com.citibank.cfx.trial.Piano.play(..))" />
+	 		<aop:before pointcut-ref="performance" method="takeSeats" />
+	 		<aop:after pointcut-ref="performance" method="clap" />
+	 	</aop:aspect>
+	 </aop:config>
+</beans>
+
+```
+
+
 #### Sticky Sessions
 
 When your website is served by only 1 web server, for each pair, a session object is created and remains in the memory of the web server. All the requests from the client go to this web server and update this session object. If some data needs to be stored in the session object over the period of interaction, it is stored in this session object and stays there as long as the session exists.
