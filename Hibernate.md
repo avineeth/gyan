@@ -10,7 +10,7 @@
 - It is the programmed and translucent perseverance of objects in a Java application in to the tables of a relational database using the metadata that describes the mapping between the objects and the database.
 - It works by transforming the data from one representation to another.
 
-![Image](https://github.com/avineeth/gyan/blob/master/img/hibernate_data_access_layers.svg?raw=true)
+![Image](https://github.com/avineeth/gyan/blob/master/img/hibernate_data_access_layers.png?raw=true)
 
 ## Advantages of Hibernate
 
