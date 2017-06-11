@@ -1,4 +1,67 @@
 
+## A JDBC Example
+
+```
+package com.citibank.cfx.reports;
+
+import java.sql.Connection;  // <-- ALL CLASSES ARE IN java.sql.*
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
+
+public class DBConn {
+	
+	private static final String URL = "jdbc:oracle:thin:@localhost:13100:INFR";
+	private static final String DB_USER = "user";
+	private static final String DB_PASSWORD = "pass";
+	
+	public static void main(String[] args) {
+		
+		Connection conn = null;
+		Statement stmt  = null;
+		ResultSet rs  = null;
+		try {
+			//1. load driver class
+			Class.forName("oracle.jdbc.driver.OracleDriver"); // oracle driver in ojdbc.jar
+			
+			//2. create connection
+			conn = DriverManager.getConnection(URL, DB_USER, DB_PASSWORD);
+			
+			//3. create statement object
+			stmt = conn.createStatement();
+			
+			//4. execute query
+			rs = stmt.executeQuery("Select * from EMPLOYEE");
+			while(rs.next()){
+				System.out.println(rs.getInt(1));
+				System.out.println(rs.getString(2));
+				System.out.println(rs.getString("firstname"));
+				System.out.println("-------------");
+			}
+		}catch(ClassNotFoundException ce) {
+			ce.printStackTrace();
+		}catch(SQLException sq){
+			sq.printStackTrace();
+		}finally {
+			try{
+				//5. close connection objects
+				if(rs !=null)
+					rs.close();
+				if(stmt !=null) 
+					stmt.close();
+				if(conn !=null)
+					conn.close();
+			}catch(SQLException sq) {
+				//Do nothing
+			}
+		}
+		
+	}
+}
+
+```
+
 ## What is Hibernate?
 
 - Hibernate is a powerful, high performance object/relational persistence and query service.
