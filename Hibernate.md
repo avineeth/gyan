@@ -84,6 +84,11 @@ public class DBConn {
 5. Simplifies complex join: To fetch data form multiple tables is easy in hibernate framework.
 6. Provides query statistics and database status: Hibernate supports Query cache and provide statistics about query and database status.
 
+## Relation with JPA
+- JPA (Java Persistence API) is an interface for persistence providers to implement.
+- Hibernate is one such implementation of JPA.
+- You can annotate your classes as much as you would like with JPA annotations, however without an implementation nothing will happen. -- Think of JPA as the guidelines that must be followed or an interface, while Hibernates JPA implementation is code that meets the API as defined by JPA and provides the under the hood functionality.
+- When you use hibernate with JPA you are actually using the Hibernate JPA implementation. The benefit of this is that you can swap out hibernates implementation of JPA for another implementation of the JPA specification. When you use straight hibernate your locking into the implementation because other ORMs may use different methods/configurations and annotations, therefore you cannot just switch over to another ORM.
 
 ## Hibernate Architecture
 
@@ -136,6 +141,31 @@ public class DBConn {
 - There is a rich range of built-in types, covering all Java primitives and many JDK classes, including types for java.util.Currency, java.util.Calendar, byte[], and java.io.Serializable.
 - Even better, Hibernate supports user-defined custom types. The interfaces UserType and CompositeUserType are provided to allow you to add your own types. You can use this feature to allow commonly used application classes such as Address, Name, or MonetaryAmount to be handled conveniently and elegantly. 
 
+### Extension interfaces
+
+- Much of the functionality that Hibernate provides is configurable, allowing you to choose between certain built-in strategies.
+- When the built-in strategies are insufficient, Hibernate will usually let you plug in your own custom implementation by implementing an interface.
+- Extension points include:
+  1. Primary key generation (IdentifierGenerator interface)
+  2. SQL dialect support (Dialect abstract class)
+  3. Caching strategies (Cache and CacheProvider interfaces)
+  4. JDBC connection management (ConnectionProvider interface)
+  5. Transaction management (TransactionFactory, Transaction, and TransactionManagerLookup interfaces)
+  6. ORM strategies (ClassPersister interface hierarchy)
+  7. Property access strategies (PropertyAccessor interface)
+  8. Proxy creation (ProxyFactory interface)
+
+### Hibernate Configuration
+
+It's important to understand the difference in configuring Hibernate for managed and nonmanaged environments:
+
+##### Managed environment
+- Pools resources such as database connections and allows transaction boundaries and security to be specified declaratively (that is, in metadata).
+- A J2EE application server such as JBoss, BEA WebLogic, or IBM WebSphere implements the standard (J2EE-specific) managed environment for Java.
+##### Nonmanaged environment
+- Provides basic concurrency management via thread pooling. A servlet container like Jetty or Tomcat provides a nonmanaged server environment for Java Web applications.
+- A standalone desktop or command line application is also considered nonmanaged.
+- Nonmanaged environments don't provide automatic transaction or resource management or security infrastructure. The application itself manages database connections and demarcates transaction boundaries.
 
 
 References:
