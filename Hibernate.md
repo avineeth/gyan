@@ -168,5 +168,57 @@ It's important to understand the difference in configuring Hibernate for managed
 - Nonmanaged environments don't provide automatic transaction or resource management or security infrastructure. The application itself manages database connections and demarcates transaction boundaries.
 
 
+### Hibernate/JPA2 Annotations
+- The JPA 2 standard annotations are contained in the ** javax.persistence ** package. 
+
+#### Entity
+- The @Entity annotation marks this class as an entity bean.
+- It must have a no-argument constructor that is visible with at least protected scope (JPA specific). 
+- POJO class must not be final; and it must not be abstract as well.
+```
+import javax.persistence.Entity;
+ 
+@Entity
+public class EmployeeEntity implements Serializable
+{
+    public EmployeeEntity(){
+ 
+    }
+    //Other code
+}
+```
+
+#### Primary Keys with @Id and @GeneratedValue
+- Each entity bean has to have a primary key, which you annotate on the class with the @Id annotation. 
+- By default, the @Id annotation will not create a primary key generation strategy, which means that you, as the code’s author, need to determine what valid primary keys are, by setting them explicitly calling setter methods. OR you can use @GeneratedValue annotation.
+
+```
+@Id
+@GeneratedValue (strategy = GenerationType.SEQUENCE)
+private Integer employeeId;
+```
+
+- There are four different types of primary key generators on GeneratorType, as follows:
+  1. AUTO: Hibernate decides which generator type to use, based on the database’s support for primary key generation.
+  2. IDENTITY: The database is responsible for determining and assigning the next primary key.
+  3. SEQUENCE: Some databases support a SEQUENCE column type. It uses @SequenceGenerator.
+  4. TABLE: This type keeps a separate table with the primary key values. It uses @TableGenerator.
+
+#### @Table annotation.
+- This annotation allows you to specify many of the details of the table that will be used to persist the entity in the database. As already pointed out, if you omit the annotation, Hibernate will default to using the class name for the table name, so you need only provide this annotation if you want to override that behavior. 
+- The @Table annotation provides four attributes, allowing you to override the name of the table, its catalog, and its schema, and to enforce unique constraints on columns in the table. 
+ 
+#### The @Column annotation
+- is used to specify the details of the column to which a field or property will be mapped. 
+- The following attributes commonly being overridden:
+  - name : permits the name of the column to be explicitly specified—by default, this would be the name of the property.
+  - length : permits the size of the column used to map a value (particularly a String value) to be explicitly defined. The column size defaults to 255, which might otherwise result in truncated String data, for example.
+  - nullable : permits the column to be marked NOT NULL when the schema is generated. The default is that fields should be permitted to be null; however, it is common to override this when a field is, or ought to be, mandatory.
+  - unique : permits the column to be marked as containing only unique values. This defaults to false, but commonly would be set for a value that might not be a primary key but would still cause problems if duplicated (such as username).
+```
+@Column(name="FNAME",length=100,nullable=false)
+private String  firstName;
+```
+
 References:
 https://vladmihalcea.com/tutorials/hibernate/
