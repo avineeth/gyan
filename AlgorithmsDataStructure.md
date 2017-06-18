@@ -1,11 +1,4 @@
 
-# Collections
-
-The core collection interface:
-
-![Image](https://github.com/avineeth/gyan/blob/master/img/collections.gif?raw=true)
-
-
 # CODING CHECKLIST
 
 #### String to char array
@@ -28,12 +21,129 @@ Returns a string representation of the contents of the specified array.
 int[] arr= {12, 3, 4, 1, 6, 9};
 int[] arr2 = Arrays.copyOf(arr, arr.length);
 ```
+#### To convert an array of String to ArrayList?
+```
+//String array
+String[] words = {"ace", "boom", "crew", "dog", "eon"};
+//Use Arrays utility class
+List wordList = Arrays.asList(words);
+//Now you can iterate over the list
+```
+
+#### To reverse a List
+`Collections.reverse(list);`
+
 #### Integer to int
 Integer.intValue()
 
 #### Middle of an array
     int mid = lo + (hi - lo) / 2;
-	    
+
+
+# Collections
+
+The core collection interface:
+
+![Image](https://github.com/avineeth/gyan/blob/master/img/collections.gif?raw=true)
+
+public interface Collection extends Iterable {
+//method definitions
+}
+
+
+#### Why Map interface does not extend Collection interface?
+- A good answer to this interview question is “because they are incompatible“.
+- Collection has a method add(Object o). Map can not have such method because it need key-value pair.
+- There are other reasons also such as Map supports keySet, valueSet etc. Collection classes does not have such views.
+- Due to such big differences, Collection interface was not used in Map interface, and it was build in separate hierarchy.
+
+### List Interface
+- A java list is a “ordered” collection of elements. 
+- This ordering is a zero based index.
+- It does not care about duplicates.
+- Apart from methods defined in Collection interface, it does have its own methods also which are largely to manipulate the collection based on index location of element. These methods can be grouped as search, get, iteration and range view. All above operations support index locations.
+- The main classes implementing List interface are: Stack, Vector, ArrayList and LinkedList. 
+
+### Set Interface
+- It models the mathematical set in set theory. Set interface is like List interface but with some differences. 
+- First, it is not ordered collection. **So no ordering is preserved while adding or removing elements.**
+- The main feature it does provide is **uniqueness of elements**. It does not support duplicate elements.
+- Set also adds a stronger contract on the behavior of the equals and hashCode operations, allowing Set instances to be compared meaningfully even if their implementation types differ. Two Set instances are equal if they contain the same elements.
+- Based on above reasons, it does not have operations based on indexes of elements like List. It only has methods which are inherited by Collection interface.
+- Main classes implementing Set interface are : EnumSet, HashSet, LinkedHashSet, TreeSet. Read more on related java documentation
+
+#### How HashSet store elements?
+- HashSet uses HashMap internally to store values.
+- You must know that HashMap store key-value pairs, with one condition i.e. keys will be unique.
+- HashSet uses Map’s this feature to ensure uniqueness of elements. In HashSet class, a map declaration is as below:
+```
+private transient HashMap<E,Object> map;
+ 
+//This is added as value for each key
+private static final Object PRESENT = new Object();
+```
+- So when you store a element in HashSet, it stores the element as key in map and “PRESENT” object as value. (See declaration above).
+```
+public boolean add(E e) {
+return map.put(e, PRESENT)==null;
+}
+```
+
+#### Can a null element added to a TreeSet or HashSet?
+- As you see, There is no null check in add() method in previous question. And HashMap also allows one null key, so one “null” is allowed in HashSet.
+
+
+#### WeakHashMap 
+WeakHashMap is an implementation of the Map interface that stores only weak references to its keys. Storing only weak references allows a key-value pair to be garbage collected when its key is no longer referenced outside of the WeakHashMap. This class is intended primarily for use with key objects whose equals methods test for object identity using the == operator. Once such a key is discarded it can never be recreated, so it is impossible to do a look-up of that key in a WeakHashMap at some later time and be surprised that its entry has been removed.
+
+#### TreeMap?
+
+- TreeMap is special form of HashMap. It maintains the ordering of keys which is missing in HashMap class. This ordering is by default “natural ordering”. The default ordering can be override by providing an instance of Comparator class, whose compare method will be used to maintain ordering of keys.
+- Please note that all keys inserted into the map must implement the Comparable interface (this is necessary to decide the ordering). 
+
+#### Difference between Set and List?
+1. Set is unordered collection where List is ordered collection based on zero based index.
+2. List allow duplicate elements but Set does not allow duplicates.
+3. List does not prevent inserting null elements (as many you like), but Set will allow only one null element.
+
+#### Difference between List and Map?
+
+1. Perhaps most easy question. List is collection of elements where as map is collection of key-value pairs.
+2. There is actually lots of differences which originate from first statement. They have separate top level interface, separate set of generic methods, different supported methods and different views of collection.
+
+#### Difference between HashMap and HashTable?
+1. Hashtable is synchronized, whereas HashMap is not.
+2. Hashtable does not allow null keys or values. HashMap allows one null key and any number of null values.
+3. The third significant difference between HashMap vs Hashtable is that Iterator in the HashMap is a fail-fast iterator while the enumerator for the Hashtable is not.
+
+#### Difference between Iterator and Enumeration?
+
+1. Iterators allow the caller to remove elements from the underlying collection during the iteration with its remove() method. You can not add/remove elements from a collection when using enumerator.
+2. Enumeration is available in legacy classes i.e Vector/Stack etc. whereas Iterator is available in all modern collection classes.
+3. Another minor difference is that Iterator has improved method names e.g. Enumeration.hasMoreElement() has become Iterator.hasNext(), Enumeration.nextElement() has become Iterator.next() etc
+
+#### Difference between TreeSet and SortedSet?
+
+SortedSet is an interface which TreeSet implements. That’ it !!
+
+#### Difference between ArrayList and LinkedList?
+
+1. LinkedList store elements within a doubly-linked list data structure. ArrayList store elements within a dynamically resizing array.
+2. LinkedList allows for constant-time insertions or removals, but only sequential access of elements. In other words, you can walk the list forwards or backwards, but grabbing an element in the middle takes time proportional to the size of the list. ArrayLists, on the other hand, allow random access, so you can grab any element in constant time. But adding or removing from anywhere but the end requires shifting all the latter elements over, either to make an opening or fill the gap.
+3. LinkedList has more memory overhead than ArrayList because in ArrayList each index only holds actual object (data) but in case of LinkedList each node holds both data and address of next and previous node.
+
+#### How to make a collection read only?
+- Collections.unmodifiableList(list);
+- Collections.unmodifiableSet(set);
+- Collections.unmodifiableMap(map);
+These methods takes collection parameter and return a new read-only collection with same elements as in original collection.
+
+#### How to make a collection thread safe?
+- Collections.synchronizedList(list);
+- Collections.synchronizedSet(set);
+- Collections.synchronizedMap(map);
+Above methods take collection as parameter and return same type of collection which are synchronized and thread safe.
+
 #### Queue 
 - Queue is an interface cannot instantiate
 - Implement as a **Priority Queue** or as a **LinkedList**
@@ -44,8 +154,6 @@ Integer.intValue()
   - **remove()** -Removes and returns the head of the queue. Throws NoSuchElementException when queue is impty.
   - **poll()** -Removes and returns the head of the queue. Returns null if queue is empty.
   - Since it is a subtype of Collections class, it inherits all the methods of it namely size(), **isEmpty()**, contains() etc.
-
-
 
 ## Traversing Collections
 There are three ways to traverse collections:
