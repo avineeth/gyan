@@ -59,7 +59,6 @@ public class DBConn {
 		
 	}
 }
-
 ```
 
 ## What is Hibernate?
@@ -219,6 +218,180 @@ private Integer employeeId;
 @Column(name="FNAME",length=100,nullable=false)
 private String  firstName;
 ```
+
+
+### Entity States
+Given an instance of an object that is mapped to Hibernate, it can be in any one of four different states: transient, persistent, detached, or removed.
+
+- Newly created POJO object will be in the **transient state**. Transient object doesn’t represent any row of the database i.e. not associated with any session object. It’s plain simple java object.
+- **Persistent object** represent one row of the database and always associated with some unique hibernate session. Changes to persistent objects are tracked by hibernate and are saved into database when commit call happen.
+- **Detached objects** are those who were once persistent in past, and now they are no longer persistent. To persist changes done in detached objects, you must reattach them to hibernate session.
+- **Removed objects** are persistent objects that have been passed to the session’s remove() method and soon will be deleted as soon as changes held in the session will be committed to database.
+
+
+refresh() Method
+
+
+#### Understanding Entities and Their Associations
+
+- Entities can contain references to other entities, either directly as an embedded property or field, or indirectly via a collection of some sort (arrays, sets, lists, etc.).
+- These associations are represented using ** foreign key** relationships in the underlying tables. These foreign keys will rely on the identifiers used by participating tables.
+- When only one of the pair of entities contains a reference to the other, the association is unidirectional.
+- If the association is mutual, then it is referred to as bidirectional.
+- In hibernate mapping associations, one (and only one) of the participating classes is referred to as “managing the relationship” and other one is called “managed by” using ‘mappedBy’ property.
+= We should not make both ends of association “managing the relationship”. Never do it.
+- Note that “mappedBy” is purely about how the foreign key relationships between entities are saved. It has nothing to do with saving the entities themselves using cascade functionality.
+
+### TYPE OF ASSOCIATION
+- One-to-one	Either end can be made the owner, but one (and only one) of them should be; if you don’t specify this, you will end up with a circular dependency.
+- One-to-many	The many end must be made the owner of the association.
+- Many-to-one	This is the same as the one-to-many relationship viewed from the opposite perspective, so the same rule applies: the many end must be made the owner of the association.
+- Many-to-many	Either end of the association can be made the owner.
+
+### @JoinColumn and mappedBy
+- The annotation @JoinColumn indicates that this entity is the owner of the relationship (that is: the corresponding table has a column with a foreign key to the referenced table), whereas the attribute mappedBy indicates that the entity in this side is the inverse of the relationship, and the owner resides in the "other" entity.
+- This also means that you can access the other table from the class which you've annotated with "mappedBy" (fully bidirectional relationship).
+- In particular, for the code in the question the correct annotations would look like this:
+```
+@Entity
+public class Company {
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "company")
+    private List<Branch> branches;
+}
+
+@Entity
+public class Branch {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "companyId")
+    private Company company;
+}
+```
+
+### JPA Cascade Types
+
+The cascade types supported by the Java Persistence Architecture are as below:
+
+1. CascadeType.PERSIST : means that save() or persist() operations cascade to related entities.
+2. CascadeType.MERGE : means that related entities are merged when the owning entity is merged.
+3. CascadeType.REFRESH : does the same thing for the refresh() operation.
+4. CascadeType.REMOVE : removes all related entities association with this setting when the owning entity is deleted.
+5. CascadeType.DETACH : detaches all related entities if a “manual detach” occurs.
+6. CascadeType.ALL : is shorthand for all of the above cascade operations.
+
+### Criteira (where clause)
+- The simplest example of a criteria query is one with no optional parameters or restrictions—the criteria query will simply return every object that corresponds to the class.
+
+```
+Criteria crit = session.createCriteria(Product.class);
+List<Product> results = crit.list();
+```
+
+- The Criteria API makes it easy to use restrictions in your queries to selectively retrieve objects; for instance, your application could retrieve only products with a price over $30. You may add these restrictions to a Criteria object with the add() method. The add() method takes an org.hibernate.criterion.Criterion object that represents an individual restriction. You can have more than one restriction for a criteria query.
+
+- Restrictions.eq() Example
+To retrieve objects that have a property value that “equals” your restriction, use the eq() method on Restrictions, as follows:
+```
+Criteria crit = session.createCriteria(Product.class);
+crit.add(Restrictions.eq("description","Mouse"));
+List<Product> results = crit.list()
+```
+Above query will search all products having description as “Mouse”.
+
+
+### Lazy Loading
+
+- The default behavior is to load ‘property values eagerly’ and to load ‘collections lazily’. 
+- Also note that @OneToMany and @ManyToMany associations are defaulted to LAZY loading; and @OneToOne and @ManyToOne are defaulted to EAGER loading. This is important to remember to avoid any pitfall in future.
+
+#### How Lazy Loading Works in Hibernate
+
+The simplest way that Hibernate can apply lazy load behavior upon your entities and associations is by providing a proxy implementation of them. Hibernate intercepts calls to the entity by substituting a proxy for it derived from the entity’s class. Where the requested information is missing, it will be loaded from the database before control is ceded to the parent entity’s implementation.
+
+
+#### Annotation Type Temporal
+- This annotation must be specified for persistent fields or properties of type java.util.Date and java.util.Calendar. It may only be specified for fields or properties of these types.
+- The Temporal annotation may be used in conjunction with the Basic annotation, the Id annotation, or the ElementCollection annotation (when the element collection value is of such a temporal type.
+g. java.util.Date it's not obvious if one wants to map to DATE or TIMESTAMP database type. Only exception is java.sql.Date/Time.
+
+```
+@Temporal(DATE)
+protected java.util.Date endDate;
+```
+### Removing cache objects from first level cache example
+
+- Though we can not disable the first level cache in hibernate, but we can certainly remove some of objects from it when needed. This is done using two methods :
+1. evict()
+2. clear()
+- Here evict() is used to remove a particular object from cache associated with session, and clear() method is used to remove all cached objects associated with session. So they are essentially like remove one and remove all.
+
+http://www.byteslounge.com/tutorials/jpa-entity-versioning-version-and-optimistic-locking
+
+### Second level Cache
+- First level cache: This is enabled by default and works in session scope. Read more about hibernate first level cache.
+- Second level cache: This is apart from first level cache which is available to be used globally in session factory scope.
+- Above statement means, second level cache is created in session factory scope and is available to be used in all sessions which are created using that particular session factory.
+- It also means that once session factory is closed, all cache associated with it die and cache manager also closed down.
+
+#### How second level cache works
+
+1. Whenever hibernate session try to load an entity, the very first place it look for cached copy of entity in first level cache (associated with particular hibernate session).
+2. If cached copy of entity is present in first level cache, it is returned as result of load method.
+3. If there is no cached entity in first level cache, then second level cache is looked up for cached entity.
+4. If second level cache has cached entity, it is returned as result of load method. But, before returning the entity, it is stored in first level cache also so that next invocation to load method for entity will return the entity from first level cache itself, and there will not be need to go to second level cache again.
+5. If entity is not found in first level cache and second level cache also, then database query is executed and entity is stored in both cache levels, before returning as response of load() method.
+6. Second level cache validate itself for modified entities, if modification has been done through hibernate session APIs.
+7. If some user or process make changes directly in database, the there is no way that second level cache update itself until “timeToLiveSeconds” duration has passed for that cache region. In this case, it is good idea to invalidate whole cache and let hibernate build its cache once again. You can use below code snippet to invalidate whole hibernate second level cache.
+
+
+#### Configuring EhCache
+http://howtodoinjava.com/hibernate/hibernate-ehcache-configuration-tutorial/
+
+To configure ehcache, you need to do two steps:
+1. configure Hibernate for second level caching
+2. specify the second level cache provider
+
+```
+Example 6.2. Configuring cache providers using annotations
+
+@Entity 
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+public class Forest { ... }
+```
+
+- You can cache the content of a collection or the identifiers, if the collection contains other entities. Use the @Cache annotation on the Collection property.
+
+- @Cache can take several attributes.
+Attributes of @Cache annotation, 
+
+  - usage 
+      The given cache concurrency strategy, which may be:
+     1. NONE
+     2. READ_ONLY
+     3. NONSTRICT_READ_WRITE
+     4. READ_WRITE
+     5. TRANSACTIONAL
+  - region
+The cache region. This attribute is optional, and defaults to the fully-qualified class name of the class, or the qually-qualified role name of the collection.
+
+  - include
+Whether or not to include all properties.. Optional, and can take one of two possible values.
+
+A value of all includes all properties. This is the default.
+A value of non-lazy only includes non-lazy properties.
+
+- ENABLE_SELECTIVE	Entities are not cached unless you explicitly mark them as cachable. This is the default and recommended value.
+- DISABLE_SELECTIVE	Entities are cached unless you explicitly mark them as not cacheable.
+- ALL	All entities are always cached even if you mark them as not cacheable.
+- NONE	No entities are cached even if you mark them as cacheable. This option basically disables second-level caching.
+
+### The persistence.xml file
+- The EntityManager API is great, but how does the server know which database it is supposed to save / update / query the entity objects? How do we configure the underlying object-relational-mapping engine and cache for better performance and trouble shooting? 
+- The persistence.xml file gives you complete flexibility to configure the EntityManager.
+- The persistence.xml file is a standard configuration file in JPA. 
+- It has to be included in the META-INF directory inside the JAR file that contains the entity beans.
+- For Hibernate, hibernate.cfg.xml is the configuration file. 
+- The persistence.xml file must define a persistence-unit with a unique name in the current scoped classloader. 
 
 References:
 https://vladmihalcea.com/tutorials/hibernate/
