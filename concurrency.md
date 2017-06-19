@@ -70,6 +70,27 @@ Notice that both examples invoke **Thread.start()** in order to start the new th
 #### join()
 The current thread calls join(), via another thread's thread object reference when it wants to wait for that other thread to terminate. 
 
+#### yield() method
+
+Theoretically, to ‘yield’ means to let go, to give up, to surrender. A yielding thread tells the virtual machine that it’s willing to let other threads be scheduled in its place. This indicates that it’s not doing something too critical. Note that it’s only a hint, though, and not guaranteed to have any effect at all.
+
+yield() is defined as following in Thread.java.
+```
+/**
+  * A hint to the scheduler that the current thread is willing to yield its current use of a processor. The scheduler is free to ignore
+  * this hint. Yield is a heuristic attempt to improve relative progression between threads that would otherwise over-utilize a CPU. 
+  * Its use should be combined with detailed profiling and benchmarking to ensure that it actually has the desired effect. 
+  */
+ 
+public static native void yield();
+```
+Let’s list down important points from above definition:
+
+- Yield is a Static method and Native too.
+- Yield tells the currently executing thread to give a chance to the threads that have equal priority in the Thread Pool.
+- There is no guarantee that Yield will make the currently executing thread to runnable state immediately.
+- It can only make a thread from Running State to Runnable State, not in wait or blocked state.
+
 #### Interrupts
 
 - An interrupt is an indication to a thread that it should stop what it is doing and do something else. It's up to the programmer to decide exactly how a thread responds to an interrupt, but it is very common for the thread to terminate.
