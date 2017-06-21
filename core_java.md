@@ -273,6 +273,64 @@ public final class Contacts {
    }
    ```
 
+## Annotations
+- Java annotations are used to provide **meta data** for your Java code.
+- Being meta data, Java annotations do not directly affect the execution of your code, although some types of annotations can actually be used for that purpose.
+- Java annotations were added to Java from Java 5. 
+- Java annotations are typically used for the following purposes:
+   1. Compiler instructions
+   2. Build-time instructions
+   3. Runtime instructions
+  
+#### Annotation Basics
+- A Java annotation in its shortest form looks like this:
+`@Entity`
+- The @ character signals to the compiler that this is an annotation.
+- The name following the @ character is the name of the annotation. In the example above the annotation name is Entity.
+- You can place Java annotations above classes, interfaces, methods, method parameters, fields and local variables.
+
+#### Built-in Java Annotations
+- Java comes with three built-in annotations which are used to give the Java compiler instructions. These annotations are:
+  1. @Deprecated
+  2. @Override
+  3. @SuppressWarnings
+
+#### Creating Your Own Annotations
+- It is possible to create your own (custom) Java annotations. Annotations are defined in their own file, just like a Java class or interface. Here is custom Java annotation example:
+```
+@interface MyAnnotation {
+
+    String   value();
+
+    String   name();
+    int      age();
+    String[] newNames();
+
+}
+```
+- This example defines an annotation called MyAnnotation which has four elements. 
+- Notice the @interface keyword. This signals to the Java compiler that this is a Java annotation definition.
+- Notice that each element is defined similarly to a method definition in an interface. It has a data type and a name. You can use all primitive data types as element data types. You can also use arrays as data type. **You cannot use complex objects as data type.**
+
+J2SE 5.0 provides four annotations in the java.lang.annotation package that are used only when writing annotations:
+  1. @Documented – Whether to put the annotation in Javadocs
+  2. @Inherited – Whether subclasses get the annotation.
+  3. @Retention – Defines for how long the annotation should be kept.
+        1. RetentionPolicy.SOURCE – Discard during the compile. These annotations don’t make any sense after the compile has completed, so they aren’t written to the bytecode. Examples @Override, @SuppressWarnings
+        2. RetentionPolicy.CLASS – Discard during class load. Useful when doing bytecode-level post-processing. Somewhat surprisingly, this is the default.
+        3. RetentionPolicy.RUNTIME – Do not discard. The annotation should be available for reflection at runtime. This is what we generally use for our custom annotations.
+
+   4. @Target? – Places the annotation can go
+      1. ElementType.TYPE (class, interface, enum)
+      2. ElementType.FIELD (instance variable)
+      3. ElementType.METHOD
+      4. ElementType.PARAMETER
+      5. ElementType.CONSTRUCTOR
+      6. ElementType.LOCAL_VARIABLE
+      7. ElementType.ANNOTATION_TYPE (on another annotation)
+      8. ElementType.PACKAGE (remember package-info.java)
+
+
 ### Floating Point Numbers
 
 The Java programming language provides two built-in classes for representing floating-point numbers: float, and double. The "float" class takes 4 bytes of storage, and have 23 binary digits of precision. The "double" class takes 8 bytes of storage, and have 52 binary digits of precision.
