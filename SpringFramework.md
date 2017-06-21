@@ -221,6 +221,29 @@ public class Audience {
 
 ```
 
+## Transaction Management
+
+### Explaining transactions in only four words
+
+#### Atomic
+Transactions are made up of one or more activities bundled together as a single unit of work. Atomicity ensures that all the operations in the transaction happen or that none of them happen. If all the activities succeed, the transaction is a success. If any of the activities fails, the entire transaction fails and is rolled back.
+
+#### Consistent
+Once a transaction ends (whether successful or not), the system is left in a state consistent with the business that it models. The data shouldn’t be corrupted with respect to reality.
+
+#### Isolated
+Transactions should allow multiple users to work with the same data, without each user’s work getting tangled up with the others. Therefore, transactions should be isolated from each other, preventing concurrent reads and writes to the same data from occurring. (Note that isolation typically involves locking rows and/or tables in a database.)
+
+#### Durable
+Once the transaction has completed, the results of the transaction should be made permanent so that they’ll survive any sort of system crash. This typically involves storing the results in a database or some other form of persistent storage.
+
+### Important Points Regarding Spring's  Transaction Support
+- Spring supports for both programmatic and declarative transaction management.
+- For programmatic transaction management Spring employs a callback mechanism that abstracts away the actual transaction implementation from the transactional code.
+- Choosing between programmatic and declarative transaction management is largely a decision of fine-grained control versus convenience. Typically that is not required.
+- If your application uses only a single persistent resource, Spring can use the transactional support offered by the persistence mechanism. This includes JDBC, Hibernate, and the Java Persistence API (JPA).
+- But if your application has transaction requirements that span multiple resources, Spring can support distributed (XA) transactions using a thirdparty JTA implementation.
+
 
 #### Sticky Sessions
 
