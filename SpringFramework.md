@@ -260,7 +260,63 @@ As an example, you may read about Amazon's Elastic Load Balancer and sticky sess
 
 ## REST API
 
-####  HATEOAS
+### What is REST
+
+- R- Representational - Data can be represented in any form (XML, JSON (javascript object notation), even html)
+- S- State - We are considered about the state of the resources rather than actions on the data
+- T- Transfer - Transfering the data from one application to another (through http)
+- ** REST - in short stands for transfering state of a resources from server to client (or vice-versa). **
+
+### Difference between SOAP and REST
+0. SOAP and rest cannot be compared directly. SOAP is a protocol but REST is an architectural style.
+1. SOAP (RPC) is service oriented but REST is resource oriented
+2. SOAP is focused more about actions and verbs.REST is emphasizing more on nouns that describe the application.
+3. SOAP is tightly coupled. There is a rigid contract between Client and Server based on WSDL and XML namespaces. anything changes it breaks. REST client is more like a web-browser. 
+
+#### REST URLs 
+REST URIs - Uniform Resource Identifiers should identify a resource.
+Parameters in URLs - http://localhost:9080/Spittles/{id} --> http://localhost:9080/Spittles/123
+Here {id} is the parameter. These are supported in Spring by @PathVariable annotation.
+```
+@RequestMapping(value="/{id}", method = RequestMethod.GET)
+public String getSpittle(@PathVariable("id") long id, Model model) {
+	return "view";
+}
+```
+
+### REST Verbs - HTTP Methods
+- HTTP Methods are characterized by the two traits:
+1. Safe  - A method is safe if it doesnt change the state of resource.
+2. Idempotent - repeated requests should have no further side effects after the first resource.
+
+Method | Description | Safe? | Idempotent? 
+-------|-------------|-------|-----------
+GET | Retrieves resource data from server | yes| yes
+POST | Posts data to the server handled by the listening process | no | no
+PUT | Puts (updates) the data to the server | no | yes
+DELETE | detes the resource at the url | no | yes
+
+### Representing Resources
+- Resource can be represented in any form (xml, json, pdf, html).
+- Spring provides two ways to transform resource's Java representation into the representation that will be shipped to the client:
+  - Negotiated view-based rendenring - ContentNegotiatingViewResovler - similar to MVC 
+  - HTTP message converters
+  	- bypasses model and view. In this style the object returned from the controller is automatically converted into a represenation appropriate for the client.
+	
+### Writing REST Clients - REST Template
+```
+public class Application {
+
+    private static final Logger log = LoggerFactory.getLogger(Application.class);
+
+    public static void main(String args[]) {
+        RestTemplate restTemplate = new RestTemplate();
+        Quote quote = restTemplate.getForObject("http://gturnquist-quoters.cfapps.io/api/random", Quote.class);
+        log.info(quote.toString());
+    }
+```
+ 
+###  HATEOAS
 
 - HATEOAS (Hypermedia as the Engine of Application State) is a constraint of the REST application architecture.
 - A hypermedia-driven site provides information to navigate the site's REST interfaces dynamically by including hypermedia links with the responses.
