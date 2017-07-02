@@ -223,4 +223,25 @@ Displaying HiRes_10MB_Photo1
 
 
 
+## J2EE Design Patterns
+
+#### Front Controller pattern
+DispatcherServlet in Spring
+
+#### View Helper
+ViewResolver in Spring
+
+#### Dependency Injection
+
+#### Data Access Object(DAO) pattern
+It provides a flexible and transparent access to the data, abstracts the data sources and hides the complexity of Data persistence layer. This pattern provides for loose coupling between business and data persistence layer.
+
+#### Intercepting Filter pattern
+Provides a solution for pre-processing and post-processing a request. It allows us to declaratively apply filters for intercepting requests and responses. For ex. Servlet filters.
+
+#### Session Façade pattern
+This pattern hides the complexity of business components and centralizes the workflow. It provides course-grained interfaces to the clients which reduces the remote method overhead. This pattern fits well with declarative transactions and security management.
+
+
+
 
