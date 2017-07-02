@@ -320,6 +320,39 @@ System.out.println(c.getName());
 Output:Simple
 ```
 
+##### Why we use Class.forName(“oracle.jdbc.driver.OracleDriver”) while connecting to a DataBase?
+- In previous versions of JDBC, to obtain a connection, you first had to initialize your JDBC driver by calling the method Class.forName. 
+- The basic idea behind using Class.forName() is to **load a JDBC driver implementation**.
+- A (normal) JDBC driver must contain a **static initializer** that registers an instance of the driver implementation with  java.sql.DriverManager:
+
+...
+
+```
+import java.lang.reflect.Method;
+public class ReflectionExample {
+
+	public static void main(String[] args) throws Exception{
+		Class c= Class.forName("A");
+		System.out.println(c.getName());
+		Method[] marr = c.getMethods();
+		for(Method m : marr) {
+			System.out.println(m.getName());
+		}
+	}
+}
+
+class A {
+	
+		static {
+			System.out.println("Hello World");
+			
+		}
+		public void doSomething() {
+			
+		}
+}
+```
+
 ## Annotations
 - Java annotations are used to provide **meta data** for your Java code.
 - Being meta data, Java annotations do not directly affect the execution of your code, although some types of annotations can actually be used for that purpose.
