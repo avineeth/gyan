@@ -2,7 +2,6 @@ TODO:
 
 - Thread Dumps
 - GC Pauses
-
 # Garbage Collection
 
 ### JVM Generations
@@ -130,6 +129,15 @@ http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
 -	Another kind of execution engine, one that is faster but requires more memory, is a just-in-time compiler. In this scheme, the bytecodes of a method are compiled to native machine code the first time the method is invoked. The native machine code for the method is then cached, so it can be re-used the next time that same method is invoked.
 
 ![Image](https://github.com/avineeth/gyan/blob/master/img/jvm-1_3.png?raw=true)
+
+
+## Why is Java called Platform Independent?
+- Platform Independence is also called build once, run anywhere. 
+- Java is one of the most popular platform independent languages. Once we compile a java program and build a jar, we can run the jar (compiled java program) in any Operating System - where a JVM is installed.
+- Java achieves Platform Independence in a beautiful way. On compiling a java file the output is a class file which contains an internal java representation called bytecode. JVM converts bytecode to executable instructions. 
+- The executable instructions are different in different operating systems. So, there are different JVM's for different operating systems. A JVM for windows is different from a JVM for mac. **JVM is plaform dependent **
+- However, both the JVM's understand the bytecode and convert it to the executable code for the respective operating system.
+
 
 ## Is java compiled or interpreted?
 - Java uses a two step compilation process. Java source code is compiled down to "bytecode" by the Java compiler. The bytecode is executed by Java Virtual Machine (JVM). 
