@@ -273,6 +273,53 @@ public final class Contacts {
    }
    ```
 
+## Reflection 
+- Reflection is a feature in Java programming Language. It allows a Java program to examine or "Introspect" or inspect upon itself.
+- For example, it's possible for a Java class to obtain the names of all its members and display them.
+- It is also possible to instantiate new objects, invoke methods and get/set field values using reflection.
+ 
+ ```
+ import java.lang.reflect.*;
+ 
+   public class DumpMethods {
+      public static void main(String args[])
+      {
+         try {
+            Class c = Class.forName(args[0]);
+            Method m[] = c.getDeclaredMethods();
+            for (int i = 0; i < m.length; i++)
+            System.out.println(m[i].toString());
+         }
+         catch (Throwable e) {
+            System.err.println(e);
+         }
+      }
+   }
+ ```
+
+- The Reflection API is mainly used in: 
+1. IDE (Integrated Development Environment) e.g. Eclipse, MyEclipse, NetBeans etc.
+2. Debugger
+3. Test Tools etc.
+4. One very common use case in Java is the usage with annotations. JUnit 4, for example, will use reflection to look through your classes for methods tagged with the @Test annotation, and will then call them when running the unit test.
+
+##### Class.forName()
+- is used to load the class dynamically.
+- returns the instance of Class class.
+- It should be used if you know the fully qualified name of class.This cannot be used for primitive types. 
+```
+class Simple{}
+
+class Test{
+public static void main(String args[]){
+Class c=Class.forName("Simple");
+System.out.println(c.getName());
+}
+}
+
+Output:Simple
+```
+
 ## Annotations
 - Java annotations are used to provide **meta data** for your Java code.
 - Being meta data, Java annotations do not directly affect the execution of your code, although some types of annotations can actually be used for that purpose.
