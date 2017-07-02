@@ -360,3 +360,8 @@ This response not only has the person's name, but includes the self-linking URL 
 - Level 1 : Expose Resources with proper URI’s (using nouns). Ex: http://server/accounts, http://server/accounts/10. However, HTTP Methods are not used.
 - Level 2 : Resources use proper URI's + HTTP Methods. For example, to update an account, you do a PUT to . The create an account, you do a POST to . Uri’s look like posts/1/comments/5 and accounts/1/friends/1.
 - Level 3 : HATEOAS (Hypermedia as the engine of application state). You will tell not only about the information being requested but also about the next possible actions that the service consumer can do. When requesting information about a facebook user, a REST service can return user details along with information about how to get his recent posts, how to get his recent comments and how to retrieve his friend’s list.
+
+
+### What is Spring Boot?
+Over the years spring has become more and more complex as new functionalities have been added. Just visit the page-https://spring.io/projects and we will see all the spring projects we can use in our application for different functionalities. If one has to start a new spring project we have to add build path or add maven dependencies, configure application server, add spring configuration . So a lot of effort is required to start a new spring project as we have to currently do everything from scratch.
+Spring Boot is the solution to this problem. Spring boot has been built on top of existing spring framework. **Using spring boot we avoid all the boilerplate code and configurations that we had to do previously.** Spring boot thus helps us use the existing Spring functionalities more robustly and with minimum efforts.
