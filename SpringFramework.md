@@ -303,7 +303,9 @@ DELETE | detes the resource at the url | no | yes
   - HTTP message converters
   	- bypasses model and view. In this style the object returned from the controller is automatically converted into a represenation appropriate for the client.
 	
-### Writing REST Clients - REST Template
+### Writing REST Clients 
+- Using REST Template
+
 ```
 public class Application {
 
