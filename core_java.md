@@ -411,6 +411,57 @@ J2SE 5.0 provides four annotations in the java.lang.annotation package that are 
       8. ElementType.PACKAGE (remember package-info.java)
 
 
+### Enums
+
+- Enumerations (in general) are generally a set of related constants. 
+- Enumeration in java is supported by keyword enum. enums are a special type of class that always extends java.lang.Enum.
+
+```
+public class EnumExample {
+
+	public enum DIRECTION {
+		NORTH(90){
+			@Override
+			public void shout(){
+				System.out.println("Direction is North");
+			}
+		},
+		SOUTH(270){
+			@Override
+			public void shout(){
+				System.out.println("Direction is South");
+			}
+		},
+		EAST(0){
+			@Override
+			public void shout(){
+				System.out.println("Direction is East");
+			}
+		},
+		WEST(180){
+			@Override
+			public void shout(){
+				System.out.println("Direction is West");
+			}
+		};
+		
+		private int angle;
+		private DIRECTION(int angle) {
+			this.angle=angle;
+		}
+		public int getAngle() {
+			return this.angle;
+		}
+		
+		public abstract void shout();
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(DIRECTION.NORTH.getAngle());
+		DIRECTION.NORTH.shout();
+	}
+}
+```
 ### Floating Point Numbers
 
 The Java programming language provides two built-in classes for representing floating-point numbers: float, and double. The "float" class takes 4 bytes of storage, and have 23 binary digits of precision. The "double" class takes 8 bytes of storage, and have 52 binary digits of precision.
