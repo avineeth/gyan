@@ -535,3 +535,24 @@ button.addActionListener(new ActionListener() {
 - Using this method makes coding a little bit quicker, as I don't need to make an extra class that implements ActionListener. I can just instantiate an anonymous inner class without actually making a separate class.
 - I only use this technique for "quick and dirty" tasks where making an entire class feels unnecessary. Having multiple anonymous inner classes that do exactly the same thing should be refactored to an actual class, be it an inner class or a separate class.
 
+
+#### "Variable is accessed within inner class. Needs to be declared final."
+
+Solution:
+Declare the variable final, or make it an instance variable.
+
+Explanation:
+Java doesn't want developers to change local variables from within an inner class or an anonymous inner class.
+
+Inner Classes and Local Variables
+Any variable defined in a method and accessed by an anonymous inner class must be final. Or, as Oracle says:
+"An anonymous class cannot access local variables in its enclosing scope that are not declared as final or effectively final"
+Note: "effectively final" is something new introduced in Java SE 8. It is defined as a variable or parameter that is not declared as final, whose value is never changed after it is initialized.
+
+But why make it so inner classes can't modify variables belonging to their outer scope?
+The reason is that the inner class "captures" the variable. To understand why this matters, we need to understand the implications of how captured variables work. If you are familiar with closures, that is exactly what's going on here.
+The inner class is a closure. It copies the variable from it's enclosing scope to a new variable, and brings just that copy inside the inner class. Anything it does to that copy is independent from the variable in the enclosing scope. So if the variable changes in the inner class, and then it is used later in the enclosing scope, the changes made in the inner class did not persist in the enclosing scope.
+
+Basically, what happens in the inner class stays in the inner class.
+
+
