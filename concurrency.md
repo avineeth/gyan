@@ -208,6 +208,16 @@ public class StoptheThreadExample {
 
 //TODO add Simple Thread example here..
 
+### Volatile keyword
+
+- The Java volatile keyword is used to mark a Java variable as **"being stored in main memory"**. More precisely that means, that every read of a volatile variable will be read from the computer's main memory, and not from the CPU cache, and that every write to a volatile variable will be written to main memory, and not just to the CPU cache.
+- In a multithreaded application where the threads operate on non-volatile variables, each thread may copy variables from main memory into a CPU cache while working on them, for performance reasons. If your computer contains more than one CPU, each thread may run on a different CPU. That means, that each thread may copy the variables into the CPU cache of different CPUs.
+- With non-volatile variables there are no guarantees about when the Java Virtual Machine (JVM) reads data from main memory into CPU caches, or writes data from CPU caches to main memory. 
+- If Thread A writes to a volatile variable and Thread B subsequently reads the same volatile variable, then **all variables visible to Thread A** before writing the volatile variable, will also be visible to Thread B after it has read the volatile variable. 
+- The reading and writing instructions of volatile variables **cannot be reordered by the JVM** (the JVM may reorder instructions for performance reasons as long as the JVM detects no change in program behaviour from the reordering). Instructions before and after can be reordered, but the volatile read or write cannot be mixed with these instructions. Whatever instructions follow a read or write of a volatile variable are guaranteed to happen after the read or write.
+- Locking can guarantee both Visibility and Atomicity. Volatile variables can only guarantee Visibility.
+- Use Volatile variables when Writes to the variable doesnt depend on its current value (like a status flag).
+  
 
 ### Monitors
 
