@@ -138,6 +138,18 @@ Code:
 ```
 - Answer: It will not execute finally block. The program will be terminated
 
+
+### Checked vs Unchecked Exceptions in Java
+- In Java, there two types of exceptions:
+- Checked: are the exceptions that are checked at compile time. If some code within a method throws a checked exception, then the method must either handle the exception or it must specify the exception using throws keyword. Example - FileNotFoundException, IOException
+- Unchecked are the exceptions that are not checked at compiled time. In C++, all exceptions are unchecked, so it is not forced by the compiler to either handle or specify the exception. It is up to the programmers to be civilized, and specify or catch the exceptions. In Java exceptions under **Error and RuntimeException** classes are unchecked exceptions, everything else under throwable is checked.
+
+  Throwable
+    /  \
+Error  Exception
+         /   \
+    (checked) RuntimeException  		  
+    
 ## What Is the Static Keyword in Java?
 
 - In Java, a static member is a member of a class that isn’t associated with an instance of a class. Instead, the member belongs to the class itself. As a result, you can access the static member without first creating a class instance.
