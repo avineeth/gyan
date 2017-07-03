@@ -277,6 +277,18 @@ public class StoptheThreadExample {
   - (Only the thread that already owns an object's lock is allowed to lock it again. As mentioned previously, no other thread can lock the object until the owning thread releases the lock.) 
   - Each time the thread releases the lock, the count is decremented. When the count reaches zero, the lock is released and made available to other threads.
 
+#### Mutex vs Semaphore
+
+- Mutex is basically mutual exclusion. Only one thread can acquire the resource at once. When one thread acquires the resource, no other thread is allowed to acquire the resource until the thread owning the resource releases. All threads waiting for acquiring resource would be blocked.
+
+- Semaphore is used to control the number of threads executing. There will be fixed set of resources. The resource count will gets decremented every time when a thread owns the same. When the semaphore count reaches 0 then no other threads are allowed to acquire the resource. The threads get blocked till other threads owning resource releases.
+
+- In short, the main difference is how many threads are allowed to acquire the resource at once ?
+  - Mutex --its ONE.
+  - Semaphore -- its DEFINED_COUNT, ( as many as semaphore count)
+
+- Semaphores have no notion of ownership, this means that any thread can release a semaphore (this can lead to many problems in itself but can help with "death detection").
+- Whereas a mutex does have the concept of ownership (i.e. you can only release a mutex you have acquired).
 
 #### Synchronization Support in the Instruction Set
 
