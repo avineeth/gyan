@@ -365,8 +365,30 @@ HashMap.java
     transient volatile int modCount;
  ```
  
-//TODO add EmployeeDB.java
+- Note that Iterator.remove is the only safe way to modify a collection during iteration; the behavior is unspecified if the underlying collection is modified in any other way while the iteration is in progress.
 
+```
+public static void main(String args[]) {
+
+		Map<String,String> emp = new HashMap<String,String>();
+		emp.put("1","david");
+		emp.put("2","mary");
+		emp.put("3","john");
+		
+		//If Iterator.remove() is used ConcurrentModificationException is not thrown.
+		Iterator iter = emp.entrySet().iterator();
+		while(iter.hasNext()) {
+			Map.Entry<String,String> entry = (Map.Entry<String,String>)iter.next();
+			System.out.println(entry.getKey());
+		}
+		
+		// directly removing from the collection using remove during iteration causes concurrent modification exception.
+		for(String empno : emp.keySet() ){
+			System.out.println(emp.get(empno));
+			emp.remove(empno); //**ConcurrentModificationException**
+		}
+	}
+```
 #### What is fail-fast in java?
 - A fail-fast system is nothing but immediately report any failure that is likely to lead to failure. When a problem occurs, a fail-fast systemfails immediately. In Java, we can find this behavior with iterators. Incase, you have called iterator on a collection object, and another thread tries to modify the collection object, then concurrent modification exception will be thrown. This is called fail-fast.
 
