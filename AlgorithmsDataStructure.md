@@ -69,12 +69,13 @@ for (Map.Entry<String, Object> entry : map.entrySet()) {
 
 The core collection interface:
 
-![Image](https://github.com/avineeth/gyan/blob/master/img/collections.gif?raw=true)
+![Image](https://github.com/avineeth/gyan/blob/master/img/CollectionHierarchy.png?raw=true)
 
+```
 public interface Collection extends Iterable {
 //method definitions
 }
-
+```
 
 #### Why Map interface does not extend Collection interface?
 - A good answer to this interview question is “because they are incompatible“.
