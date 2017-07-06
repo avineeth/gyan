@@ -365,6 +365,66 @@ class A {
 }
 ```
 
+ ## Object Cloning in Java
+ 
+- In java, it essentially means the ability to create an object with similar state as the original object. 
+- By default, java cloning is ‘field by field copy’ i.e. as the Object class does not have idea about the structure of class on which clone() method will be invoked. So, JVM when called for cloning, do following things:
+  1. If the class has only primitive data type members then a completely new copy of the object will be created and the reference to the new object copy will be returned.
+  2. If the class contains members of any class type then only the object references to those members are copied and hence the member references in both the original object as well as the cloned object refer to the same object.
+- Apart from above default behavior, you can always override this behavior and specify your own. This is done using overriding clone() method. Lets see how it is done.
+
+- In java, if a class needs to support cloning it has to do following things:
+
+1) You must implement Cloneable interface.
+	`public class Department implements Cloneable {`
+	
+2) You must override clone() method from Object class. [Its weird. clone() method should have been in Cloneable interface.
+	```
+    @Override
+    public Object clone() throws CloneNotSupportedException{
+        return super.clone();
+    }
+
+	```
+```
+/*
+Creates and returns a copy of this object. The precise meaning of "copy" may depend on the class of the object.
+The general intent is that, for any object x, the expression:
+1) x.clone() != x will be true
+2) x.clone().getClass() == x.getClass() will be true, but these are not absolute requirements.
+3) x.clone().equals(x) will be true, this is not an absolute requirement.
+*/
+protected native Object  [More ...] clone() throws CloneNotSupportedException;
+```
+
+#### Shallow Cloning
+
+- This is default implementation in java. In overridden clone method, if you are not cloning all the object types (not primitives), then you are making a shallow copy.
+- All above examples are of shallow copy only, because we have not cloned the Department object on Employee class’s clone method. Now, i will move on to next section where we will see the deep cloning.
+
+
+#### Deep cloning
+- It is the desired behavior in most the cases. We want a clone which is independent of original and making changes in clone should not affect original.
+```
+//Modified clone() method in Employee class
+@Override
+protected Object clone() throws CloneNotSupportedException {
+    Employee cloned = (Employee)super.clone();
+    cloned.setDepartment((Department)cloned.getDepartment().clone());
+    return cloned;
+}
+```
+I modified the Employee classes clone() method and added following clone method in Department class.
+
+```
+//Defined clone method in Department class.
+@Override
+protected Object clone() throws CloneNotSupportedException {
+    return super.clone();
+}
+```
+
+
 ## Annotations
 - Java annotations are used to provide **meta data** for your Java code.
 - Being meta data, Java annotations do not directly affect the execution of your code, although some types of annotations can actually be used for that purpose.
