@@ -181,6 +181,22 @@ Above methods take collection as parameter and return same type of collection wh
   - **poll()** -Removes and returns the head of the queue. Returns null if queue is empty.
   - Since it is a subtype of Collections class, it inherits all the methods of it namely size(), **isEmpty()**, contains() etc.
 
+## Linked list as a Stack and Queue
+- A double-linked list such as Java's LinkedList is a rather flexible data structure, so it makes sense to implement several data structures using it as a base. 
+-So if you want to view it as a Queue, you'd say something like this:
+
+`Queue q = new LinkedList();`
+
+- If you want to use it as a stack, you would declare it like this:
+
+`Deque s = new LinkedList();`
+
+- The methods (push() and pop()) are from the Deque interface, which is also implemented by LinkedList. 
+- The Javadoc for Deque states:
+`
+A linear collection that supports element insertion and removal at both ends. The name deque is short for "double ended queue" and is usually pronounced "deck". Most Deque implementations place no fixed limits on the number of elements they may contain, but this interface supports capacity-restricted deques as well as those with no fixed size limit.
+`
+
 ## Traversing Collections
 There are three ways to traverse collections:
 - using aggregate operations ( TODO: JDK 1.8 lambda expressions)
