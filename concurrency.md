@@ -546,20 +546,108 @@ concurrencyLevel - the estimated number of concurrently updating threads. The im
 
 ```
 
-//TODO Blocking Queues
+### Blocking Queue
+
+- BlockingQueue is a queue which is **thread safe** to insert or retrieve elements from it. 
+- It provides a mechanism which blocks requests for inserting new elements when the queue is full or requests for removing elements when the queue is empty, with the additional option to stop waiting when a specific timeout passes.
+- This functionality makes BlockingQueue a nice way of implementing the Producer-Consumer pattern, as the producing thread can insert elements until the upper limit of BlockingQueue while the consuming thread can retrieve elements until the lower limit is reached.
+- BlockingQueue is an Interface, The classes that implement BlockingQueue interface are available in java.util.concurrent package and they are the following:
+  - ArrayBlockingQueue
+  - DelayQueue
+  - LinkedBlockingDeque
+  - LinkedBlockingQueue
+  - PriorityBlockingQueue
+  - SynchronousQueue
+
+Operation | Throws exception | Special value |	Blocks | Times out
+----------|------------------|---------------|---------|----------
+Insert | add(e) | offer(e) | put(e) | offer(e, time, unit)
+Remove | remove() | poll() | take() | poll(time, unit)
+Examine | element() | peek() | not applicable |	not applicable
+
+
+```
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
+/**
+ * Created by Vineeth on 7/9/2017.
+ */
+public class BlockingQueueExample {
+
+    public static void main(String[] args) throws InterruptedException{
+
+        BlockingQueue<Integer> queue = new ArrayBlockingQueue<Integer>(10);
+        Producer p = new Producer(queue);
+        Consumer c = new Consumer(queue);
+
+        Thread p1 = new Thread(p);
+        Thread c1 = new Thread(c);
+        p1.start();
+        c1.start();
+
+    }
+}
+
+
+class Producer implements Runnable {
+
+    private BlockingQueue<Integer> queue;
+
+    public Producer(BlockingQueue<Integer> q) {
+        this.queue = q;
+
+    }
+
+    public void run() {
+
+        for (int i = 0; i < 200; i++) {
+            try {
+                queue.put(i);
+                System.out.println("Produced:[" + i + "]");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+}
+
+class Consumer implements Runnable {
+
+    private BlockingQueue<Integer> queue;
+
+    public Consumer(BlockingQueue<Integer> q) {
+        this.queue =q;
+    }
+
+    public void run(){
+
+
+        try {
+            while (true) {
+                int i = queue.take();
+                System.out.println("Consumed:[" + i + "]");
+                Thread.sleep(5000);
+            }
+        }catch(InterruptedException e) { e.printStackTrace();}
+    }
+}
+```
 
 ### Synchronizers
 
 - A synchronizer is any object that coordinates the control flow of threads based on its state.
 - Main Synchronizers after Java 1.5
-  - CountDownLatches
   - Semaphores
+  - CountDownLatches  
   - Barriers
   - Blocking queues
 - All synchronizers share certain structural properties: they encapsulate state that determines whether threads arriving at the synchronizer should be allowed to pass or forced to wait, provide methods to manipulate that state, and provide methods to wait efficiently for the synchronizer to enter the desired state.
 
+### Semaphores
 
-#### Latches
+### Latches
 - A latch is a synchronizer that can delay the progress of threads until it reaches its terminal state.
 - A latch acts as a gate: until the latch reaches the terminal state the gate is closed and no thread can pass, and in the terminal state the gate opens, allowing all threads to pass.
 - Once the latch reaches the terminal state, it cannot change state again, so it remains open forever.
