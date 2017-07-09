@@ -197,6 +197,54 @@ Above methods take collection as parameter and return same type of collection wh
 A linear collection that supports element insertion and removal at both ends. The name deque is short for "double ended queue" and is usually pronounced "deck". Most Deque implementations place no fixed limits on the number of elements they may contain, but this interface supports capacity-restricted deques as well as those with no fixed size limit.
 `
 
+### Default Capacity of ArrayList
+
+1 What is meaning of capacity in ArrayList in java?
+- Capacity is the size of the array which is used to store elements in the ArrayList.
+
+2 Does size of ArrayList grows automatically in java?
+- Yes, size of ArrayList grows automatically in java. ArrayList resizes itself dynamically in java.
+
+3 What is default initial capacity of ArrayList in java?
+- Default initial capacity of ArrayList is 10.
+- java.util.ArrayList defines private static final variable DEFAULT_CAPACITY to define initial capacity of ArrayList.
+```
+    /**
+     * Default initial capacity.
+     */
+ private static final int DEFAULT_CAPACITY = 10;
+```
+4 By what size ArrayList is resized in java? How much size increases when ArrayList is resized in java?
+- ArrayList is resized by 50% of it’s current size. 
+- So, ArrayList will be resized from 10, to 15, to 22, to 33 and so on.
+
+5 But how ArrayList is resized in java?
+- ArrayList’s add method internally calls ensureCapacityInternal method, which calls ensureExplicitCapacity method, which calls grow method,
+  - grow method creates new array of higher capacity 
+  - copies existing array to new one
+  - return the new array.
+
+6 Can we change default initial capacity of ArrayList in java?
+Yes, rather than using new ArrayList(), you can use other constructor specified in java.util.ArrayList 
+`List<Integer> list = new ArrayList<>(20);'
+
+### Default Capacity, Load Factor and Rehashing of HashMap
+
+- Default Capacity of HashMap is 16 (2^4). It is increased in a power of 2.
+- Load Factor is a measure, which decides when exactly to increase the capacity(buckets) of hashmap, so as to maintain get and put operation complexity as O(1).
+- Default load factor of Hashmap is 0.75f (i.e 75% of current map size).
+- Lets say we have a well defined hash function which distrubes the keys equally in each bucket.
+   - if there are 16 items in the hashmap each bucket will have 1 item. So get operation will take contant time of 1.
+   - if there are 32 items in the hashmap each bucket will have 2 items, So get operation will take contant time of 2.
+   - so on, if there are 50,000 items in the hashmap each bucket will have 50,000/2 items and so get operation is going to be costly.
+   - if we increase the number of buckets then complextity of O(1) can be maintained. Load factor determines when to increase the number of buckets.
+- So, when to increase the hashmap size is decided by product of,  **(initial capacity of hashmap * Load factor of hashmap).**
+- `16 (initial capacity) * 0.75 (loadfactor) = 12 `
+- This represents that uptil 12th key-value pair hashmap will keep its size to 16 and as soon as 13th item(key-value pair) will come into the Hashmap,  it will increase its size from default 2^4 = 16 buckets to 2^5 = 32 buckets.
+
+- Once the capacity of the hashmap is increased, the hash values has to be calculated again for the existing key-value pairs. This is called rehashing.
+
+
 ## Traversing Collections
 There are three ways to traverse collections:
 - using aggregate operations ( TODO: JDK 1.8 lambda expressions)
