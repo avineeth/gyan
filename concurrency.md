@@ -510,6 +510,42 @@ concurrencyLevel - the estimated number of concurrently updating threads. The im
 ```
 ![Image](https://github.com/avineeth/gyan/blob/master/img/concurrenthaspmap.png?raw=true)  
 
+
+### CopyOnWriteArrayList
+
+##### Copy-on-write concept
+- Copy-on-write is an optimization stategy used in computer programming. 
+- Copy-on-write stems from the understanding that when multiple separate tasks **use** identical copies of the same information, it is not necessary to create separate copies of that information for each process, instead they can all be given pointers to the same resource.
+- However, when a local copy has been modified, the copy-on-write paradigm has no provision that the shared resource has in the meantime not been updated by another task or tasks.
+- So Copy-on-write is therefore only suggested if only the latest update is important and occasional use of a slightly stale value is not harmful. Copy-on-write is the name given to the process of identifying when a task attempts to make a change to the shared information, creating a separate (private) copy of that information for the task and redirecting the task to making changes to the private copy to prevent its changes from becoming visible to all the other tasks
+
+##### CopyOnWriteArrayList 
+- as the name suggests, when ever there is a write operation like "Add", "set" so on, it copies the undelying array.
+- So basic idea is whenever we add or remove to the CopyOnWriteArrayList, the underlying array is copied with the modification.
+- It means, whenever there is modification done by thread that update the ArrayList, all other threads holding an older copy of different array.
+- This is ordinarily too costly, **but will be more efficient than alternatives when traversal (read) operations vastly outnumber mutations (writes),** and is useful when you cannot or don't want to synchronize traversals, yet need to preclude interference among concurrent threads.
+-  the underlying array reference is marked as volatile so that readers do not need to use a lock to see changes to the referenced array which means array update is an atomic operation and hence reads will always see the array in a consistent state.
+- When a write operation occurs this volatile reference is only updated in the final statement via setArray() method. Up until this point any read operations will return elements from the old copy of the array. 
+- Also, the write lock is required to prevent concurrent modification, which may result the array holding inconsistent data or changes being lost
+
+```
+414   public boolean More ...add(E e) {
+415         final ReentrantLock lock = this.lock;
+416         lock.lock();
+417         try {
+418             Object[] elements = getArray();
+419             int len = elements.length;
+420             Object[] newElements = Arrays.copyOf(elements, len + 1);
+421             newElements[len] = e;
+422             setArray(newElements);
+423             return true;
+424         } finally {
+425             lock.unlock();
+426         }
+427     }
+
+```
+
 //TODO Blocking Queues
 
 ### Synchronizers
