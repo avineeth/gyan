@@ -208,6 +208,11 @@ public class StoptheThreadExample {
 
 //TODO add Simple Thread example here..
 
+#### Difference between Wait and Sleep, Yield in Java
+
+Read more: http://javarevisited.blogspot.com/2011/12/difference-between-wait-sleep-yield.html#ixzz4mNrQPCiQ
+
+
 ### Volatile keyword
 
 - The Java volatile keyword is used to mark a Java variable as **"being stored in main memory"**. More precisely that means, that every read of a volatile variable will be read from the computer's main memory, and not from the CPU cache, and that every write to a volatile variable will be written to main memory, and not just to the CPU cache.
@@ -636,7 +641,6 @@ class Consumer implements Runnable {
 ```
 
 ### Synchronizers
-
 - A synchronizer is any object that coordinates the control flow of threads based on its state.
 - Main Synchronizers after Java 1.5
   - Semaphores
@@ -646,6 +650,72 @@ class Consumer implements Runnable {
 - All synchronizers share certain structural properties: they encapsulate state that determines whether threads arriving at the synchronizer should be allowed to pass or forced to wait, provide methods to manipulate that state, and provide methods to wait efficiently for the synchronizer to enter the desired state.
 
 ### Semaphores
+- Counting Semaphore in Java is a synchronizer
+- Counting Semaphore in Java maintains specified number of pass or permits, In order to access a shared resource, Current Thread must acquire a permit. 
+- If permit is already exhausted by other thread than it can wait until a permit is available due to release of permit from different thread. 
+- This concurrency utility can be very useful to implement producer consumer design pattern or implement bounded pool or resources like Thread Pool, DB Connection pool etc.
+- Semaphore provides two main method acquire() and release() for getting permits and releasing permits. 
+- acquire() method blocks until permit is available. Semaphore provides both blocking method as well as unblocking method to acquire permits. 
+```
+package concurrent;
+
+import java.util.concurrent.Semaphore;
+
+/**
+ * Created by Vineeth on 7/9/2017.
+ */
+public class CountingSemaphoreExample {
+
+    public static void main(String[] args) {
+        Semaphore semaphore = new Semaphore(1);
+        Thread e1 = new Thread(new Executer(semaphore));
+        Thread a1 = new Thread(new Signaler(semaphore));
+        e1.start();
+        a1.start();
+    }
+}
+
+class Executer implements Runnable {
+
+    private Semaphore semaphore;
+
+    public Executer(Semaphore s) {
+        this.semaphore = s;
+    }
+
+    public void run() {
+        while (true) {
+            try {
+                System.out.println("Aquiring");
+                semaphore.acquire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+}
+
+class Signaler implements  Runnable {
+
+    private Semaphore semaphore;
+
+    public Signaler(Semaphore s) {
+        this.semaphore = s;
+    }
+
+    public void run() {
+        while(true) {
+            System.out.println("Releasing...");
+            semaphore.release();
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {}
+        }
+
+    }
+}
+```
 
 ### Latches
 - A latch is a synchronizer that can delay the progress of threads until it reaches its terminal state.
