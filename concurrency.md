@@ -800,6 +800,73 @@ public class CountDownLatchExample {
 
 }
 ```
+
+## Executor
+
+- Executor Framework provides a flexible threadpool implementation.
+- It is part of java.util.concurrent package.
+- The java.util.concurrent package defines three executor interfaces:
+  1. Executor - a simple interface that supports launching new tasks.
+  2. ExecutorService - a subinterface of Executor, which adds features that help manage the lifecycle, both for the individual tasks and of the executor itself.
+  3. ScheduledExecutorService - a subinterface of ExecutorService, supports future/or periodic execution of tasks.
+
+- A thread pool, as its name suggests, manages a homogeneous pool of worker threads.
+- You can create a thread pool by calling one of the static factory methods in Executors:
+  - newFixedThreadPool. A fixed-size thread pool creates threads as tasks are submitted, up to the maximum pool size, and then attempts to keep the pool size constant (adding new threads if a thread dies due to an unexpected Exception).
+  1. newCachedThreadPool. A cached thread pool has more flexibility to reap idle threads when the current size of the pool exceeds the demand for processing, and to add new threads when demand increases, but places no bounds on the size of the pool.
+  2. newSingleThreadExecutor. A single-threaded executor creates a single worker thread to process tasks, replacing it if it dies unexpectedly. Tasks are guaranteed to be processed sequentially according to the order imposed by the task queue (FIFO, LIFO, priority order).
+  3. newScheduledThreadPool. A fixed-size thread pool that supports delayed and periodic task execution, similar to Timer. 
+
+- Executing tasks in pool threads has a number of advantages over the threadpertask approach. Reusing an existing thread instead of creating a new one amortizes thread creation and teardown costs over multiple requests.
+
+### ExecutorService
+- ExecutorService interface extends Executor, adding a number of methods for lifecycle management (as well as some convenience methods for task submission).
+- The lifecycle management methods of ExecutorService are:
+```
+public interface ExecutorService extends Executor {
+void shutdown();
+List<Runnable> shutdownNow();
+boolean isShutdown();
+boolean isTerminated();
+boolean awaitTermination(long timeout, TimeUnit unit)
+throws InterruptedException;
+// ... additional convenience methods for task submission
+<T> Future<T>	submit(Callable<T> task);
+Future<?>	submit(Runnable task);
+
+}
+```
+- The lifecycle implied by ExecutorService has three states—running, shuttingdown, and terminated.
+- ExecutorServices are initially created in the running state. 
+- The shutdown method initiates a graceful shutdown: no new tasks are accepted but previously submitted tasks are allowed to complete—including those that have not yet begun execution.
+- The shutdownNow method initiates an abrupt shutdown: it attempts to cancel outstanding tasks and does not start any tasks that are queued but not begun.
+
+- The ExecutorService interface supplements execute with a similar, but more versatile **submit()** method. Like execute, submit accepts Runnable objects, but also accepts **Callable** objects, which allow the task to return a value. The submit method returns a **Future** object, which is used to retrieve the Callable return value and to manage the status of both Callable and Runnable tasks.
+
+```
+private static void executorServiceCallable() throws ExecutionException, InterruptedException{
+        ExecutorService exec = Executors.newFixedThreadPool(10);
+
+        Future<String> future = exec.submit( new Callable<String>() {
+            public String call(){
+                System.out.println("This is a callable asynchronous task.");
+                try {
+                    Thread.sleep(10000);
+                }catch (InterruptedException e) {
+                    System.out.println("I am Interrupted");
+                    e.printStackTrace();
+                }
+                return "Callable Output";
+            }
+
+        });
+        //future.cancel(true);
+        System.out.println("thread output" + future.get());
+
+        exec.shutdown();
+    }
+```
+
 ### Publishing an Object - Make defensive copies when needed
 
 http://www.informit.com/articles/article.aspx?p=31551&seqNum=2
