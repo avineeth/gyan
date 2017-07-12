@@ -34,8 +34,23 @@ Animal animal2 = new Dog();
 ##### Abstract Factory
 - The Abstract Factory Pattern provides an interface for creating **families of related or dependent objects** without specifying their concrete classes.
 
+##### Builder
+- Encapsulates the way a **complex object** is constructed.
+- Builder Design pattern is a creational pattern and should be used when number of parameter required in constructor is more than manageable usually 4 or at most 5. 
+
+
 ## Structural Design Patterns
 - These design patterns concern class and object composition. Concept of inheritance is used to compose interfaces and define ways to compose objects to obtain new functionalities.
+
+#### Adapter
+- The Adapter Pattern converts the interface of a class into another interface the clients expect. Adapter lets classes work together that couldn’t otherwise because of incompatible interfaces.
+- Think of power adapters, using a laptop with US plug in Europe.
+
+#### Facade 
+- The Facade Pattern provides a unified interface to a set of interfaces in a subsytem. Facade defines a higherlevel interface that makes the subsystem easier to use.
+- Check the Computer example below.
+
+#### Proxy
 
 ## Behavioral Design Patterns
 - These design patterns are specifically concerned with communication between objects.
@@ -302,6 +317,56 @@ Cake{sugar=0.75, butter=0.5, eggs=2, vanila=2, flour=1.5, bakingpowder=0.0, milk
 
 Read more: http://javarevisited.blogspot.com/2012/06/builder-design-pattern-in-java-example.html#ixzz4mf1zEbYV
 ```
+
+## Facade Design Pattern
+```
+/* Complex parts */
+
+class CPU {
+    public void freeze() { ... }
+    public void jump(long position) { ... }
+    public void execute() { ... }
+}
+
+class HardDrive {
+    public byte[] read(long lba, int size) { ... }
+}
+
+class Memory {
+    public void load(long position, byte[] data) { ... }
+}
+
+/* Facade */
+
+class ComputerFacade {
+    private CPU processor;
+    private Memory ram;
+    private HardDrive hd;
+
+    public ComputerFacade() {
+        this.processor = new CPU();
+        this.ram = new Memory();
+        this.hd = new HardDrive();
+    }
+
+    public void start() {
+        processor.freeze();
+        ram.load(BOOT_ADDRESS, hd.read(BOOT_SECTOR, SECTOR_SIZE));
+        processor.jump(BOOT_ADDRESS);
+        processor.execute();
+    }
+}
+
+/* Client */
+
+class You {
+    public static void main(String[] args) {
+        ComputerFacade computer = new ComputerFacade();
+        computer.start();
+    }
+}
+```
+
 ## Proxy Design Pattern
 
 - Proxy design pattern intent according to GoF is: 
