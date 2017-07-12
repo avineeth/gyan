@@ -148,6 +148,7 @@ public class SingletonExample {
     }
 
 }
+```
 
 #### Initialization-on-demand holder idiom 
 
