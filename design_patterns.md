@@ -22,10 +22,11 @@ Animal animal2 = new Dog();
 
 ### The Strategy Pattern
 - The Strategy Pattern defines a family of algorithms, encapsulates each one, and makes them interchangeable.
-- Strategy lets the algorithm vary independently from clients that use it.
+- The Strategy pattern is used in situations where you know that you want to swap out implementations. As an example, you might want to format data in different ways - you could use the strategy pattern to swap out an XML formatter or CSV formatter, etc.
 - In Strategy pattern, a class behavior or its algorithm can be changed at run time. This type of design pattern comes under behavior pattern.
 - In Strategy pattern, we create objects which represent various strategies and a context object whose behavior varies as per its strategy object. The strategy object changes the executing algorithm of the context object.
 - Duck example
+- Similar to Dependency Injection.
 
 ### The Observer Pattern
 - The Observer Pattern defines a one-to-many dependency between objects so that when one object changes state, all of its dependents are notified and updated automatically.
