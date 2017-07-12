@@ -63,6 +63,29 @@ Animal animal2 = new Dog();
 ### Singleton Pattern
 - The Singleton Pattern ensures a class has only one instance, and provides a global point of access to it.
 
+#### Straightforward way of creating Singleton Class. (Non-threadsafe.)
+- Private static instance variable. (static because getInstance() should be static).
+- private constructor.
+- public getInstance method which lazyily creates instance.
+
+```
+public class SingletonExample {
+
+    private static SingletonExample singleton;
+
+    private SingletonExample() {}
+
+    public static SingletonExample getInstance() {
+        if(singleton == null) {
+            return new SingletonExample();
+        }
+        else
+            return singleton;
+    }
+
+}
+```
+
 #### Synchronize the getInstance() method:
 - A straightforward technique that is guaranteed to work.
 - this has performance overhead because of the synchronized method
@@ -100,6 +123,31 @@ public class Singleton {
   }
 }
 ```
+
+#### Double check locking
+- Check that the variable is initialized (without obtaining the lock). If it is initialized, return it immediately.
+- Obtain the lock.
+- Double-check whether the variable has already been initialized: if another thread acquired the lock first, it may have already done the initialization. If so, return the initialized variable.
+- Otherwise, initialize and return the variable.
+```
+public class SingletonExample {
+
+    private static SingletonExample singleton;
+
+    private SingletonExample() {}
+
+    public static SingletonExample getInstance() {
+        if(singleton == null) {
+            synchronized (SingletonExample.class) {
+                if(singleton == null)  //Double check locking
+                    return new SingletonExample();
+            }
+        }
+
+        return singleton;
+    }
+
+}
 
 #### Initialization-on-demand holder idiom 
 
