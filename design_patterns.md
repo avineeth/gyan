@@ -32,7 +32,7 @@ Animal animal2 = new Dog();
 - The Factory Method Pattern defi nes an interface for creating an object, but lets subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses.
 
 ##### Abstract Factory
-- The Abstract Factory Pattern provides an interface for creating families of related or dependent objects without specifying their concrete classes.
+- The Abstract Factory Pattern provides an interface for creating **families of related or dependent objects** without specifying their concrete classes.
 
 ## Structural Design Patterns
 - These design patterns concern class and object composition. Concept of inheritance is used to compose interfaces and define ways to compose objects to obtain new functionalities.
@@ -176,6 +176,21 @@ public class Something {
 - And since the initialization phase writes the static variable INSTANCE in a serial operation, all subsequent concurrent invocations of the getInstance will return the same correctly initialized INSTANCE without incurring any additional synchronization overhead.
 
 - While the implementation is an efficient thread-safe "singleton" cache without synchronization overhead, and better performing than uncontended synchronization,[4] the idiom can only be used when the construction of Something can be guaranteed to not fail. In most JVM implementations, if construction of Something fails, subsequent attempts to initialize it from the same class-loader will result in a NoClassDefFoundError failure.
+
+## Factory Method
+- Factory method pattern is a creational pattern that uses factory methods to deal with the problem of creating objects without having to specify the exact class of the object that will be created.
+
+ 
+## Abstract Factory
+
+### Difference between AbstractFactory and Factory design patters are as follows:
+
+- Factory Method is used to create one product only but Abstract Factory is about creating families of related or dependent products.
+- Factory Method pattern exposes a method to the client for creating the object whereas in case of Abstract Factory they expose a family of related objects which may consist of these Factory methods.
+- Factory Method pattern hides the construction of single object where as Abstract factory method hides the construction of a family of related objects. Abstract factories are usually implemented using (a set of) factory methods.
+- AbstractFactory pattern uses composition to delegate responsibility of creating object to another class while Factory design pattern uses inheritance and relies on derived class or sub class to create object.
+- The idea behind the Factory Method pattern is that it allows for the case where a client doesn't know what concrete classes it will be required to create at runtime, but just wants to get a class that will do the job while AbstractFactory pattern is best utilised when your system has to create multiple families of products or you want to provide a library of products without exposing the implementation details.!
+
 
 ## Proxy Design Pattern
 
