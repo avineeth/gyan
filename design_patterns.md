@@ -19,6 +19,27 @@ class Dog extends Animal {
 Animal animal2 = new Dog();
 
 ```
+## Creational Design Patterns 
+- These design patterns provide a way to create objects while hiding the creation logic, rather than instantiating objects directly using new opreator.
+
+##### Singleton
+- Ensure a class only has one instance, and provide a global point of access to it. 
+
+##### Simple Factory
+- All factory patterns encapsulate object creation. The Factory Method Pattern encapsulates object creation by letting subclasses decide what objects to create.
+
+##### Factory Method
+- The Factory Method Pattern defi nes an interface for creating an object, but lets subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses.
+
+##### Abstract Factory
+- The Abstract Factory Pattern provides an interface for creating families of related or dependent objects without specifying their concrete classes.
+
+## Structural Design Patterns
+- These design patterns concern class and object composition. Concept of inheritance is used to compose interfaces and define ways to compose objects to obtain new functionalities.
+
+## Behavioral Design Patterns
+- These design patterns are specifically concerned with communication between objects.
+
 
 ### The Strategy Pattern
 - The Strategy Pattern defines a family of algorithms, encapsulates each one, and makes them interchangeable.
@@ -38,15 +59,6 @@ Animal animal2 = new Dog();
 - Starbuck example
 - new BufferedReader( new FileInputStream());
 
-
-### Simple Factory
-- All factory patterns encapsulate object creation. The Factory Method Pattern encapsulates object creation by letting subclasses decide what objects to create.
-
-### Factory Method
-- The Factory Method Pattern defi nes an interface for creating an object, but lets subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses.
-
-### Abstract Factory
-- The Abstract Factory Pattern provides an interface for creating families of related or dependent objects without specifying their concrete classes.
 
 ### Singleton Pattern
 - The Singleton Pattern ensures a class has only one instance, and provides a global point of access to it.
