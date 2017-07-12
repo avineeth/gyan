@@ -51,6 +51,8 @@ Animal animal2 = new Dog();
 - Check the Computer example below.
 
 #### Proxy
+- `Provide a surrogate or placeholder for another object to control access to it- GoF.`
+- Proxy means ‘in place of’. In attendance roll call, we give proxy for our friends in college right? ‘Representing’ or ‘in place of’ or ‘on behalf of’ are literal meanings of proxy and that directly explains proxy design pattern.
 
 ## Behavioral Design Patterns
 - These design patterns are specifically concerned with communication between objects.
