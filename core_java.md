@@ -424,6 +424,27 @@ protected Object clone() throws CloneNotSupportedException {
 }
 ```
 
+## Generics
+- The Java Generics features were added to the Java language from Java 5
+- It provides compile time type-safety.
+- Ensures that you only insert correct Type in collection and avoids ClassCastException in runtime.
+- Type casting is not required: There is no need to typecast the object.
+
+#### How Generics works in Java ? What is type erasure ?
+- Generics is implemented using **Type erasure**, compiler erases all type related information during compile time and no type related information is available during runtime. 
+- For example List<String> is represented by only List at runtime.
+- This was done to ensure binary compatibility with the libraries which were developed prior to Java 5. you don't have access to Type argument at runtime and Generic type is translated to Raw type by compiler during runtime. 
+
+#### What is Bounded and Unbounded wildcards in Generics ?
+- Bounded Wildcards are those which impose bound on Type. 
+- There are two kinds of Bounded wildcards <? extends T> which impose an upper bound by ensuring that type must be sub class of T 
+- and <? super T> where its imposing lower bound by ensuring Type must be super class of T. 
+- This Generic Type must be instantiated with Type within bound otherwise it will result in compilation error. 
+- On the other hand <?> represent and unbounded type because <?> can be replace with any Type.
+
+#### Can we use Generics with Array?
+- Array doesn't support Generics and that's why Joshua Bloch suggested in Effective Java to prefer List over Array because List can provide compile time type-safety over Array.
+
 
 ## Annotations
 - Java annotations are used to provide **meta data** for your Java code.
