@@ -153,6 +153,9 @@ http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
 ## Just In Time (JIT) Compilation
 - Java byte code is interpreted however this is not as fast as directly executing native code on the JVM’s host CPU. To improve performance the Oracle Hotspot VM looks for “hot” areas of byte code that are executed regularly and compiles these to native code. The native code is then stored in the code cache in non-heap memory. In this way the Hotspot VM tries to choose the most appropriate way to trade-off the extra time it takes to compile code verses the extra time it take to execute interpreted code.
 
+## What's the difference between the -client and -server systems?
+These two systems are different binaries. They are essentially two different compilers (JITs)interfacing to the same runtime system. The client system is optimal for applications which need fast startup times or small footprints, the server system is optimal for applications where the overall performance is most important. In general the client system is better suited for interactive applications such as GUIs. Some of the other differences include the compilation policy,heap defaults, and inlining policy.
+
 ### Difference between 32 bit and 64 bit
 - 32 bit/64 bit is the size of the CPU register.
 - with 32 bit registers CPU can hold only 2^32 address locations -max 4 GB RAM
