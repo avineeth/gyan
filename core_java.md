@@ -637,4 +637,10 @@ The inner class is a closure. It copies the variable from it's enclosing scope t
 
 Basically, what happens in the inner class stays in the inner class.
 
-
+#### Difference between URLs and URIs
+- A Uniform Resource Identifier (URI) is a compact sequence of characters that identifies an abstract or physical resource.
+- A URI can be further classified as a locator, a name, or both. The term “Uniform Resource Locator” (URL) refers to the subset of URIs that, in addition to identifying a resource, provide a means of locating the resource by describing its primary access mechanism (e.g., its network “location”).
+- URIs are identifiers, and that can mean name, location, or both.
+- All URNs and URLs are URIs, but the opposite is not true.
+- The part that makes something a URL is the combination of the name and an access method, such as https://, or mailto:.
+- All these bits are URIs, so saying that is always technically accurate, but if you are discussing something that’s both a full URL and a URI (which all URLs are), it’s best to call it a “URL” because it’s more specific.
