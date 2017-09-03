@@ -111,25 +111,32 @@ http://www.beabetterdeveloper.com/2013/11/sessions-pitfall.htm
 
 I got asked quite often, why one shouldn't use sessions and whats so bad about them. In this post i want to sum up my thoughts and experiences.
 
-Sessions produce unnecessary complexity
+##### Sessions produce unnecessary complexity
 The term bugfoot is a combination of bug and bigfoot. It's used for a bug that appears only once and is not reproducable. A bugfoot tells you that something is wrong, and that it will probably come up again. But you cannot fix it, because you don't know the cause.
 
 If you want bugfoots in your software, just use sessions. Sooner or later you'll happen to see one.
 
-Sessions don't scale
+##### Sessions don't scale
 Lets say you are a professional chess player, and you'd like to play multiple people at the same time. If you'd try to remember every game and your strategy on it, you'll hit your capacity rather quick. Now imagine you were not remembering anything of those games, and you were just rereading the chessboard on every move. You could literally play 1.000.000 people at the same time, and it wouldn't make any difference to you. 
 
 Now draw an analogy to your server. If your application gets a lot of load, you might have to distribute it to different servers. If you were using sessions, you'd suddenly had to replicate all sessions to all servers. The system would become even more complex and error prone.
 
-Sessionstate cannot be bookmarkable nor cachable
+##### Sessionstate cannot be bookmarkable nor cachable
 Did you try to bookmark your shopping cart? Nah, of course you can't because it's empty as soon as the session runs out. Imagine a shop that actually allowed you to bookmark your cart. Like
 http://example.com/carts/1337 or
 http://example.com/cart?products=[{id:1, amount: 1}]
 How wonderful that would be.
 
-Conclusion
+##### Conclusion
 You want a simple system that is easy to test and whose bugs are easy to reproduce. State leads to the opposite. HTTP was never ever ment to be stateful and it should have stayed this way. 
 
-If you want some rest, follow these two rules
+##### If you want some rest, follow these two rules
 Keep all application state (not resource state) on the client
 Keep all shared state (not session state) on the server
+
+
+### Things you should know about POJOs annotated with @WebService
+
+1. A POJO annotated with @WebService deployed in a WAR is served by the Web Container (this is significant)
+2. Life cycle – a single instance of the POJO serves requests from the client. Pretty much like Servlets.
+3. Concurrency aspect (thread safety) – they are not thread safe. The same instance of the bean can be concurrently accessed by multiple threads. Although this is not a problem if your service is stateless i.e. does not use instance variables to store state – you might still face scalability issues though (after all, its just one instance !). If your POJO uses instance variables to store state, then you are in big soup and will definitely face issues w.r.t inconsistent behavior resulting from concurrent threads accessing a single instance of your web service class.
