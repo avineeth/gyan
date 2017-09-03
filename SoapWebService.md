@@ -91,3 +91,45 @@ Web Services Description Language (WSDL)
 - Two styles - RPC and Document
 - Document - (default) provides a xsd to validat
 - RPC
+
+
+## Stateless
+
+Web Services are stateless by default because of the underlying HTTP protocol. The server processes each web service request as a new interaction even though it is from the same client
+
+Normally, a JAX-WS Web service is stateless: that is, none of the local variables and object values that you set in the Web service object are saved from one invocation to the next. Even sequential requests from a single client are treated each as independent, stateless method invocations.
+
+There are Web service use cases where a client may want to save data on the service during one invocation and then use that data during a subsequent invocation. For example, a shopping cart object may be added to by repeated calls to the addToCart web method and then fetched by the getCart web method. In a stateless Web service, the shopping cart object would always be empty, no matter how many addToCart methods were called. But by using HTTP Sessions to maintain state across Web service invocations, the cart may be built up incrementally, and then returned to the client.
+
+Enabling stateful support in a JAX-WS Web service requires a minimal amount of coding on both the client and server.
+
+
+
+### Sessions, a Pitfall.
+
+http://www.beabetterdeveloper.com/2013/11/sessions-pitfall.htm
+
+I got asked quite often, why one shouldn't use sessions and whats so bad about them. In this post i want to sum up my thoughts and experiences.
+
+Sessions produce unnecessary complexity
+The term bugfoot is a combination of bug and bigfoot. It's used for a bug that appears only once and is not reproducable. A bugfoot tells you that something is wrong, and that it will probably come up again. But you cannot fix it, because you don't know the cause.
+
+If you want bugfoots in your software, just use sessions. Sooner or later you'll happen to see one.
+
+Sessions don't scale
+Lets say you are a professional chess player, and you'd like to play multiple people at the same time. If you'd try to remember every game and your strategy on it, you'll hit your capacity rather quick. Now imagine you were not remembering anything of those games, and you were just rereading the chessboard on every move. You could literally play 1.000.000 people at the same time, and it wouldn't make any difference to you. 
+
+Now draw an analogy to your server. If your application gets a lot of load, you might have to distribute it to different servers. If you were using sessions, you'd suddenly had to replicate all sessions to all servers. The system would become even more complex and error prone.
+
+Sessionstate cannot be bookmarkable nor cachable
+Did you try to bookmark your shopping cart? Nah, of course you can't because it's empty as soon as the session runs out. Imagine a shop that actually allowed you to bookmark your cart. Like
+http://example.com/carts/1337 or
+http://example.com/cart?products=[{id:1, amount: 1}]
+How wonderful that would be.
+
+Conclusion
+You want a simple system that is easy to test and whose bugs are easy to reproduce. State leads to the opposite. HTTP was never ever ment to be stateful and it should have stayed this way. 
+
+If you want some rest, follow these two rules
+Keep all application state (not resource state) on the client
+Keep all shared state (not session state) on the server
