@@ -126,6 +126,8 @@ WeakHashMap is an implementation of the Map interface that stores only weak refe
 
 - TreeMap is special form of HashMap. It maintains the ordering of keys which is missing in HashMap class. This ordering is by default “natural ordering”. The default ordering can be override by providing an instance of Comparator class, whose compare method will be used to maintain ordering of keys.
 - Please note that all keys inserted into the map must implement the Comparable interface (this is necessary to decide the ordering). 
+- TreeMap is a Red-Black tree based NavigableMap implementation.In other words , it sorts the TreeMap object keys using Red-Black tree algorithm.
+- Complexity - TreeMap : log(n)   HashMap : Constant time performance assuming elements disperses properly
 
 #### Difference between Set and List?
 1. Set is unordered collection where List is ordered collection based on zero based index.
