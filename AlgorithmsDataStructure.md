@@ -225,6 +225,21 @@ A linear collection that supports element insertion and removal at both ends. Th
   - grow method creates new array of higher capacity 
   - copies existing array to new one
   - return the new array.
+  
+  ```
+  	public void ensureCapacity(int minCapacity) {
+	         modCount++;
+		 int oldCapacity = elementData.length;
+	         if (minCapacity > oldCapacity) {
+	             Object oldData[] = elementData;
+	             int newCapacity = (oldCapacity * 3)/2 + 1;
+	             if (newCapacity < minCapacity)
+	                 newCapacity = minCapacity;
+	             // minCapacity is usually close to size, so this is a win:
+	             elementData = Arrays.copyOf(elementData, newCapacity);
+	        }
+	    }
+```
 
 6 Can we change default initial capacity of ArrayList in java?
 Yes, rather than using new ArrayList(), you can use other constructor specified in java.util.ArrayList 
