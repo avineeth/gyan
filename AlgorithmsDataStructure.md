@@ -211,9 +211,7 @@ A linear collection that supports element insertion and removal at both ends. Th
 - Default initial capacity of ArrayList is 10.
 - java.util.ArrayList defines private static final variable DEFAULT_CAPACITY to define initial capacity of ArrayList.
 ```
-    /**
-     * Default initial capacity.
-     */
+
  private static final int DEFAULT_CAPACITY = 10;
 ```
 4 By what size ArrayList is resized in java? How much size increases when ArrayList is resized in java?
@@ -225,22 +223,8 @@ A linear collection that supports element insertion and removal at both ends. Th
   - grow method creates new array of higher capacity 
   - copies existing array to new one
   - return the new array.
-  ```
-  	public void ensureCapacity(int minCapacity) {
-	         modCount++;
-		 int oldCapacity = elementData.length;
-	         if (minCapacity > oldCapacity) {
-	             Object oldData[] = elementData;
-	             int newCapacity = (oldCapacity * 3)/2 + 1;
-	             if (newCapacity < minCapacity)
-	                 newCapacity = minCapacity;
-	             // minCapacity is usually close to size, so this is a win:
-	             elementData = Arrays.copyOf(elementData, newCapacity);
-	        }
-	    }
-```
-
-##### Can we change default initial capacity of ArrayList in java?
+  
+6 Can we change default initial capacity of ArrayList in java?
 Yes, rather than using new ArrayList(), you can use other constructor specified in java.util.ArrayList 
 `List<Integer> list = new ArrayList<>(20);`
 
