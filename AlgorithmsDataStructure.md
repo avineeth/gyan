@@ -225,7 +225,6 @@ A linear collection that supports element insertion and removal at both ends. Th
   - grow method creates new array of higher capacity 
   - copies existing array to new one
   - return the new array.
-  
   ```
   	public void ensureCapacity(int minCapacity) {
 	         modCount++;
@@ -241,9 +240,9 @@ A linear collection that supports element insertion and removal at both ends. Th
 	    }
 ```
 
-6 Can we change default initial capacity of ArrayList in java?
+##### Can we change default initial capacity of ArrayList in java?
 Yes, rather than using new ArrayList(), you can use other constructor specified in java.util.ArrayList 
-`List<Integer> list = new ArrayList<>(20);'
+`List<Integer> list = new ArrayList<>(20);`
 
 ### Default Capacity, Load Factor and Rehashing of HashMap
 
