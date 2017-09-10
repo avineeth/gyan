@@ -73,3 +73,63 @@ This class of codes are used to indicate a server failure while processing the r
 - 501 Not Implemented: the server does not yet support the requested functionality.
 - 503 Service Unavailable: this could happen if an internal system on the server has failed or the server is overloaded. Typically, the server won't even respond and the request will timeout.
 
+
+### Request and Response Message Formats
+
+Let's now look at the content of these messages. The HTTP specification states that a request or response message has the following generic structure:
+
+```
+message = <start-line>
+          *(<message-header>)
+          CRLF
+          [<message-body>]
+
+<start-line> = Request-Line | Status-Line 
+<message-header> = Field-Name ':' Field-Value
+```
+
+It's mandatory to place a new line between the message headers and body.
+
+
+### Request Format
+The request message has the same generic structure as above, except for the request line which looks like:
+
+```
+Request-Line = Method SP URI SP HTTP-Version CRLF
+Method = "OPTIONS"
+       | "HEAD"  
+       | "GET"  
+       | "POST"  
+       | "PUT"  
+       | "DELETE"  
+       | "TRACE"
+```       
+SP is the space separator between the tokens. HTTP-Version is specified as "HTTP/1.1" and then followed by a new line. Thus, a typical request message might look like:
+
+```
+GET /articles/http-basics HTTP/1.1
+Host: www.articles.com
+Connection: keep-alive
+Cache-Control: no-cache
+Pragma: no-cache
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+```
+
+Note the request line followed by many request headers. The Host header is mandatory for HTTP/1.1 clients. GET requests do not have a message body, but POST requests can contain the post data in the body.
+
+
+### Response Format
+The response format is similar to the request message, except for the status line and headers. The status line has the following structure:
+
+```
+Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
+```
+
+- HTTP-Version is sent as HTTP/1.1
+- The Status-Code is one of the many statuses discussed earlier.
+- The Reason-Phrase is a human-readable version of the status code.
+
+A typical status line for a successful response might look like so:
+```
+HTTP/1.1 200 OK
+```
