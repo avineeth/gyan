@@ -9,6 +9,8 @@
 - The default port for TCP/IP is 80, but other ports can also be used.
 - The current version of the protocol is HTTP/1.1
 
+![Image](https://github.com/avineeth/gyan/blob/master/img/http1-req-res-details.png?raw=true)
+
 ### HTTP Connections
 - A connection must be established between the client and server before they can communicate with each other, and HTTP uses the reliable TCP transport protocol to make this connection.
 - By default, web traffic uses TCP port 80. 
@@ -17,6 +19,7 @@
 - HTTPS is a secure version of HTTP, inserting an additional layer between HTTP and TCP called TLS or SSL (Transport Layer Security or Secure Sockets Layer, respectively).
 - HTTPS communicates over port 443 by default.
 
+![Image](https://github.com/avineeth/gyan/blob/master/img/http2-http-https.png?raw=true)
 
 #### Difference between TCP and UDP
 - TCP is all about reliability —packets sent with TCP are tracked so no data is lost or corrupted in transit. 
