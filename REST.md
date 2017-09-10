@@ -46,7 +46,16 @@ This class of codes was introduced in HTTP/1.1 and is purely provisional. The se
 
 #### 2xx: Successful
 
-This tells the client that the request was successfully processed. The most common code is 200 OK. For a GET request, the server sends the resource in the message body. There are other less frequently used codes:
+This tells the client that the request was successfully processed. 
+- The most common code is 200 OK. For a GET request, the server sends the resource in the message body. The request has succeeded. The information returned with the response is dependent on the method used in the request, for example:
+  - GET an entity corresponding to the requested resource is sent in the response;
+  - HEAD the entity-header fields corresponding to the requested resource are sent in the response without any message-body;
+  - POST an entity describing or containing the result of the action;
+  - TRACE an entity containing the request message as received by the end server.
+ 
+- 201 Created - Used for POST requests. The request has been fulfilled and resulted in a new resource being created. The newly created resource can be referenced by the URI(s) returned in the entity of the response, with the most specific URI for the resource given by a Location header field. The response SHOULD include an entity containing a list of resource characteristics and location(s) from which the user or user agent can choose the one most appropriate. The entity format is specified by the media type given in the Content-Type header field. The origin server MUST create the resource before returning the 201 status code. If the action cannot be carried out immediately, the server SHOULD respond with 202 (Accepted) response instead.
+
+There are other less frequently used codes:
 - 202 Accepted: the request was accepted but may not include the resource in the response. This is useful for async processing on the server side. The server may choose to send information for monitoring.
 - 204 No Content: there is no message body in the response.
 - 205 Reset Content: indicates to the client to reset its document view.
@@ -119,7 +128,15 @@ Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
 ```
 
 - Note the request line followed by many request headers. The Host header is mandatory for HTTP/1.1 clients. GET requests do not have a message body, but POST requests can contain the post data in the body.
-- The Accept prefixed headers indicate the acceptable media-types, languages and character sets on the client.
+
+
+##### Accept header
+The "Accept" header field can be used by user agents to specify response media types that are acceptable.
+
+##### Content-Type 
+The "Content-Type" header field indicates the media type of the associated representation
+
+- Accept indicates what kind of response from the server the client can accept. Content-type always is about the content of the current request or response.
 
 
 ### Response Format
