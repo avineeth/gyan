@@ -213,20 +213,6 @@ DELETE | detes the resource at the url | no | yes
   - HTTP message converters
   	- bypasses model and view. In this style the object returned from the controller is automatically converted into a represenation appropriate for the client.
 	
-### Writing REST Clients 
-- Using REST Template
-
-```
-public class Application {
-
-    private static final Logger log = LoggerFactory.getLogger(Application.class);
-
-    public static void main(String args[]) {
-        RestTemplate restTemplate = new RestTemplate();
-        Quote quote = restTemplate.getForObject("http://gturnquist-quoters.cfapps.io/api/random", Quote.class);
-        log.info(quote.toString());
-    }
-```
  
 ###  HATEOAS
 
@@ -271,5 +257,27 @@ This response not only has the person's name, but includes the self-linking URL 
 - Level 2 : Resources use proper URI's + HTTP Methods. For example, to update an account, you do a PUT to . The create an account, you do a POST to . Uri’s look like posts/1/comments/5 and accounts/1/friends/1.
 - Level 3 : HATEOAS (Hypermedia as the engine of application state). You will tell not only about the information being requested but also about the next possible actions that the service consumer can do. When requesting information about a facebook user, a REST service can return user details along with information about how to get his recent posts, how to get his recent comments and how to retrieve his friend’s list.
 
+### JAX-RS
 
+- JAX-RS: Java API for RESTful Web Services (JAX-RS) is a Java programming language API spec that provides support in creating web services according to the Representational State Transfer (REST) architectural pattern.
+- JAX-RS uses annotations, introduced in Java SE 5, to simplify the development and deployment of web service clients and endpoints.
 
+- Implementations
+  - Jersey, the reference implementation from Sun (now Oracle)
+  - RESTeasy, JBoss's implementation
+  - Apache CXF, an open source Web service framework
+
+### Writing REST Clients 
+- Using REST Template
+
+```
+public class Application {
+
+    private static final Logger log = LoggerFactory.getLogger(Application.class);
+
+    public static void main(String args[]) {
+        RestTemplate restTemplate = new RestTemplate();
+        Quote quote = restTemplate.getForObject("http://gturnquist-quoters.cfapps.io/api/random", Quote.class);
+        log.info(quote.toString());
+    }
+```
