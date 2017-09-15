@@ -12,6 +12,14 @@
 ## Elementary Sorts
 
 ### Selection Sort
+
+- Time Complexity 
+ - Best - O(n^2)
+ - Average - O(n^2)
+ - Worst - O(n^2)
+- Space Complexity
+   - O(1) - in place
+
 ```
 import java.util.Arrays;
 public class SelectionSort {
@@ -31,6 +39,12 @@ public class SelectionSort {
 }
 ```
 ### Insertion Sort
+- Time Complexity 
+ - Best - O(n)
+ - Average - O(n^2)
+ - Worst - O(n^2)
+- Space Complexity
+   - O(1) - in place
 
 ```
 import java.util.Arrays;
