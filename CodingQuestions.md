@@ -711,3 +711,11 @@ One example of external sorting is the ** external merge sort** algorithm, which
 4. Read the first 10 MB (= 100MB / (9 chunks + 1)) of each sorted chunk into input buffers in main memory and allocate the remaining 10 MB for an output buffer. (In practice, it might provide better performance to make the output buffer larger and the input buffers slightly smaller.)
 5. Perform a 9-way merge and store the result in the output buffer. Whenever the output buffer fills, write it to the final sorted file and empty it. Whenever any of the 9 input buffers empties, fill it with the next 10 MB of its associated 100 MB sorted chunk until no more data from the chunk is available. This is the key step that makes external merge sort work externally -- because the merge algorithm only makes one pass sequentially through each of the chunks, each chunk does not have to be loaded completely; rather, sequential parts of the chunk can be loaded as needed.
 
+
+### Use a stack to sort given data. 
+-- done office computer
+
+### Given an array with positive integers only, find the MIN integer that is missing from the array.
+use the formula n*(n-1)/2 to find total sum of number
+
+
