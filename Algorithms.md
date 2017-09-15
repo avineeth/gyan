@@ -1,13 +1,13 @@
 
 
 # Table of Contents
-- [Sorting](#sorting)
+- [Array Sorting](#sorting)
    - [Selection Sort](#selection-sort)
    - [Insertion Sort](#insertion-sort)
    - [Merge Sort](#merge-sort)
    - [Quick Sort](#quick-sort)
 
-# Sorting
+# Array Sorting
 
 ## Elementary Sorts
 
@@ -87,6 +87,7 @@ public class InsertionSort {
 - Best Case Sort: Merge Sort: O(½ n lg n)
 - Average Case Sort: Merge Sort: O(n log n)
 - Worst Case Sort: Merge Sort: O(n log n)
+- Space complexity : O(n)
 
 [MergeSort.java](../../../algos/blob/master/MergeSort.java)
 
