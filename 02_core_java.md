@@ -649,3 +649,16 @@ Basically, what happens in the inner class stays in the inner class.
 - All URNs and URLs are URIs, but the opposite is not true.
 - The part that makes something a URL is the combination of the name and an access method, such as https://, or mailto:.
 - All these bits are URIs, so saying that is always technically accurate, but if you are discussing something that’s both a full URL and a URI (which all URLs are), it’s best to call it a “URL” because it’s more specific.
+
+
+
+### Difference between Comparable and Comparator Interface. 
+- a.compareTo(b): Comparable interface :
+  - Compares values and returns an int which tells if the values compare less than, equal, or greater than.
+  - If your class objects have a natural order, implement the Comparable<T> interface and define this method. All Java classes that have a natural ordering implement Comparable<T> - Example: String, wrapper classes, BigInteger
+- compare(a, b):
+  - Comparator interface : Compares values of two objects. This is implemented as part of the Comparator<T> interface, and the typical use is to define one or more small utility classes that implement this, to pass to methods such as sort() or for use by sorting data structures such as TreeMap and TreeSet. You might want to create a Comparator object for the following:
+  - Multiple comparisons. To provide several different ways to sort something. For example, you might want to sort a Person class by name, ID, age, height, ... You would define a Comparator for each of these to pass to the sort() method.
+  - System class To provide comparison methods for classes that you have no control over. For example, you could define a Comparator for Strings that compared them by length.
+  - Strategy pattern To implement a Strategy pattern, which is a situation where you want to represent an algorithm as an object that you can pass as a parameter, save in a data structure, etc.
+
