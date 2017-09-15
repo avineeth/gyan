@@ -59,3 +59,12 @@ The reverse is even easier. You just do a reverse lookup in your alphabet.
 e9a62 = [4,61,0] = 4×622 + 61×621 + 0×620 = 1915810
 ```
 Now find your database-record with WHERE id = 19158 and do the redirect.
+
+
+
+## Things to keep in mind for Design questions involving large scale systems like Twitter, Netflix
+
+The key here is to understand what your interviewer is looking for. He wants you to give him a 50,000 ft overview, identify high-level components and describe the interactions between components as succinctly as possible. Here are 3 ​phases of such a discussion.
+  - Draw a big box that represents the system.
+  - Zoom-in and break that big box into 5–6 components.
+  - Briefly discuss the role of each component e.g. compute, storage, front-end, back-end, caching, queueing, networking, load-balancing, etc.
