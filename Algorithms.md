@@ -8,6 +8,14 @@
    - [Quick Sort](#quick-sort)
 - [Binary Search](#binary-search)
 - [Priorty Queues - Binary Heap](#priority-queues)
+- [Graph Theory](#graph-theory)
+- Graph traversal algorithms
+  - [Breadth-first Search](#breadth-first-search)
+  - [Depth-first search](#depth-first-search)
+  - [Prims Minimum Spanning Tree](#prims-minimum-spanning-tree)
+  - [Djikstra's Algorithm - shortest path](#djikstras-algorithm---shortest-path)
+
+
 # Array Sorting
 
 ## Elementary Sorts
