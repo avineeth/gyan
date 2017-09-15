@@ -93,6 +93,13 @@ public class InsertionSort {
 
 ### Quick Sort
 
+1. Shuffle the array. (optional)
+2. Partition so that, for some j
+  – entry a[j] is in place
+  – no larger entry to the left of j
+  – no smaller entry to the right of j
+3. Sort each piece recursively.
+![Image](https://github.com/avineeth/gyan/blob/master/img/quicksort.PNG?raw=true)
 ```
   //1. shuffle
   //2. partition
