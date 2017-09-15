@@ -1,5 +1,12 @@
 
 
+# Table of Contents
+- [Sorting](#sorting)
+   - [Selection Sort](#selection-sort)
+   - [Insertion Sort](#insertion-sort)
+   - [Merge Sort](#merge-sort)
+   - [Quick Sort](#quick-sort)
+
 # Sorting
 
 ## Elementary Sorts
