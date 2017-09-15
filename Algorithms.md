@@ -7,7 +7,7 @@
    - [Merge Sort](#merge-sort)
    - [Quick Sort](#quick-sort)
 - [Binary Search](#binary-search)
-
+- [Priorty Queues - Binary Heap](#priority-queues)
 # Array Sorting
 
 ## Elementary Sorts
