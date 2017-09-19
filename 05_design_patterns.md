@@ -19,6 +19,29 @@ class Dog extends Animal {
 Animal animal2 = new Dog();
 
 ```
+## SOLID Development Principles 
+
+1. Single Responsibility Principle - One class should have one and only one responsibility
+![Image](https://lostechies.com/derickbailey/files/2011/03/SingleResponsibilityPrinciple2_thumb_579E051E.jpg?raw=true)
+
+2. Open Closed Principle - Software components should be open for extension, but closed for modification
+
+3. Liskov’s Substitution Principle - "Derived types must be completely substitutable for their base types" (Duck Example)
+
+![Image](https://lostechies.com/derickbailey/files/2011/03/LiskovSubtitutionPrinciple_thumb_4E44D09B.jpg?raw=true)
+
+4. Interface Segregation Principle - "Clients should not be forced to implement unnecessary methods which they will not use".
+
+![Image](https://lostechies.com/derickbailey/files/2011/03/InterfaceSegregationPrinciple_thumb_2DBD90E9.jpg?raw=true)
+
+
+5. Dependency Inversion Principle - "Depend on abstractions, not on concretions"
+![Image](https://lostechies.com/derickbailey/files/2011/03/DependencyInversionPrinciple_thumb_50152662.jpg?raw=true)
+
+
+
+
+
 ## Creational Design Patterns 
 - These design patterns provide a way to create objects while hiding the creation logic, rather than instantiating objects directly using new opreator.
 
