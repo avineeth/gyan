@@ -194,7 +194,51 @@ Used for searching. A binary tree where the left child contains only nodes with 
 
 ![Image](http://algs4.cs.princeton.edu/32bst/images/bst-anatomy.png?raw=true)
 
+#### Insert Operation
+- pay attention the recursion is tricky.
+```
+	public void put(char key, int val) {
+		root = put(root, key, val);
+	}
+	
+	private Node put(Node node, char key, int val) {
+		
+		if(node ==  null) {						
+			return  new Node(key, val);
+		}
+		
+		if(key < node.key) {
+			node.left = put(node.left, key, val);
+		}
+		else if(key >= node.key) {
+			node.right = put(node.right, key, val);
+		}		
+		
+		return node;
+	}
 
+```
+
+### Search Operation 
+
+```
+private Value get(Node node, char key) {
+		
+		if(node == null) {  //not present
+			return null;
+		}
+		
+		if(key < node.key) {  //search left
+			return get(node.left, key);
+		}
+		else if(key > node.key) { //search right
+			return get(node.right, key);
+		}	
+		else  //found
+			return node.key;	
+	
+	}
+```
 ### Priority Queues
 - Remove the largest or smallest queue by the natural order.
 - Requirement - Generic Items that are Comparable
