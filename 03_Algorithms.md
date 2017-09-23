@@ -6,8 +6,9 @@
    - [Insertion Sort](#insertion-sort)
    - [Merge Sort](#merge-sort)
    - [Quick Sort](#quick-sort)
-- [Binary Search](#binary-search)
-- [Binary Search Tree](#binary-search-tree)
+- [Symbol Tables](#symbol-tables)
+  - [Binary Search](#binary-search)
+  - [Binary Search Tree](#binary-search-tree)
 - [Priorty Queues - Binary Heap](#priority-queues)
 - [Graph Theory](#graph-theory)
 - Graph traversal algorithms
@@ -141,6 +142,18 @@ public class InsertionSort {
 The most likely reason: quicksort is not stable, i.e. equal entries can change their relative position during the sort; among other things, this means that if you sort an already sorted array, it may not stay unchanged.
 Since primitive types have no identity (there is no way to distinguish two ints with the same value), this does not matter for them. But for reference types, it could cause problems for some applications. Therefore, a stable merge sort is used for those.
 
+### Symbol Tables
+- Key-value pair abstraction.
+  - Insert a value with specified key.
+  - Given a key, search for the corresponding value.
+- Ex. DNS lookup.
+  - Insert domain name with specified IP address.
+  - Given domain name, find corresponding IP address.
+* key domain name          IP address
+* www.cs.princeton.edu     128.112.136.11
+* www.princeton.edu        128.112.128.15
+* www.yale.edu             130.132.143.21
+
 
 ## Binary Search
 - Easiest way to find a key in a Array.
@@ -166,20 +179,6 @@ public static int binarySearch(int[] a, int key)
  }
 ```
 
-### Symbol Tables
-- Key-value pair abstraction.
-  - Insert a value with specified key.
-  - Given a key, search for the corresponding value.
-- Ex. DNS lookup.
-  - Insert domain name with specified IP address.
-  - Given domain name, find corresponding IP address.
-* key domain name          IP address
-* www.cs.princeton.edu     128.112.136.11
-* www.princeton.edu        128.112.128.15
-* www.yale.edu             130.132.143.21
-
-
-
 ## Binary tree
 Tree where each node has up to two leaves
 
@@ -194,7 +193,7 @@ Used for searching. A binary tree where the left child contains only nodes with 
 
 ![Image](http://algs4.cs.princeton.edu/32bst/images/bst-anatomy.png?raw=true)
 
-#### Insert Operation
+##### Insert Operation
 - pay attention the recursion is tricky.
 ```
 	public void put(char key, int val) {
@@ -219,7 +218,7 @@ Used for searching. A binary tree where the left child contains only nodes with 
 
 ```
 
-### Search Operation 
+##### Search Operation 
 
 ```
 private Value get(Node node, char key) {
@@ -239,6 +238,18 @@ private Value get(Node node, char key) {
 	
 	}
 ```
+##### Complexity
+- Worst Case:
+  - Search: N
+  - Insert: N
+  - Delete: N
+
+- Avg Case:
+  - Search: logN (depth of the tree)
+  - Insert: logN
+  - Delete: sqrt(N)
+	
+
 ### Priority Queues
 - Remove the largest or smallest queue by the natural order.
 - Requirement - Generic Items that are Comparable
