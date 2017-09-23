@@ -7,6 +7,7 @@
    - [Merge Sort](#merge-sort)
    - [Quick Sort](#quick-sort)
 - [Binary Search](#binary-search)
+- [Binary Search Tree](#binary-search-tree)
 - [Priorty Queues - Binary Heap](#priority-queues)
 - [Graph Theory](#graph-theory)
 - Graph traversal algorithms
@@ -165,22 +166,6 @@ public static int binarySearch(int[] a, int key)
  }
 ```
 
-
-## Binary tree
-Tree where each node has up to two leaves
-
-  1
- / \
-2   3
-
-## Binary search tree
-Used for searching. A binary tree where the left child contains only nodes with values less than the parent node, and where the right child only contains nodes with values greater than or equal to the parent.
-
-  2
- / \
-1   3
-
-
 ### Symbol Tables
 - Key-value pair abstraction.
   - Insert a value with specified key.
@@ -192,6 +177,23 @@ Used for searching. A binary tree where the left child contains only nodes with 
 * www.cs.princeton.edu     128.112.136.11
 * www.princeton.edu        128.112.128.15
 * www.yale.edu             130.132.143.21
+
+
+
+## Binary tree
+Tree where each node has up to two leaves
+
+  1
+ / \
+2   3
+
+## Binary search tree
+- A binary search tree (BST) is a binary tree where each node has a Comparable key (and an associated value) and satisfies the restriction that the key in any node is larger than the keys in all nodes in that node's left subtree and smaller than the keys in all nodes in that node's right subtree.
+ 
+Used for searching. A binary tree where the left child contains only nodes with values less than the parent node, and where the right child only contains nodes with values greater than or equal to the parent.
+
+![Image](http://algs4.cs.princeton.edu/32bst/images/bst-anatomy.png?raw=true)
+
 
 ### Priority Queues
 - Remove the largest or smallest queue by the natural order.
