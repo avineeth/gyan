@@ -1,5 +1,9 @@
 
-# CODING CHECKLIST
+# Table of Contents
+ - [Coding Checlist](#coding-checklist)
+ - [Permutations of a String](#permutations-of-a-string)
+ 
+## CODING CHECKLIST
 
 #### String to char array
 ```
