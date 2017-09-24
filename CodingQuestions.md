@@ -64,8 +64,59 @@ for (Map.Entry<String, Object> entry : map.entrySet()) {
 }
 ```
 
+### Permuations and Combination
+- permutation order matters, combination order does not matter
+- trivia - a combination lock should be called a permutation lock.
+- permutation formula - n!/(n-r)!
+- combination formula - n!/(n-r)!r!
+
 # Popular Questions
 
+## Permutations of a String
+- Can be solved using recursion (Base Case and build approach)
+- Assume we have a string S represented by characters a1,a2,a3... aN;
+- Base case N =1
+  - The only permutation is S=a1
+- Case N=2
+  - S =a1a2 and the permutations are a1a2 and a2a1
+- Case N=3 (gets tricky)
+  - S = a1a2a3, here we can generate all permuations if we are given a1a2 and a2a1 and we insert a3 at all positions.
+  - we solve for f(n-1) and then push aN into every spot.
+  
+```
+  	public static List<String> getPermutations(String str) {
+		
+		if(str == null) 
+			return null;
+		
+		List<String> permutations = new ArrayList<>();
+		if(str.length() ==1) {
+			permutations.add(str);
+			return permutations;
+		}
+		char insertchar = str.charAt(0);
+		String remainderstr = str.substring(1);
+		List<String> words = getPermutations(remainderstr);
+		for(String s : words) {
+			 List<String> c= insertCharacter(s, insertchar);
+			 permutations.addAll(c);			
+		}
+		
+		return permutations;
+		
+	}
+	public static List<String> insertCharacter(String str, char c) {
+		
+		List<String> permutations = new ArrayList<>();
+		for(int i = 0; i <= str.length(); i++) {
+			String s =  str.substring(0, i) + c + str.substring(i, str.length());
+			permutations.add(s);
+		}
+		return permutations;
+	}
+
+```
+  
 ## Nuts and bolts.
 A disorganized carpenter has a mixed pile of n nuts and n bolts. The goal is to find the corresponding pairs of nuts and bolts. Each nut fits exactly one bolt and each bolt fits exactly one nut. By fitting a nut and a bolt together, the carpenter can see which one is bigger (but the carpenter cannot compare two nuts or two bolts directly). Design an algorithm for the problem that uses nlogn compares (probabilistically).
 
