@@ -1,8 +1,10 @@
 
 # Table of Contents
  - [Coding Checklist](#coding-checklist)
+ - [Check if a String is a Palindrome](#check-if-a-string-is-a-palindrome)
  - [Permutations of a String](#permutations-of-a-string)
- - [Given 2 strings find if one string is a permutation of another](#given-2-strings-find-if-one-string-is-a-permutation-of-another)
+ - [Given 2 strings find if one string is a permutation (Anagram) of another](#given-2-strings-find-if-one-string-is-a-permutation-of-another)
+ - [Determine if a string has all unique characters.](#determine-if-a-string-has-all-unique-characters)
  - [Nuts and bolts](#nuts-and-bolts)
  - [2-Sum Problem](#2-sum-problem)
  - [3-Sum Problem](#3-sum-problem)
@@ -82,7 +84,25 @@ for (Map.Entry<String, Object> entry : map.entrySet()) {
 - permutation formula - n!/(n-r)!
 - combination formula - n!/(n-r)!r!
 
+### ASCII Table:
+
+http://www.asciitable.com/
+
 # Popular Questions
+
+## Check if a String is a Palindrome
+
+```
+	public static boolean isPalindrome(String str) {
+		char[] arr = str.toCharArray();
+		int i=0,j=str.length()-1;
+		while(i <= j) {
+			System.out.println("i :[" + arr[i] + "] j:" + arr[j]);
+			if(arr[i++] != arr[j--]) return false;
+		}
+		return true;
+	}
+```
 
 ## Permutations of a String
 - Can be solved using recursion (Base Case and build approach)
@@ -129,9 +149,29 @@ for (Map.Entry<String, Object> entry : map.entrySet()) {
 
 ```
 ## Given 2 strings find if one string is a permutation of another
+- the same question can be asked "How to check if two Strings are anagrams of each other?"
 - for 2 strings to be permutations of each other the length should be same. return false if length is not same.
 - Sort both the strings if the sorted order is equal then both strings are permutations of each other.
 
+## Determine if a string has all unique characters.
+- the same question can be asked 
+- pangram is a sentence using every letter of a given alphabet at least once. 
+- The best-known English pangram is "The quick brown fox jumps over the lazy dog."
+```
+public static boolean uniquechars(String str) {
+		
+		boolean[] chararr = new boolean[128];
+		char[] strarr = str.toCharArray();
+		for(char c: strarr) {
+			if(chararr[c])
+				return false;
+			chararr[c] = true;
+		}	
+				
+		return true;
+}
+	
+```
 ## Nuts and bolts.
 A disorganized carpenter has a mixed pile of n nuts and n bolts. The goal is to find the corresponding pairs of nuts and bolts. Each nut fits exactly one bolt and each bolt fits exactly one nut. By fitting a nut and a bolt together, the carpenter can see which one is bigger (but the carpenter cannot compare two nuts or two bolts directly). Design an algorithm for the problem that uses nlogn compares (probabilistically).
 
