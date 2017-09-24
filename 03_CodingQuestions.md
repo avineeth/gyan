@@ -1,7 +1,15 @@
 
 # Table of Contents
- - [Coding Checlist](#coding-checklist)
+ - [Coding Checklist](#coding-checklist)
  - [Permutations of a String](#permutations-of-a-string)
+ - [Given 2 strings find if one string is a permutation of another](#given-2-strings-find-if-one-string-is-a-permutation-of-another)
+ - [Nuts and bolts](#nuts-and-bolts)
+ - [2-Sum Problem](#2-sum-problem)
+ - [3-Sum Problem](#3-sum-problem)
+ - [4-Sum Problem](#4-sum-problem)
+ - [Sorting 900 megabytes of data using only 100 megabytes of RAM](#sorting-900-megabytes-of-data-using-only-100-megabytes-of-ram)
+ - [Given an array with positive integers only, find the MIN integer that is missing from the array.](#given-an-array-with-positive-integers-only-find-the-min-integer-that-is-missing-from-the-array)
+
  
 ## CODING CHECKLIST
 
@@ -120,7 +128,10 @@ for (Map.Entry<String, Object> entry : map.entrySet()) {
 	}
 
 ```
-  
+## Given 2 strings find if one string is a permutation of another
+- for 2 strings to be permutations of each other the length should be same. return false if length is not same.
+- Sort both the strings if the sorted order is equal then both strings are permutations of each other.
+
 ## Nuts and bolts.
 A disorganized carpenter has a mixed pile of n nuts and n bolts. The goal is to find the corresponding pairs of nuts and bolts. Each nut fits exactly one bolt and each bolt fits exactly one nut. By fitting a nut and a bolt together, the carpenter can see which one is bigger (but the carpenter cannot compare two nuts or two bolts directly). Design an algorithm for the problem that uses nlogn compares (probabilistically).
 
