@@ -5,6 +5,7 @@
  - [Permutations of a String](#permutations-of-a-string)
  - [Given 2 strings find if one string is a permutation (Anagram) of another](#given-2-strings-find-if-one-string-is-a-permutation-of-another)
  - [Determine if a string has all unique characters.](#determine-if-a-string-has-all-unique-characters)
+ - [Basic String Compression](#basic-string-compression)
  - [Nuts and bolts](#nuts-and-bolts)
  - [2-Sum Problem](#2-sum-problem)
  - [3-Sum Problem](#3-sum-problem)
@@ -170,8 +171,32 @@ public static boolean uniquechars(String str) {
 				
 		return true;
 }
-	
 ```
+## Basic String Compression
+- easy problem
+- go through the string and keep counting.
+
+```
+public static String getCompressedString(String str) {
+		
+		char[] strarr = str.toCharArray();
+		char currchar = strarr[0];
+		String curstr = str.substring(0,1);
+		int count =1;
+		
+		for(int i=1; i< str.length(); i++) {
+			if(strarr[i] == currchar) {
+				count++;
+			}
+			else {
+				currchar = strarr[i];
+				curstr = curstr + count + currchar;
+				count =1;
+			}			
+		}	
+		return curstr + count;
+}
+```	
 ## Nuts and bolts.
 A disorganized carpenter has a mixed pile of n nuts and n bolts. The goal is to find the corresponding pairs of nuts and bolts. Each nut fits exactly one bolt and each bolt fits exactly one nut. By fitting a nut and a bolt together, the carpenter can see which one is bigger (but the carpenter cannot compare two nuts or two bolts directly). Design an algorithm for the problem that uses nlogn compares (probabilistically).
 
