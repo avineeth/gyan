@@ -6,6 +6,7 @@
  - [Given 2 strings find if one string is a permutation (Anagram) of another](#given-2-strings-find-if-one-string-is-a-permutation-of-another)
  - [Determine if a string has all unique characters.](#determine-if-a-string-has-all-unique-characters)
  - [Basic String Compression](#basic-string-compression)
+ - [String pattern match indexOf](#string-indexof)
  - [Nuts and bolts](#nuts-and-bolts)
  - [2-Sum Problem](#2-sum-problem)
  - [3-Sum Problem](#3-sum-problem)
@@ -197,6 +198,29 @@ public static String getCompressedString(String str) {
 		return curstr + count;
 }
 ```	
+## String Indexof
+- Naive implementation is easy, but takes O(NxM) time.
+- More sophesticated algorithms exist like KMP pattern matching.
+```
+ public static int indexOf(String str1, String str2) {
+        char[] str1arr = str1.toCharArray();
+        char[] str2arr = str2.toCharArray();
+        int N = str1arr.length;
+        int M = str2arr.length;
+
+        for(int i =0 ; i< N ; i++) {
+            int j=0;
+            while(j < M){
+                 if(str1arr[i+j] != str2arr[j])
+                     break;
+                j++;
+            }
+            if(j == M) return i;
+        }
+       return  -1;
+    }
+```
+
 ## Nuts and bolts.
 A disorganized carpenter has a mixed pile of n nuts and n bolts. The goal is to find the corresponding pairs of nuts and bolts. Each nut fits exactly one bolt and each bolt fits exactly one nut. By fitting a nut and a bolt together, the carpenter can see which one is bigger (but the carpenter cannot compare two nuts or two bolts directly). Design an algorithm for the problem that uses nlogn compares (probabilistically).
 
