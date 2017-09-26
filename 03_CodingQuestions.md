@@ -90,6 +90,25 @@ for (Map.Entry<String, Object> entry : map.entrySet()) {
 
 http://www.asciitable.com/
 
+### Comparator Example
+
+```
+Collections.sort(palindromes, new SORTBYLENGTH());
+
+class SORTBYLENGTH implements Comparator<String> {
+	@Override
+	public int compare(String o1, String o2) {
+		int retval = 0;
+				
+		if(o1.length() < o2.length()) retval = -1;
+		else if(o1.length() > o2.length()) retval = 1;
+		else retval =0;
+		
+		return retval;
+	}
+}
+```
+
 # Popular Questions
 
 ## Check if a String is a Palindrome
