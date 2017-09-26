@@ -124,6 +124,54 @@ class SORTBYLENGTH implements Comparator<String> {
 		return true;
 	}
 ```
+## Longest Palindromic Substring
+1. Brute Force approach - Complexity O(N^3)
+2. Expand around center - Complexity O(N^2)
+3. Manachers Algorithm  - Complexity O(N)
+
+
+```
+	public static void longestPalindrome2(String str) {
+		int start =0;
+		int maxlength =1;
+		
+		for(int i=1; i< str.length(); i++) {
+			int lo =i-1;
+			int hi =i+1;
+			
+			while(lo > 0 && hi < str.length()
+					&& str.charAt(lo) == str.charAt(hi)) {
+			
+				if((hi-lo) > maxlength ) {
+					maxlength = hi-lo;
+					start = lo;
+				}
+				lo--;
+				hi++;
+			}
+		}
+		System.out.println(str.substring(start, start+maxlength +1));
+	}	
+```	
+
+```
+	public static void longestPalindrome(String str) {
+		List<String> palindromes = new ArrayList<>();
+		for(int i = 0; i< str.length(); i++) {
+			for(int j = i+1; j <= str.length(); j++) {
+				//System.out.println(str.substring(i, j));
+				String s = str.substring(i, j);
+				if(isPalindrome(s)) {
+					palindromes.add(s);
+				}
+				
+			}
+		}
+		Collections.sort(palindromes, new SORTBYLENGTH());
+		Collections.reverse(palindromes);
+		System.out.println(palindromes.get(0));
+	}
+```
 
 ## Permutations of a String
 - Can be solved using recursion (Base Case and build approach)
