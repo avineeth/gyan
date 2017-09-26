@@ -2,6 +2,7 @@
 # Table of Contents
  - [Coding Checklist](#coding-checklist)
  - [Check if a String is a Palindrome](#check-if-a-string-is-a-palindrome)
+ - [Longest Palindromic Substring](#longest-palindromic-substring)
  - [Permutations of a String](#permutations-of-a-string)
  - [Given 2 strings find if one string is a permutation (Anagram) of another](#given-2-strings-find-if-one-string-is-a-permutation-of-another)
  - [Determine if a string has all unique characters.](#determine-if-a-string-has-all-unique-characters)
