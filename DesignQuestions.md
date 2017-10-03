@@ -13,6 +13,21 @@
 
 A content delivery network or content distribution network (CDN) is a geographically distributed network of proxy servers and their data centers. The goal is to distribute service spatially relative to end-users to provide high availability and high performance. CDNs serve a large portion of the Internet content today, including web objects (text, graphics and scripts), downloadable objects (media files, software, documents), applications (e-commerce, portals), live streaming media, on-demand streaming media, and social networks.
 
+### What IP Addresses Are Private?
+- A private IP address is an IP address that's reserved for internal use behind a router or other Network Address Translation (NAT) device, apart from the public.
+- The Internet Assigned Numbers Authority (IANA) reserves the following IP address blocks for use as private IP addresses:
+  - 10.0.0.0 to 10.255.255.255
+  - 172.16.0.0 to 172.31.255.255
+  - 192.168.0.0 to 192.168.255.255
+
+### What Is A Domain Name Server (DNS) And How Does It Work
+
+- Domain Name Servers (DNS) are the Internet's equivalent of a phone book. They maintain a directory of domain names and translate them to Internet Protocol (IP) addresses.
+- This is necessary because, although domain names are easy for people to remember, computers or machines, access websites based on IP addresses. 
+- Information from all the domain name servers across the Internet are gathered together and housed at the Central Registry. Host companies and Internet Service Providers interact with the Central Registry on a regular schedule to get updated DNS information. 
+- When you type in a web address, e.g., www.jimsbikes.com, your Internet Service Provider views the DNS associated with the domain name, translates it into a machine friendly IP address (for example 216.168.224.70 is the IP for jimsbikes.com) and directs your Internet connection to the correct website. 
+- After you register a new domain name or when you update the DNS servers on your domain name, it usually takes about 12-36 hours for the domain name servers world-wide to be updated and able to access the information. This 36-hour period is referred to as propagation.
+
 
 ### TinyURL
 
