@@ -223,6 +223,15 @@ public class Something {
  
 ## Abstract Factory
 
+-Factory Pattern is one of the Creational Design Patterns.
+- It basically counts new operator as evil and is mostly used as a way to create objects.
+- You create a factory that is a place to create different objects which are somehow similar in features yet divided in categories.
+- Java core factory design pattern examples:
+  - ** Collection.iterator() **
+  - ** NumberFormat.getInstance()  **
+  - ** ResourceBundle.getBundle()  **
+  - ** EnumSet.of()  **
+
 ### Difference between AbstractFactory and Factory design patters are as follows:
 
 - Factory Method is used to create one product only but Abstract Factory is about creating families of related or dependent products.
@@ -519,6 +528,33 @@ Provides a solution for pre-processing and post-processing a request. It allows 
 #### Session Façade pattern
 This pattern hides the complexity of business components and centralizes the workflow. It provides course-grained interfaces to the clients which reduces the remote method overhead. This pattern fits well with declarative transactions and security management.
 
+
+### DAO vs DTO
+- DTO is an abbreviation for Data Transfer Object, so it is used to transfer the data between classes and modules of your application. - - DTO should only contain private fields for your data, getters, setters and constructors.
+- It is not recommended to add business logic methods to such classes, but it is OK to add some util methods.
+
+- DAO is an abbreviation for Data Access Object, so it should encapsulate the logic for retrieving, saving and updating data in your data storage (a database, a file-system, whatever).
+- Use a Data Access Object (DAO) to abstract and encapsulate all access to the data source. The DAO manages the connection with the data source to obtain and store data.
+- Here is an example how the DAO and DTO interfaces would look like:
+
+```
+interface PersonDTO {
+    String getName();
+    void setName(String name);
+    //.....
+}
+
+interface PersonDAO {
+    PersonDTO findById(long id);
+    void save(PersonDTO person);
+    //.....
+}
+```
+![Image](http://www.oracle.com/ocom/groups/public/@otn/documents/digitalasset/146804.jpg?raw=true)
+
+Sequence Diagram
+
+![Image](http://www.oracle.com/ocom/groups/public/@otn/documents/digitalasset/145996.jpg?raw=true)
 
 
 
