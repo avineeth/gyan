@@ -1,3 +1,7 @@
+
+https://github.com/checkcheckzz/system-design-interview
+
+
 ## Things to keep in mind for Design questions involving large scale systems like Twitter, Netflix
 
 The key here is to understand what your interviewer is looking for. He wants you to give him a 50,000 ft overview, identify high-level components and describe the interactions between components as succinctly as possible. Here are 3 ​phases of such a discussion.
@@ -60,8 +64,34 @@ Under this scheme, data is written to cache alone, and completion is immediately
 
 
 ### Content delivery network - AKAMAI
-
 A content delivery network or content distribution network (CDN) is a geographically distributed network of proxy servers and their data centers. The goal is to distribute service spatially relative to end-users to provide high availability and high performance. CDNs serve a large portion of the Internet content today, including web objects (text, graphics and scripts), downloadable objects (media files, software, documents), applications (e-commerce, portals), live streaming media, on-demand streaming media, and social networks.
+
+### Sharding or Data Partitioning
+- Data partitioning (also known as sharding) is a technique to break up a big database (DB) into many smaller parts.
+- It is the process of splitting up a DB/table across multiple machines to improve the manageability, performance, availability and load balancing of an application.
+- The justification for data sharding is that, after a certain scale point, it is cheaper and more feasible to scale horizontally by adding more machines than to grow it vertically by adding beefier servers.
+
+#### Horizontal partitioning:
+- In this scheme, we put different rows into different tables.
+- For example, if we are storing different places in a table, we can decide that locations with ZIP codes less than 10000 are stored in one table, and places with ZIP codes greater than 10000 are stored in a separate table.
+- This is also called a range based sharding, as we are storing different ranges of data in separate tables.
+
+- The key problem with this approach is that if the value whose range is used for sharding isn’t chosen carefully, then the partitioning scheme will lead to unbalanced servers. 
+- In the previous example, splitting location based on their zip codes assumes that places will be evenly distributed across the different zip codes. This assumption is not valid as there will be a lot of places in a thickly populated area like Manhattan compared to its suburb cities.
+
+#### Vertical Partitioning:
+- In this scheme, we divide our data to store tables related to a specific feature to their own server.
+- For example, if we are building Instagram like application, where we need to store data related to users, all the photos they upload and people they follow, we can decide to place user profile information on one DB server, friend lists on another and photos on a third server.
+
+- Vertical partitioning is straightforward to implement and has a low impact on the application. The main problem with this approach is that if our application experiences additional growth, then it may be necessary to further partition a feature specific DB across various servers (e.g. it would not be possible for a single server to handle all the metadata queries for 10 billion photos by 140 million users).
+
+#### Directory Based Partitioning:
+- A loosely coupled approach to work around issues mentioned in above schemes is to create a lookup service which knows your current partitioning scheme and abstracts it away from the DB access code.
+- So, to find out where does a particular data entity resides, we query our directory server that holds the mapping between each tuple key to its DB server.
+- This loosely coupled approach means we can perform tasks like adding servers to the DB pool or change our partitioning scheme without having to impact your application.
+
+
+
 
 ### What IP Addresses Are Private?
 - A private IP address is an IP address that's reserved for internal use behind a router or other Network Address Translation (NAT) device, apart from the public.
