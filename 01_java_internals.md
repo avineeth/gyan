@@ -196,6 +196,7 @@ public class SayHello {
 ## Class Loader Architecture
 - There may be more than one class loader inside a Java Virtual Machine.
 - The primordial class loader (there is only one of them) is a part of the Java Virtual Machine implementation.
+- also called bootstrap class loader (also known as the system class loader).
 - The Java Virtual Machine considers any class it loads through the primordial class loader to be trusted, regardless of whether or not the class is part of the Java API.
 - Classes it loads through class loader objects, however, it views with suspicion--by default, it considers them to be untrusted.
 
