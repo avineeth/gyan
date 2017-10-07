@@ -156,6 +156,37 @@ http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
 ## What's the difference between the -client and -server systems?
 These two systems are different binaries. They are essentially two different compilers (JITs)interfacing to the same runtime system. The client system is optimal for applications which need fast startup times or small footprints, the server system is optimal for applications where the overall performance is most important. In general the client system is better suited for interactive applications such as GUIs. Some of the other differences include the compilation policy,heap defaults, and inlining policy.
 
+### javap - command to decompile bytecode (.class file)
+```
+C:\Java\Algorithms>javap SayHello.class
+Compiled from "SayHello.java"
+public class SayHello {
+  public SayHello();
+  public void doSomething();
+}
+```
+
+For Disassembling the code use javap -c 
+
+```
+C:\Java\Algorithms>javap -c SayHello.class
+Compiled from "SayHello.java"
+public class SayHello {
+  public SayHello();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: return
+
+  public void doSomething();
+    Code:
+       0: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+       3: ldc           #3                  // String Saying Hello
+       5: invokevirtual #4                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+       8: return
+}
+```
+
 ### Difference between 32 bit and 64 bit
 - 32 bit/64 bit is the size of the CPU register.
 - with 32 bit registers CPU can hold only 2^32 address locations -max 4 GB RAM
@@ -177,6 +208,27 @@ These two systems are different binaries. They are essentially two different com
 - One example of dynamic extension is the web browser, which uses class loader objects to download the class files for an applet across a network. A web browser fires off a Java application that installs a class loader object--usually called an applet class loader--that knows how to request class files from an HTTP server. Applets are an example of dynamic extension, because the Java application doesn’t know when it starts which class files the browser will ask it to download across the network. The class files to download are determined at run-time, as the browser encounters pages that contain Java applets.
 - The Java application started by the web browser usually creates a different applet class loader object for each location on the network from which it retrieves class files. As a result, class files from different sources are loaded by different class loader objects. This places them into different name-spaces inside the host Java application. Because the class files for applets from different sources are placed in separate name-spaces, the code of a malicious applet is restricted from interfering directly with class files downloaded from any other source. This puts the class files from different sources into different name-spaces, which allows you to restrict or prevent access between code loaded from different sources.
 - HotSpot is an an implementation of the JVM concept, originally developed by Sun and now owned by Oracle. There are other implementations of the JVM specification, like JRockit, IBM J9, among many others.
+
+
+### Dynamically Load Classes using ClassLoader and Reflection API
+
+- below code shows how a class can be loaded at runtime without actually creating an object of the class using new Operator.
+
+```
+public class ClassLoaderExamples {
+
+	public static void main(String[] args) throws Exception{
+  
+		ClassLoader mainClassLoader = ClassLoaderExamples.class.getClassLoader();
+		Class HelloWorldClass = mainClassLoader.loadClass("practice.HelloWorld");
+		System.out.println(HelloWorldClass.getName());
+		
+		Constructor<HelloWorld> constructor = HelloWorldClass.getConstructor();
+		Object myObject = constructor.newInstance();
+		((HelloWorld)myObject).sayHello();
+	}
+}
+```
 
 ## Java Memory Model
 [Credits: http://blog.jamesdbloom.com/JVMInternals.html#threads ]
