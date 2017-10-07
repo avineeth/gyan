@@ -196,7 +196,6 @@ public class SayHello {
 ## Class Loader Architecture
 - There may be more than one class loader inside a Java Virtual Machine.
 - The primordial class loader (there is only one of them) is a part of the Java Virtual Machine implementation.
-- also called bootstrap class loader (also known as the system class loader).
 - The Java Virtual Machine considers any class it loads through the primordial class loader to be trusted, regardless of whether or not the class is part of the Java API.
 - Classes it loads through class loader objects, however, it views with suspicion--by default, it considers them to be untrusted.
 
@@ -209,6 +208,15 @@ public class SayHello {
 - One example of dynamic extension is the web browser, which uses class loader objects to download the class files for an applet across a network. A web browser fires off a Java application that installs a class loader object--usually called an applet class loader--that knows how to request class files from an HTTP server. Applets are an example of dynamic extension, because the Java application doesn’t know when it starts which class files the browser will ask it to download across the network. The class files to download are determined at run-time, as the browser encounters pages that contain Java applets.
 - The Java application started by the web browser usually creates a different applet class loader object for each location on the network from which it retrieves class files. As a result, class files from different sources are loaded by different class loader objects. This places them into different name-spaces inside the host Java application. Because the class files for applets from different sources are placed in separate name-spaces, the code of a malicious applet is restricted from interfering directly with class files downloaded from any other source. This puts the class files from different sources into different name-spaces, which allows you to restrict or prevent access between code loaded from different sources.
 - HotSpot is an an implementation of the JVM concept, originally developed by Sun and now owned by Oracle. There are other implementations of the JVM specification, like JRockit, IBM J9, among many others.
+
+### Types of Class Loaders
+- When the JVM is started, three class loaders are used
+1. Bootstrap class loader
+The bootstrap class loader loads the core Java libraries[5] located in the /jre/lib directory. This class loader, which is part of the core JVM, is written in native code.
+2. Extensions class loader
+The extensions class loader loads the code in the extensions directories (/jre/lib/ext or any other directory specified by the java.ext.dirs system property). It is implemented by the **sun.misc.Launcher$ExtClassLoader** class.
+3. System class loader
+The system class loader loads code found on java.class.path, which maps to the CLASSPATH environment variable. This is implemented by the **sun.misc.Launcher$AppClassLoader** class.
 
 
 ### Dynamically Load Classes using ClassLoader and Reflection API
