@@ -431,4 +431,19 @@ One example of external sorting is the ** external merge sort** algorithm, which
 ### Given an array with positive integers only, find the MIN integer that is missing from the array.
 use the formula n*(n-1)/2 to find total sum of number
 
+## Algorithm Approaches
+
+### Sliding Window
+
+https://medium.com/outco/how-to-solve-sliding-window-problems-28d67601a66
+
+##### How do you identify them?
+So the first thing you want to be able to do is to identify a problem that uses a sliding window paradigm. Luckily, there are some common giveaways:
+- The problem will involve a data structure that is ordered and iterable like an array or a string
+- You are looking for some subrange in that array/string, like a longest, shortest or target value.
+- There is an apparent naive or brute force solution that runs in O(N²), O(2^N) or some other large time complexity.
+- But the biggest giveaway is that the thing you are looking for is often some kind of optimal, like the longest sequence or shortest sequence of something that satisfies a given condition exactly.
+And the amazing thing about sliding window problems is that most of the time they can be solved in O(N) time and O(1) space complexity.
+
+
 
