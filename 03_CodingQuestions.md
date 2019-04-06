@@ -16,7 +16,7 @@
  - [Given an array with positive integers only, find the MIN integer that is missing from the array.](#given-an-array-with-positive-integers-only-find-the-min-integer-that-is-missing-from-the-array)
 
  - [Algorithm Approaches](#algorithm-approaches)
-  - [Sliding Window](#sliding-window)
+     - [Sliding Window](#sliding-window)
  
 ## CODING CHECKLIST
 
@@ -446,6 +446,8 @@ So the first thing you want to be able to do is to identify a problem that uses 
 - There is an apparent naive or brute force solution that runs in O(N²), O(2^N) or some other large time complexity.
 - But the biggest giveaway is that the thing you are looking for is often some kind of optimal, like the longest sequence or shortest sequence of something that satisfies a given condition exactly.
 And the amazing thing about sliding window problems is that most of the time they can be solved in O(N) time and O(1) space complexity.
+
+### Linked List - Runner Technique
 
 
 
