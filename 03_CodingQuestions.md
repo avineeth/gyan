@@ -15,7 +15,7 @@
  - [Sorting 900 megabytes of data using only 100 megabytes of RAM](#sorting-900-megabytes-of-data-using-only-100-megabytes-of-ram)
  - [Given an array with positive integers only, find the MIN integer that is missing from the array.](#given-an-array-with-positive-integers-only-find-the-min-integer-that-is-missing-from-the-array)
 
-Algorithm Approaches (#algorithm-approaches)
+ - [Algorithm Approaches](#algorithm-approaches)
  
 ## CODING CHECKLIST
 
