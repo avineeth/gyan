@@ -16,6 +16,7 @@
  - [Given an array with positive integers only, find the MIN integer that is missing from the array.](#given-an-array-with-positive-integers-only-find-the-min-integer-that-is-missing-from-the-array)
 
  - [Algorithm Approaches](#algorithm-approaches)
+  - [Sliding Window](#sliding-window)
  
 ## CODING CHECKLIST
 
