@@ -17,6 +17,7 @@
 
  - [Algorithm Approaches](#algorithm-approaches)
      - [Sliding Window](#sliding-window)
+     - [Linked List Runner Technique](#linked-list---runner-technique)
  
 ## CODING CHECKLIST
 
