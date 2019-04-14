@@ -56,6 +56,9 @@ List wordList = Arrays.asList(words);
 #### Integer to int
 Integer.intValue()
 
+#### int to String
+Integer.toString(intvalue);
+
 #### Middle of an array
     int mid = lo + (hi - lo) / 2;
 
