@@ -454,4 +454,7 @@ And the amazing thing about sliding window problems is that most of the time the
 ### Linked List - Runner Technique
 
 
-
+ ##### Find kth node from last in a single linked list.
+ - the main problem here is single linked list is unidirectional, so we cannot walk back the list from the end to find kth node.
+ - if we know the length of the linkedlist then its easy - find length-kth node. - trivial solution
+ - have 2 pointers, move first pointer k positions ahead. then move both the pointers equally, when the first pointer hits the end of the list, the second pointer is in Kth location.
