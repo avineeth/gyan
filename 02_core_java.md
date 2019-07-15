@@ -72,6 +72,8 @@ To make Java more memory efficient, the JVM sets aside a special area of memory 
 - You can, however, put nonabstract methods in an abstract class.
 
 ## Difference between interface and abstract class?
+- An interface defines a contract that some implementation will fulfill for you.
+- An abstract class provides a default behavior that your implementation can reuse.
 - Think of an interface as a 100-percent abstract class.
 - But while an abstract class can define both abstract and non-abstract methods, an interface can have only abstract methods.
 - All interface methods are implicitly public and abstract. In other words,you do not need to actually type the public or abstract modifiers in the method declaration, but the method is still always public and abstract.
