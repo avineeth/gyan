@@ -13,3 +13,13 @@ bin/zookeeper-server-start.sh config/zookeeper.properties
 
 #### Console Producer
 ./kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic first_topic --producer-property acks=all
+
+#### Console Consumer
+./kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic first_topic --from-beginning
+
+#### Console Consumer group
+./kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic first_topic --group first_app --from-beginning
+
+./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+
+./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group first_app --describe
