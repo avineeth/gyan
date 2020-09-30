@@ -437,6 +437,14 @@ One example of external sorting is the ** external merge sort** algorithm, which
 ### Given an array with positive integers only, find the MIN integer that is missing from the array.
 use the formula n*(n-1)/2 to find total sum of number
 
+### Greatest Common Divisor (GCD) - Euclids algorithm
+- The gcd of two numbers also divides their difference.
+- For example, to compute gcd(48,18), divide 48 by 18 to get a quotient of 2 and a remainder of 12. Then divide 18 by 12 to get a quotient of 1 and a remainder of 6. Then divide 12 by 6 to get a remainder of 0, which means that 6 is the gcd. Here, we ignored the quotient in each step, except to notice when the remainder reached 0, signalling that we had arrived at the answer. Formally, the algorithm can be described as:
+```
+gcd(a, 0) = a
+gcd(a, b) = gcd(b, a mod b) 
+def gcd(a: Int, b: Int): Int = if(b ==0) a else gcd(b, a % b)
+```
 ## Algorithm Approaches
 
 ### Sliding Window
@@ -458,3 +466,4 @@ And the amazing thing about sliding window problems is that most of the time the
  - the main problem here is single linked list is unidirectional, so we cannot walk back the list from the end to find kth node.
  - if we know the length of the linkedlist then its easy - find length-kth node. - trivial solution
  - have 2 pointers, move first pointer k positions ahead. then move both the pointers equally, when the first pointer hits the end of the list, the second pointer is in Kth location.
+ 
