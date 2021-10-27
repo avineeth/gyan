@@ -1,2 +1,0 @@
-## Lambda Architecture
-## Kappa Architecture
