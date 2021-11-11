@@ -380,6 +380,7 @@ class Volcano {
 - A memory leak in Java can occur if you forget to close a resource, or a reference to an object is not released. e.g.
   - File/Text buffers not closed.
   - Hash maps keeping references alive if equals() and hashcode() are not implemented, e.g.
+- If an object, which is supposed to be collected but still lives in memory due to unintentional strong reference then it's known as a memory leak in Java.
 
 - Of course, there are a number of ways to create memory leaks in Java. For simplicity we will define a class to be a key in a HashMap, but we will not define the equals() and hashcode() methods.
 - A HashMap is a hash table implementation for the Map interface, and as such it defines the basic concepts of key and value: each value is related to a unique key, so if the key for a given key-value pair is already present in the HashMap, its current value is replaced.
