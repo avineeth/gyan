@@ -664,3 +664,11 @@ Basically, what happens in the inner class stays in the inner class.
   - System class To provide comparison methods for classes that you have no control over. For example, you could define a Comparator for Strings that compared them by length.
   - Strategy pattern To implement a Strategy pattern, which is a situation where you want to represent an algorithm as an object that you can pass as a parameter, save in a data structure, etc.
 
+
+### Different ways of creating object in Java
+- Using new keyword
+- Using new instance
+- Using clone() method
+- Using deserialization
+- Using newInstance() method of Constructor class
+
