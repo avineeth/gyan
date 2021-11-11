@@ -346,7 +346,14 @@ public class ClassLoaderExamples {
 - A Java application continues to execute (the virtual machine instance continues to live) as long as any non-daemon threads are still running. When all non-daemon threads of a Java application terminate, the virtual machine instance will exit. If permitted by the security manager, the application can also cause its own demise by invoking the exit() method of class Runtime or System.
 - You must in some implementation-dependent way give a Java Virtual Machine the name of the initial class that has the main() method that will start the entire application.
 
-- Different types of threads in HotSpot JVM:
+#### Daemon Threads
+- When a new thread is created it inherits the daemon status of its parent.
+- When all non-daemon threads finish, the JVM halts, and any remaining daemon threads are abandoned:
+  - finally blocks are not executed,
+  - stacks are not unwound - the JVM just exits.
+
+
+#### Different types of threads in HotSpot JVM:
   - VM thread : This thread waits for operations to appear that require the JVM to reach a safe-point. The reason these operations have to happen on a separate thread is because they all require the JVM to be at a safe point where modifications to the heap can not occur. The type of operations performed by this thread are "stop-the-world" garbage collections, thread stack dumps, thread suspension and biased locking revocation.
   - Periodic task thread: This thread is responsible for timer events (i.e. interrupts) that are used to schedule execution of periodic operations
   - GC threads: These threads support the different types of garbage collection activities that occur in the JVM
