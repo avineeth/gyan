@@ -72,6 +72,7 @@ http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
 3. Parallel Old GC (Parallel Compacting GC)
 4. Concurrent Mark & Sweep GC  (or "CMS")
 5. Garbage First (G1) GC
+- Java 8, the default GC is Parallel GC, while on Java 11 the default is G1 GC. 
 
 
 #### Serial GC (-XX:+UseSerialGC)
