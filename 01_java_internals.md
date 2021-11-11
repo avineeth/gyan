@@ -68,11 +68,10 @@ http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
 
 - According to JDK 7, there are 5 GC types for the Old Generation. 
 1. Serial GC
-2. Parallel GC
+2. Parallel GC. --> default in Java 8
 3. Parallel Old GC (Parallel Compacting GC)
-4. Concurrent Mark & Sweep GC  (or "CMS")
-5. Garbage First (G1) GC
-- Java 8, the default GC is Parallel GC, while on Java 11 the default is G1 GC. 
+4. Concurrent Mark & Sweep GC  (or "CMS") --> deprecated since Java 9
+5. Garbage First (G1) GC --> Default since Java 9
 
 
 #### Serial GC (-XX:+UseSerialGC)
