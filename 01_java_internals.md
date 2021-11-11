@@ -111,6 +111,40 @@ http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
 - In the next step, the collector selects a number of blocks based on the pause-time-goal specified by the user. These blocks are of course the ones, that contain the most garbage. Because of this behavior, the G1 got its name “Garbage First”.
 - In the final step, the collector collects the selected blocks by evacuating their regions. That means, it copies the objects that are still alive from the different blocks together into a new region and removes the old regions entirely. This results in the heap being compacted on the go and avoiding compaction pauses.
 
+# Java 8 changes to Memory model
+
+### Pre-Java 7 Era (String Handling)
+- Prior to Java 7, Interned Strings or String Literals were stored as part of the PermGen Space. In the above article, the way to configure the non-expandable or fixed PermGen has been provided, along with a diagram of where exactly it is located in memory. The PermGen space is always fixed. 
+- One more point to note here is that String Interns are candidates for garbage collection just like other Objects in Java. The default string pool size is 1009 and can be set through the switch -XX:StringTableSize.
+
+### Java 7 Changes (String Handling)
+- So, with Java 7, Oracle engineers decided to move String Interns to the Heap. As mentioned above, this decision has to do with the following factors:
+- Fixed/non-expandable size of PermGen (leading to Out of Memory: PermGen Space).
+- String Interns are garbage collected like other Objects (based on reference count).
+- Set a higher number of Strings, even up to millions.
+
+### Java 8 Changes (String Handling)
+- The above Java 7 changes of String handling continued into Java 8. Furthermore, in Java 8, the following change was made to the memory handling related to StringInterning.
+- The default number of Strings in the String Pool is now 60013, as compared to 1009
+- At any point in time, you can check the String Interning and Pooling usage statistics in the JVM by using -XX:+PrintStringTableStatistics (Symbol Table Statistics).
+
+### Java 8 Changes (PermGen to MetaSpace)
+- The most impactful change to Java has been the movement from PermGen to MetaSpace. The following are the changes in Java 8:
+  - Eliminate or reduce Out of Memory: PermGen SpaceError. (PermGen is Gone) 
+  - Memory for Class metadata is allocated only from native memory. Earlier, it was from the Contiguous Java Heap Memory.
+  - Virtually unlimited (or very high) memory for Class metadata from native memory.
+  - Limit the maximum limit for metadata in native memory using -XX:MaxMetaspaceSize.
+  - Garbage collection is triggered once the MaxMetaspaceSize is reached.
+  - PermGen and MetaSpace are not a direct movement. (Some items from PermGen have been moved to MetaSpace. There are some miscellaneous items moved to the Heap Space, like Interned Strings).
+  - The earlier PermGen flags are ignored, like -XX:PermSize and -XX:MaxPermSize. If used, a warning is issued saying that these flags are no longer valid in Java 
+  - Once the MaxMetaSpaceSize is reached, the Out of Memory: MetaSpace Error is thrown.
+  - The default MetaSpaceSize on a 32-bit and 64-bit machines are 12MB and 16MB respectively. In contrast, the default MaxPermSize was always set to 64MB. 
+  - The native memory size can be set by -XX:MaxDirectMemorySize. (The default is 128MB).
+  - MetaSpace usage is available from the verbose GC log using -XX:+PrintGCDetails.
+  - PermGen had a fixed size, but MetaSpace can Auto-Tune and Auto-Increase depending on the underlying OS.
+  - Classes can be de-allocated concurrently without GC pauses. It is more efficient than in PermGen, as that required frequent GC pauses.
+
+![Image](https://github.com/avineeth/gyan/blob/master/img/permgen_to_metaspace.jpeg?raw=true)
 
 
 # JVM Internals
