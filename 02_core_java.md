@@ -672,3 +672,6 @@ Basically, what happens in the inner class stays in the inner class.
 - Using deserialization
 - Using newInstance() method of Constructor class
 
+### Static and Dynamic binding
+https://www.geeksforgeeks.org/static-vs-dynamic-binding-in-java/
+
