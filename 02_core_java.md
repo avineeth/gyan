@@ -86,6 +86,10 @@ To make Java more memory efficient, the JVM sets aside a special area of memory 
 - An interface must be declared with the keyword interface.
 - Interface types can be used polymorphically
 
+## Interface changes in Java 8
+Java 8 allows the interfaces to have default and static methods. The reason we have default methods in interfaces is to allow the developers to add new methods to the interfaces without affecting the classes that implements these interfaces.
+
+
 ## final
 - final can be used to mark a variable "unchangeable"
 
