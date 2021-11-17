@@ -459,7 +459,7 @@ protected Object clone() throws CloneNotSupportedException {
 
 
 ## Annotations
-- Java annotations are used to provide **meta data** for your Java code.
+- Java annotations are used to provide **meta data** for your Java **code**.
 - Being meta data, Java annotations do not directly affect the execution of your code, although some types of annotations can actually be used for that purpose.
 - Java annotations were added to Java from Java 5. 
 - Java annotations are typically used for the following purposes:
