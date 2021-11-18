@@ -704,3 +704,21 @@ Basically, what happens in the inner class stays in the inner class.
 ### Static and Dynamic binding
 https://www.geeksforgeeks.org/static-vs-dynamic-binding-in-java/
 
+### Disadvantages of Java
+
+1- Performance
+Java programs take much longer time to run compared to C/C++.
+
+2- Memory
+Since Java Programs run on top of Java Virtual Machine, it consumes more memory.
+
+3- Cost
+Since memory and processing requirements higher, hardware cost increases.
+
+4- Low level programming
+There is no support for low level programming in Java, like pointers are missing.
+
+5- Garbage collection
+There is no control over garbage collection in Java. That is programmer does not have any right to control the garbage collection. Java does not provide functions like delete(), free().
+
+6- No Unsigned Types Unlike C/C++, Java does not support unsigned int, unsigned char, … etc. However in Java 8, API for unsigned long and unsigned int is introduced (Please see this oracle doc).
