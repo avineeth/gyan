@@ -310,6 +310,30 @@ Read more: http://javarevisited.blogspot.com/2011/12/difference-between-wait-sle
 - Note that as a Java programmer, you never explicitly lock an object. Object locks are internal to the Java virtual machine.
 - In your Java programs, **you identify the monitor regions of your program by writing synchronized statements and methods**. As the Java virtual machine runs your program, it automatically locks an object or class every time it encounters a monitor region.
 
+##### Object level locking:
+Object level locking means you want to synchronize non static method or block so that it can be accessed by only one thread at a time for that instance. It is used if you want to protect non static data.
+```
+public synchronized int incrementCount(){}
+public int incrementCount() {
+  synchronized (this) {
+   count++;
+   return count;
+  }
+```
+##### Class level locking:
+Class level locking means you want to synchronize static method or block so that it can be accessed by only one thread for whole class. If you have 10 instances of class, only one thread will be able to access only one method or block of any one instance at a time. It is used if you want to protect static data.
+
+```
+public static synchronized int incrementCount()
+{
+}
+public int incrementCount() {
+  synchronized (RequestCounter.class) {
+   count++;
+   return count;
+  }
+  ```
+  
 ##### Re-entrant Lock 
   - A single thread is allowed to lock the same object multiple times.
   - For each object, the Java virtual machine maintains a count of the number of times the object has been locked.
