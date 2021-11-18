@@ -54,6 +54,7 @@ if (x == 5)
 
 ### What is a deadlock
 
+- Deadlock in Java is a condition where two or more threads are blocked forever, waiting for each other.
 - Deadlocks will only occur when you have two or more locks that can be aquired at the same time and they are grabbed in different order.
 - Ways to avoid having deadlocks are:
 1. avoid having locks (if possible),
