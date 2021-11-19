@@ -728,3 +728,4 @@ There is no control over garbage collection in Java. That is programmer does not
 - Lambda expressions are anonymous methods
 - it has 2 main components - parameter list, and body. 
 - method name is anonymous and return type is inferred.
+- can be readily used with single abstract method interfaces.
