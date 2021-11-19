@@ -722,3 +722,9 @@ There is no support for low level programming in Java, like pointers are missing
 There is no control over garbage collection in Java. That is programmer does not have any right to control the garbage collection. Java does not provide functions like delete(), free().
 
 6- No Unsigned Types Unlike C/C++, Java does not support unsigned int, unsigned char, … etc. However in Java 8, API for unsigned long and unsigned int is introduced (Please see this oracle doc).
+
+### Lambda Expressions
+
+- Lambda expressions are anonymous methods
+- it has 2 main components - parameter list, and body. 
+- method name is anonymous and return type is inferred.
