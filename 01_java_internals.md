@@ -72,6 +72,7 @@ http://javarevisited.blogspot.in/2011/04/garbage-collection-in-java.html
 3. Parallel Old GC (Parallel Compacting GC)
 4. Concurrent Mark & Sweep GC  (or "CMS") --> deprecated since Java 9
 5. Garbage First (G1) GC --> Default since Java 9
+6. Z GC -> https://www.geeksforgeeks.org/z-garbage-collector-in-java/
 
 
 #### Serial GC (-XX:+UseSerialGC)
