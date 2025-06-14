@@ -680,6 +680,14 @@ Basically, what happens in the inner class stays in the inner class.
 - All URNs and URLs are URIs, but the opposite is not true.
 - The part that makes something a URL is the combination of the name and an access method, such as https://, or mailto:.
 - All these bits are URIs, so saying that is always technically accurate, but if you are discussing something that’s both a full URL and a URI (which all URLs are), it’s best to call it a “URL” because it’s more specific.
+- URL (Uniform Resource Locator)
+A URL is a specific type of URI that, in addition to identifying a resource, provides a means of locating it and specifying the mechanism for retrieving it. It tells you where the resource is and how to access it.
+
+Think of a URL as an address that points to a resource on a network (like the internet).
+
+Structure of a URL (a common type of URI):
+A typical URL includes:
+protocol://domain[:port]/path?query#fragment
 
 
 
