@@ -455,3 +455,118 @@ public class MemLeak {
 ```
 - Note: the memory leak is not due to the infinite loop on line 14: the infinite loop can lead to a resource exhaustion, but not a memory leak. If we had properly implemented equals() and hashcode() methods, the code would run fine even with the infinite loop as we would only have one element inside the HashMap.
 
+Java's exception handling mechanism (`try`, `catch`, `finally`, `throw`, `throws`) is robust and deeply integrated into the Java Virtual Machine (JVM). It's designed to manage errors and exceptional conditions gracefully, allowing programs to recover or terminate predictably.
+
+Let's dive into the internals:
+
+### 1. Exceptions are Objects
+
+First and foremost, in Java, an exception is an **object**. All exception types are subclasses of `java.lang.Throwable`.
+* **`Error`**: Represents serious problems that applications should not try to catch (e.g., `OutOfMemoryError`, `StackOverflowError`).
+* **`Exception`**: Represents conditions that an application might want to catch.
+    * **`RuntimeException` (Unchecked Exceptions)**: Subclasses of `RuntimeException` (e.g., `NullPointerException`, `ArrayIndexOutOfBoundsException`). The compiler doesn't force you to declare or catch them.
+    * **Checked Exceptions**: All other `Exception` subclasses (e.g., `IOException`, `SQLException`). The compiler *forces* you to either catch them or declare them in the method signature using `throws`.
+
+When an exception occurs, an instance of the appropriate `Throwable` subclass is created.
+
+### 2. The JVM Stack and Stack Frames
+
+The **JVM Stack** (which we discussed earlier) is central to exception handling. Each method call has its own **Stack Frame**. When an exception is thrown, the JVM needs to "unwind" this stack to find an appropriate handler.
+
+### 3. The Exception Table (in the `.class` file)
+
+This is the most critical piece of the puzzle. Every compiled Java method has an **Exception Table** (part of its bytecode). This table tells the JVM where to look for `catch` blocks for specific types of exceptions.
+
+An entry in the Exception Table typically looks like this:
+
+| `start_pc` | `end_pc` | `handler_pc` | `catch_type` |
+| :--------- | :------- | :----------- | :----------- |
+| (Index to start of `try` block in bytecode) | (Index to end of `try` block in bytecode) | (Index to start of `catch` block in bytecode) | (Index to a class in the constant pool, representing the exception type to catch) |
+
+### 4. The Process of Throwing and Handling an Exception
+
+When an exception is thrown (either explicitly with `throw` or implicitly by the JVM due to an error like `NullPointerException`), the JVM performs the following steps:
+
+1.  **Creation and Throwing:**
+    * An exception object is instantiated.
+    * The `athrow` bytecode instruction is executed. This signals the JVM that an exception has occurred.
+
+2.  **Stack Unwinding and Handler Search:**
+    * The JVM starts searching the **Exception Table of the *current* method's Stack Frame**.
+    * It iterates through the entries in the table, looking for an entry where:
+        * The current program counter (PC) is between `start_pc` and `end_pc` (meaning the exception occurred within the `try` block covered by this entry).
+        * The thrown exception's type is assignable to the `catch_type` in the table entry (e.g., if `NullPointerException` is thrown, an entry for `RuntimeException` or `Exception` would match).
+    * **If a match is found:**
+        * The JVM clears the current method's Operand Stack.
+        * It then jumps execution to the `handler_pc` (the start of the `catch` block).
+        * The thrown exception object is pushed onto the Operand Stack of the `catch` block so it can be assigned to the `catch` parameter.
+        * The `catch` block then executes.
+    * **If no match is found in the current method's Exception Table:**
+        * The JVM pops the current Stack Frame from the JVM Stack.
+        * It then repeats the entire search process in the **caller's Stack Frame** (the method that invoked the current method).
+        * This process of popping frames and searching up the call stack is called **stack unwinding**.
+
+3.  **`finally` Block Execution During Unwinding:**
+    * Regardless of whether a `catch` block is found or not, if a `finally` block is present in a method whose frame is being unwound, the code within that `finally` block is guaranteed to be executed.
+    * Internally, `finally` blocks are handled in bytecode either by:
+        * **Code Duplication:** The `finally` block's bytecode is duplicated into the normal exit path and into each `catch` block's exit path.
+        * **`jsr` / `ret` instructions (legacy/less common now):** Older bytecode used these instructions to jump to and return from a shared `finally` routine. Modern compilers tend to use code duplication or more sophisticated bytecode generation that achieves the same effect.
+    * After the `finally` block executes, if no `catch` handler was found earlier, the exception continues unwinding up the stack.
+
+4.  **Thread Termination:**
+    * If the JVM unwinds the entire stack (reaches the bottom, typically the `main` method's frame) and still finds no `catch` handler for the exception, the **thread that threw the exception will terminate**.
+    * The JVM will usually print the exception's stack trace to the console (standard error).
+    * If it's the `main` thread, the entire program will exit. Other threads might continue to run.
+
+### Example Flow:
+
+```java
+public void methodA() {
+    try {
+        methodB(); // Calls methodB
+    } catch (NullPointerException e) {
+        System.out.println("Caught in methodA");
+    } finally {
+        System.out.println("Finally in methodA");
+    }
+}
+
+public void methodB() {
+    try {
+        methodC(); // Calls methodC
+    } catch (ArrayIndexOutOfBoundsException e) {
+        System.out.println("Caught in methodB");
+    } finally {
+        System.out.println("Finally in methodB");
+    }
+}
+
+public void methodC() {
+    String s = null;
+    s.length(); // Throws NullPointerException here
+}
+```
+
+**Execution Trace for `methodA()` -> `methodB()` -> `methodC()` (throwing NPE):**
+
+1.  `methodA()` frame pushed.
+2.  `methodB()` frame pushed.
+3.  `methodC()` frame pushed.
+4.  Inside `methodC()`, `s.length()` throws `NullPointerException`.
+5.  JVM searches `methodC`'s Exception Table: No handler for NPE.
+6.  `methodC` frame popped. JVM searches `methodB`'s Exception Table: Finds handler for `ArrayIndexOutOfBoundsException`, but NOT for `NullPointerException`.
+7.  `finally` block in `methodB` executes ("Finally in methodB").
+8.  `methodB` frame popped. JVM searches `methodA`'s Exception Table: Finds handler for `NullPointerException`.
+9.  JVM jumps to `methodA`'s `catch` block. `NullPointerException` object pushed onto operand stack.
+10. `methodA`'s `catch` block executes ("Caught in methodA").
+11. `finally` block in `methodA` executes ("Finally in methodA").
+12. `methodA` completes. Frame popped.
+
+### Performance Considerations
+
+While powerful, exception handling does incur a performance cost:
+* **Object Creation:** Creating the `Throwable` object itself (which involves populating the stack trace) is not free.
+* **Stack Unwinding:** The process of searching exception tables and unwinding the stack has overhead.
+* **JIT De-optimization:** Code paths involving frequent exception throwing and catching are harder for the JIT compiler to optimize aggressively.
+
+Therefore, exceptions should be used for truly **exceptional conditions** (errors, unexpected situations) and not for normal program flow control, where simpler conditional logic is more efficient.
