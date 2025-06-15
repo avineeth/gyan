@@ -700,6 +700,149 @@ protocol://domain[:port]/path?query#fragment
   - Multiple comparisons. To provide several different ways to sort something. For example, you might want to sort a Person class by name, ID, age, height, ... You would define a Comparator for each of these to pass to the sort() method.
   - System class To provide comparison methods for classes that you have no control over. For example, you could define a Comparator for Strings that compared them by length.
   - Strategy pattern To implement a Strategy pattern, which is a situation where you want to represent an algorithm as an object that you can pass as a parameter, save in a data structure, etc.
+In Java, both `Comparable` and `Comparator` are interfaces used for sorting objects, but they serve different purposes and are used in different contexts.
+
+Here's a breakdown of their differences:
+
+---
+
+### `java.lang.Comparable` Interface
+
+* **Purpose:** Defines the **natural ordering** of objects of a class. When a class implements `Comparable`, it means that instances of that class can compare themselves with other instances of the same class. This establishes a default, inherent sorting logic for objects of that type.
+* **Location:** Part of the `java.lang` package, so it's automatically available.
+* **Method:** It has a single abstract method:
+    ```java
+    public int compareTo(T other);
+    ```
+    * Returns:
+        * A **negative** integer if `this` object is less than `other`.
+        * **Zero** if `this` object is equal to `other`.
+        * A **positive** integer if `this` object is greater than `other`.
+* **Implementation:** The class whose objects are to be sorted must **implement this interface directly**. This means you're modifying the class itself to define its natural ordering.
+* **Usage:**
+    * Used with `Collections.sort(List<T>)` for lists.
+    * Used with `Arrays.sort(T[] array)` for arrays.
+    * Automatically used by sorted collections like `TreeSet` and `TreeMap` if no custom `Comparator` is provided.
+* **Flexibility:** Provides only **one** sorting sequence (the "natural" one). If you need to sort the objects in a different way, `Comparable` is not sufficient on its own.
+* **When to Use:** When objects of a class have a clear, single, inherent sorting order (e.g., `String` objects have a natural alphabetical order, `Integer` objects have a natural numerical order).
+
+**Example:**
+
+```java
+// Define a Person class that implements Comparable to sort by age naturally
+class Person implements Comparable<Person> {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() { return name; }
+    public int getAge() { return age; }
+
+    @Override
+    public String toString() { return name + " (" + age + ")"; }
+
+    // Defines the natural order: sort by age in ascending order
+    @Override
+    public int compareTo(Person other) {
+        return Integer.compare(this.age, other.age); // this.age - other.age for simple int
+    }
+}
+
+// Usage
+List<Person> people = new ArrayList<>();
+people.add(new Person("Alice", 30));
+people.add(new Person("Bob", 25));
+people.add(new Person("Charlie", 35));
+
+Collections.sort(people); // Uses Person's natural ordering (by age)
+System.out.println("Sorted by Age (Comparable): " + people);
+// Output: [Bob (25), Alice (30), Charlie (35)]
+```
+
+---
+
+### `java.util.Comparator` Interface
+
+* **Purpose:** Defines a **custom or external ordering** for objects. It allows you to provide sorting logic independent of the class whose objects are being compared. This means you can have multiple ways to sort the same set of objects without modifying the original class.
+* **Location:** Part of the `java.util` package.
+* **Method:** It has a single abstract method (making it a functional interface):
+    ```java
+    public int compare(T o1, T o2);
+    ```
+    * Returns:
+        * A **negative** integer if `o1` is less than `o2`.
+        * **Zero** if `o1` is equal to `o2`.
+        * A **positive** integer if `o1` is greater than `o2`.
+* **Implementation:** Typically implemented in a **separate class** (or using a lambda expression/method reference in modern Java), external to the class whose objects are being sorted.
+* **Usage:**
+    * Used with `Collections.sort(List<T> list, Comparator<? super T> c)`.
+    * Used with `Arrays.sort(T[] array, Comparator<? super T> c)`.
+    * Used when creating sorted collections like `TreeSet` or `TreeMap` if you want a custom order (e.g., `new TreeSet<>(new MyCustomComparator())`).
+    * Heavily used with Java 8 Streams (e.g., `stream().sorted(Comparator.comparing(Person::getName))`).
+* **Flexibility:** Provides **multiple** sorting sequences. You can create as many `Comparator` implementations as you need for different sorting criteria.
+* **When to Use:**
+    * When you need to sort objects of a class that you **cannot modify** (e.g., a third-party library class).
+    * When you need to define **multiple different sorting orders** for the same class (e.g., sort `Person` by age, then by name, then by city).
+    * When the sorting logic is complex or doesn't represent the "natural" order of the object.
+    * When you want to separate the sorting logic from the class definition (better separation of concerns).
+
+**Example:**
+
+```java
+// (Using the same Person class, but it does NOT need to implement Comparable here)
+// class Person { ... }
+
+// Define a Comparator to sort Person objects by name
+class PersonNameComparator implements Comparator<Person> {
+    @Override
+    public int compare(Person p1, Person p2) {
+        return p1.getName().compareTo(p2.getName()); // Alphabetical order by name
+    }
+}
+
+// Or, more commonly in modern Java (Java 8+), using a lambda or method reference:
+// Comparator<Person> nameComparator = (p1, p2) -> p1.getName().compareTo(p2.getName());
+// Comparator<Person> nameComparator = Comparator.comparing(Person::getName); // Best practice for simple cases
+
+// Usage
+List<Person> people = new ArrayList<>();
+people.add(new Person("Charlie", 35));
+people.add(new Person("Alice", 30));
+people.add(new Person("Bob", 25));
+
+// Sort by name using the custom Comparator
+Collections.sort(people, new PersonNameComparator());
+// Or using a lambda: Collections.sort(people, (p1, p2) -> p1.getName().compareTo(p2.getName()));
+// Or using method reference: Collections.sort(people, Comparator.comparing(Person::getName));
+
+System.out.println("Sorted by Name (Comparator): " + people);
+// Output: [Alice (30), Bob (25), Charlie (35)]
+
+// Sort by age (descending) using another Comparator (lambda)
+people.sort(Comparator.comparingInt(Person::getAge).reversed());
+System.out.println("Sorted by Age (Descending, Comparator): " + people);
+// Output: [Charlie (35), Alice (30), Bob (25)]
+```
+
+---
+
+### Summary of Differences:
+
+| Feature           | `Comparable`                                        | `Comparator`                                                |
+| :---------------- | :-------------------------------------------------- | :---------------------------------------------------------- |
+| **Package** | `java.lang`                                         | `java.util`                                                 |
+| **Method** | `int compareTo(T other)`                            | `int compare(T o1, T o2)`                                   |
+| **Definition** | Defines the **natural ordering** of an object.      | Defines a **custom/external ordering** for objects.         |
+| **Implementation**| **Implemented by the class itself** (modifies class).| **Implemented in a separate class** or as a lambda/method reference (doesn't modify class). |
+| **Usage** | `Collections.sort(list);` or `Arrays.sort(array);` | `Collections.sort(list, comparator);` or `Arrays.sort(array, comparator);` |
+| **Flexibility** | Provides **only one** sorting sequence.             | Provides **multiple** sorting sequences.                    |
+| **"Coupling"** | Objects are "intrusive" (they know how to compare themselves). | Comparators are "non-intrusive" (sorting logic is external). |
+
+In modern Java development (Java 8+), `Comparator` (especially with lambda expressions and method references) is often preferred for its flexibility and to keep sorting logic separate from the domain class, adhering to the Single Responsibility Principle. However, `Comparable` remains useful for defining a clear, inherent natural order when one naturally exists.
 
 
 ### Different ways of creating object in Java
