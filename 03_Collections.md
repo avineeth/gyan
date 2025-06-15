@@ -286,3 +286,52 @@ If a Map is a Collection, what are the elements? The only reasonable answer is "
 Collection could be made to extend Map, but this raises the question: what are the keys? There's no really satisfactory answer, and forcing one leads to an unnatural interface.
 
 Maps can be viewed as Collections (of keys, values, or pairs), and this fact is reflected in the three "Collection view operations" on Maps (keySet, entrySet, and values). While it is, in principle, possible to view a List as a Map mapping indices to elements, this has the nasty property that deleting an element from the List changes the Key associated with every element before the deleted element. That's why we don't have a map view operation on Lists.
+
+## Time complexity of HashMap
+The time complexity of `HashMap` operations largely depends on the quality of the `hashCode()` and `equals()` implementations of the keys, and the load factor. Assuming a good hash function and proper distribution of hash codes, the average case complexities are excellent:
+
+### Average Case Time Complexity:
+
+* **`put(K key, V value)`**: **O(1)** (constant time)
+    * The `hashCode()` of the key determines the bucket.
+    * In a good hash function scenario, there are few or no collisions, so finding the correct spot in the bucket is fast.
+* **`get(Object key)`**: **O(1)** (constant time)
+    * Similar to `put`, the `hashCode()` quickly identifies the bucket.
+    * With minimal collisions, the element is found quickly within that bucket.
+* **`remove(Object key)`**: **O(1)** (constant time)
+    * Again, `hashCode()` finds the bucket, and removing the element is quick.
+* **`containsKey(Object key)`**: **O(1)** (constant time)
+    * Uses the same lookup mechanism as `get`.
+* **`size()`**: **O(1)** (constant time)
+    * The map maintains an internal count.
+* **`isEmpty()`**: **O(1)** (constant time)
+    * Checks if the internal count is zero.
+
+### Worst Case Time Complexity:
+
+* **`put(K key, V value)`**: **O(n)** (linear time)
+* **`get(Object key)`**: **O(n)** (linear time)
+* **`remove(Object key)`**: **O(n)** (linear time)
+* **`containsKey(Object key)`**: **O(n)** (linear time)
+
+**When does the worst case occur?**
+
+The worst case occurs due to **hash collisions**. This happens when multiple distinct keys produce the same hash code, or map to the same bucket. In an extreme worst-case scenario, all keys might map to the same bucket, effectively turning that bucket into a linked list (or a tree in Java 8+). Searching, adding, or removing an element then requires traversing this entire linked list (or tree), leading to O(n) complexity, where 'n' is the number of elements in that bucket (or effectively, the total number of elements in the map if all collide).
+
+**Factors Affecting Performance:**
+
+1.  **`hashCode()` implementation:** A poorly implemented `hashCode()` that consistently returns the same value (e.g., `return 1;` for all objects) will cause all objects to go into the same bucket, degrading performance to O(n).
+2.  **`equals()` implementation:** Must be consistent with `hashCode()`. If two objects are `equals()`, their `hashCode()` must be the same.
+3.  **Load Factor:** This is a measure of how full the hash table can get before its capacity is automatically increased.
+    * Default is **0.75**.
+    * A higher load factor reduces space overhead but increases collision probability.
+    * A lower load factor reduces collision probability but increases space overhead.
+    * When the number of entries exceeds `capacity * loadFactor`, the `HashMap` resizes itself (rehashes all elements into new, larger buckets), which is an O(n) operation.
+4.  **Initial Capacity:** Setting an appropriate initial capacity can reduce the number of rehash operations.
+5.  **Treeify Threshold (Java 8+):**
+    * In Java 8 and later, if a bucket becomes too large (default threshold is 8 entries), the linked list for that bucket is converted into a balanced binary search tree (a Red-Black Tree).
+    * This improves the worst-case time complexity for operations within that specific bucket from O(n) to **O(log n)**. So, even in the case of many collisions, performance doesn't degrade linearly with the total number of elements in the map, but rather logarithmically with the number of elements in the *colliding bucket*.
+
+**In summary:**
+
+For most practical applications with well-designed key objects and default `HashMap` settings, you can confidently expect **O(1) average time complexity** for basic `HashMap` operations. The O(n) worst-case is primarily a theoretical concern or a symptom of a very bad `hashCode()` implementation.
